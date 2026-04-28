@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KIMI properties - Real Estate Excellence</title>
+    <meta name="description" content="Discover your dream property with KIMI properties. We provide the best way to find comfortable and suitable places to live.">
+    <link rel="stylesheet" href="style.css?v=1.2">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Syne:wght@400..800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <main class="hero-section">
+        <!-- Background Architectural Lines (will be implemented via CSS or SVG) -->
+        <div class="bg-lines"></div>
+
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">
+                    <img src="assets/logo.png" alt="KIMI properties" style="height: 80px; width: auto;">
+                </div>
+                <ul class="nav-links">
+                    <li><a href="#" class="active">Home</a></li>
+                    <li><a href="properties.html">Properties</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="contact.html">Contact Us</a></li>
+                </ul>
+                <div class="nav-actions">
+                    <a href="contact.html" class="contact-btn">Contact Us</a>
+                </div>
+            </nav>
+
+            <div class="hero-content">
+                <div class="hero-header">
+                    <h1 class="hero-title">
+                        We help people 
+                        <span class="title-pill pill-house-1"></span>
+                        to realize their dream property 
+                        <span class="title-pill pill-house-2"></span>
+                    </h1>
+                    <p class="hero-subtitle">
+                        We are creative people who provide the best way to you who want to have a new comfortable and suitable place to live
+                    </p>
+                </div>
+
+                <div class="search-bar-container">
+                    <div class="search-filter-bar hero-filter">
+                        <!-- Location Segment -->
+                        <div class="filter-segment">
+                            <div class="segment-icon">
+                                <img src="assets/icon-location.png" alt="Location Icon" style="width: 100%; height: 100%; object-fit: contain;">
+                            </div>
+                            <div class="segment-text">
+                                <span>Location</span>
+                                <select id="hero-location">
+                                    <option value="all">Any Location</option>
+                                    <option value="california">California, US</option>
+                                    <option value="london">London, UK</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <!-- Type Segment -->
+                        <div class="filter-segment">
+                            <div class="segment-icon">
+                                <img src="assets/icon-type.png" alt="Property Type Icon" style="width: 100%; height: 100%; object-fit: contain;">
+                            </div>
+                            <div class="segment-text">
+                                <span>Type of Property</span>
+                                <select id="hero-type">
+                                    <option value="all">All Types</option>
+                                    <option value="apartment">Apartment</option>
+                                    <option value="residential">Residential</option>
+                                    <option value="commercial">Commercial</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <a href="properties.html" class="btn-browse-action">Browse Property</a>
+                    </div>
+                </div>
+
+                <div class="hero-image-container">
+                    <img src="assets/hero-illustration.png" alt="Modern luxury villa" class="main-hero-image">
+                </div>
+
+                <script>
+                    document.querySelector('.hero-filter .btn-browse-action').addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const location = document.getElementById('hero-location').value;
+                        const type = document.getElementById('hero-type').value;
+                        
+                        const url = new URL('properties.html', window.location.href);
+                        if (location !== 'all') url.searchParams.set('location', location);
+                        if (type !== 'all') url.searchParams.set('type', type);
+                        
+                        window.location.href = url.toString();
+                    });
+                </script>
+            </div>
+        </div>
+    </main>
+
+    <section class="container-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Featured Listings</h2>
+                <a href="#" class="browse-link">Browse All Featured <span class="arrow">→</span></a>
+            </div>
+            
+            <div class="listings-grid">
+                <!-- Card 1 -->
+                <div class="property-card">
+                    <div class="card-image">
+                        <img src="assets/property-1.png" alt="Riverbend Retreat">
+                        <span class="featured-tag">✦ FEATURED</span>
+                    </div>
+                    <div class="card-content">
+                        <p class="price">$4,299<span>/month</span></p>
+                        <h3 class="property-name">Riverbend Retreat</h3>
+                        <p class="address">3 Leame Close, Hull, HU3 6ND</p>
+                        <div class="specs">
+                            <span><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8'/%3E%3Cpath d='M4 10V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4'/%3E%3Cpath d='M12 4v6'/%3E%3Cpath d='M2 18h20'/%3E%3C/svg%3E" alt="Bed"> 3 Beds</span>
+                            <span><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 6 6.5 3.5a1.5 1.5 0 0 0-2.12 0l-1.88 1.88a1.5 1.5 0 0 0 0 2.12L5 10'/%3E%3Cpath d='M10 5l10 10'/%3E%3Cpath d='M3 17l1 1a2 2 0 0 0 2.83 0L21 4'/%3E%3C/svg%3E" alt="Bath"> 2 Baths</span>
+                            <span><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect width='18' height='18' x='3' y='3' rx='2' ry='2'/%3E%3Cpath d='M3 9h18'/%3E%3Cpath d='M3 15h18'/%3E%3Cpath d='M9 3v18'/%3E%3Cpath d='M15 3v18'/%3E%3C/svg%3E" alt="Area"> 7x7 m²</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="property-card">
+                    <div class="card-image">
+                        <img src="assets/property-2.png" alt="Oakwood Cottage">
+                        <span class="featured-tag">✦ FEATURED</span>
+                    </div>
+                    <div class="card-content">
+                        <p class="price">$2,095<span>/month</span></p>
+                        <h3 class="property-name">Oakwood Cottage</h3>
+                        <p class="address">2699 Green Valley, Highland Lake, FL</p>
+                        <div class="specs">
+                            <span><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8'/%3E%3Cpath d='M4 10V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4'/%3E%3Cpath d='M12 4v6'/%3E%3Cpath d='M2 18h20'/%3E%3C/svg%3E" alt="Bed"> 4 Beds</span>
+                            <span><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 6 6.5 3.5a1.5 1.5 0 0 0-2.12 0l-1.88 1.88a1.5 1.5 0 0 0 0 2.12L5 10'/%3E%3Cpath d='M10 5l10 10'/%3E%3Cpath d='M3 17l1 1a2 2 0 0 0 2.83 0L21 4'/%3E%3C/svg%3E" alt="Bath"> 4 Baths</span>
+                            <span><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect width='18' height='18' x='3' y='3' rx='2' ry='2'/%3E%3Cpath d='M3 9h18'/%3E%3Cpath d='M3 15h18'/%3E%3Cpath d='M9 3v18'/%3E%3Cpath d='M15 3v18'/%3E%3C/svg%3E" alt="Area"> 6x8 m²</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="property-card">
+                    <div class="card-image">
+                        <img src="assets/property-3.png" alt="Herringbone Realty">
+                        <span class="featured-tag">✦ FEATURED</span>
+                    </div>
+                    <div class="card-content">
+                        <p class="price">$5,099<span>/month</span></p>
+                        <h3 class="property-name">Herringbone Realty</h3>
+                        <p class="address">28B Highgate Road, London, NW5 1NS</p>
+                        <div class="specs">
+                            <span><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8'/%3E%3Cpath d='M4 10V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4'/%3E%3Cpath d='M12 4v6'/%3E%3Cpath d='M2 18h20'/%3E%3C/svg%3E" alt="Bed"> 2 Beds</span>
+                            <span><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 6 6.5 3.5a1.5 1.5 0 0 0-2.12 0l-1.88 1.88a1.5 1.5 0 0 0 0 2.12L5 10'/%3E%3Cpath d='M10 5l10 10'/%3E%3Cpath d='M3 17l1 1a2 2 0 0 0 2.83 0L21 4'/%3E%3C/svg%3E" alt="Bath"> 3 Baths</span>
+                            <span><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect width='18' height='18' x='3' y='3' rx='2' ry='2'/%3E%3Cpath d='M3 9h18'/%3E%3Cpath d='M3 15h18'/%3E%3Cpath d='M9 3v18'/%3E%3Cpath d='M15 3v18'/%3E%3C/svg%3E" alt="Area"> 7x7 m²</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="priority-section">
+        <div class="container">
+            <div class="priority-layout">
+                <div class="priority-text">
+                    <h2 class="priority-title">Comfort Is Our Top Priority For You</h2>
+                    <p class="priority-desc">We guarantee that the products we sell will make our customers happy because we are very concerned about our consumer satisfaction</p>
+                </div>
+                <div class="priority-cards">
+                    <!-- Card 1 -->
+                    <div class="benefit-card">
+                        <div class="benefit-icon">
+                            <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="24" cy="24" r="24" fill="#F8F7FF"/>
+                                <path d="M24 16V32M20 19.5H25.5C27.1569 19.5 28.5 20.8431 28.5 22.5C28.5 24.1569 27.1569 25.5 25.5 25.5H22.5C20.8431 25.5 19.5 26.8431 19.5 28.5C19.5 30.1569 20.8431 31.5 22.5 31.5H28M19 16H29" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <div class="benefit-content">
+                            <h3>Affordable Price</h3>
+                            <p>We provide the best for you. The price we offer accordance with the quality we provide</p>
+                        </div>
+                    </div>
+                    <!-- Card 2 -->
+                    <div class="benefit-card">
+                        <div class="benefit-icon">
+                            <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="24" cy="24" r="24" fill="#F8F7FF"/>
+                                <path d="M24 14L27.09 20.26L34 21.27L29 26.14L30.18 33.05L24 29.8L17.82 33.05L19 26.14L14 21.27L20.91 20.26L24 14Z" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <div class="benefit-content">
+                            <h3>Clear Legality</h3>
+                            <p>Put your trust in us. We are a legal entity with official legality in the relevant government</p>
+                        </div>
+                    </div>
+                    <!-- Card 3 -->
+                    <div class="benefit-card">
+                        <div class="benefit-icon">
+                            <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="24" cy="24" r="24" fill="#F8F7FF"/>
+                                <path d="M24 21C26.7614 21 29 18.7614 29 16C29 13.2386 26.7614 11 24 11C21.2386 11 19 13.2386 19 16C19 18.7614 21.2386 21 24 21Z" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M16 33C16 28.5817 19.5817 25 24 25C28.4183 25 32 28.5817 32 33" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <circle cx="36" cy="28" r="4" fill="#F8F7FF" stroke="#1A1A1A" stroke-width="2"/>
+                                <circle cx="12" cy="28" r="4" fill="#F8F7FF" stroke="#1A1A1A" stroke-width="2"/>
+                            </svg>
+                        </div>
+                        <div class="benefit-content">
+                            <h3>Experienced Agent</h3>
+                            <p>We always work with agents in their fields so that we can provide the best quality</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="priority-bg">
+            <img src="assets/town-buildings.png" alt="Buildings">
+        </div>
+    </section>
+
+    <section class="categories-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Featured Categories</h2>
+                <a href="#" class="browse-link">Browse All Categories <span class="arrow">→</span></a>
+            </div>
+            <div class="categories-grid">
+                <!-- Category 1 -->
+                <div class="category-card">
+                    <div class="category-icon-box">
+                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M4 28V8C4 6.89543 4.89543 6 6 6H18C19.1046 6 20 6.89543 20 8V28" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M20 14H26C27.1046 14 28 14.8954 28 16V28" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M8 10H10" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M8 14H10" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M8 18H10" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M14 10H16" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M14 14H16" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M14 18H16" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <div class="category-info">
+                        <div class="category-text">
+                            <h3>Studio</h3>
+                            <p>100+ listings</p>
+                        </div>
+                        <a href="#" class="view-link">View <span class="view-arrow">↗</span></a>
+                    </div>
+                </div>
+                <!-- Category 2 -->
+                <div class="category-card">
+                    <div class="category-icon-box">
+                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M6 28V4C6 2.89543 6.89543 2 8 2H24C25.1046 2 26 2.89543 26 4V28" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M10 6H22" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M10 10H22" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M10 14H22" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M10 18H22" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M14 28V24H18V28" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <div class="category-info">
+                        <div class="category-text">
+                            <h3>Appartment</h3>
+                            <p>100+ listings</p>
+                        </div>
+                        <a href="#" class="view-link">View <span class="view-arrow">↗</span></a>
+                    </div>
+                </div>
+                <!-- Category 3 -->
+                <div class="category-card">
+                    <div class="category-icon-box">
+                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M4 28H28" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M6 28V10C6 8.89543 6.89543 8 8 8H24C25.1046 8 26 8.89543 26 10V28" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M10 12H22" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M10 16H22" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M10 20H22" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <div class="category-info">
+                        <div class="category-text">
+                            <h3>Office</h3>
+                            <p>100+ listings</p>
+                        </div>
+                        <a href="#" class="view-link">View <span class="view-arrow">↗</span></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cities-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Explore Cities</h2>
+                <a href="#" class="browse-link">Browse All Cities <span class="arrow">→</span></a>
+            </div>
+            <div class="cities-grid">
+                <!-- City 1 -->
+                <a href="#" class="city-card">
+                    <div class="city-img-box">
+                        <img src="assets/property-1.png" alt="Hugo, Oklahoma">
+                    </div>
+                    <div class="city-info-box">
+                        <h3>Hugo, Oklahoma</h3>
+                        <p><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> 100+ listings</p>
+                    </div>
+                </a>
+                <!-- City 2 -->
+                <a href="#" class="city-card">
+                    <div class="city-img-box">
+                        <img src="assets/property-2.png" alt="Lafayette, California">
+                    </div>
+                    <div class="city-info-box">
+                        <h3>Lafayette, California</h3>
+                        <p><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> 100+ listings</p>
+                    </div>
+                </a>
+                <!-- City 3 -->
+                <a href="#" class="city-card">
+                    <div class="city-img-box">
+                        <img src="assets/property-3.png" alt="Hounslow, London">
+                    </div>
+                    <div class="city-info-box">
+                        <h3>Hounslow, London</h3>
+                        <p><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> 100+ listings</p>
+                    </div>
+                </a>
+                <!-- City 4 -->
+                <a href="#" class="city-card">
+                    <div class="city-img-box">
+                        <img src="assets/hero-illustration.png" alt="Redbridge, London">
+                    </div>
+                    <div class="city-info-box">
+                        <h3>Redbridge, London</h3>
+                        <p><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> 100+ listings</p>
+                    </div>
+                </a>
+                <!-- City 5 -->
+                <a href="#" class="city-card">
+                    <div class="city-img-box">
+                        <img src="assets/property-1.png" alt="Chantilly, Paris">
+                    </div>
+                    <div class="city-info-box">
+                        <h3>Chantilly, Paris</h3>
+                        <p><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> 100+ listings</p>
+                    </div>
+                </a>
+                <!-- City 6 -->
+                <a href="#" class="city-card">
+                    <div class="city-img-box">
+                        <img src="assets/property-2.png" alt="Stockton, California">
+                    </div>
+                    <div class="city-info-box">
+                        <h3>Stockton, California</h3>
+                        <p><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> 100+ listings</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonials-section">
+        <div class="container">
+            <h2 class="section-title text-center">Kind Words From Our Customers</h2>
+        </div>
+        <div class="marquee-container">
+            <div class="marquee-content">
+                <!-- Testimonial 1 -->
+                <div class="testimonial-slide">
+                    <div class="testimonial-person-box" style="background-color: #FDE8F3;">
+                        <img src="assets/client-1.png" alt="Priya Sharma">
+                    </div>
+                    <div class="testimonial-content-box" style="background-color: #E7DCFF;">
+                        <div class="rating">★★★★★</div>
+                        <p class="quote">"The legal paperwork for buying property in the city always intimidated me. KIMI properties handled every document with total professionalism. They ensured all clearances were perfect."</p>
+                        <div class="user-meta">
+                            <div class="user-details">
+                                <h3>Priya Sharma</h3>
+                                <p>Property Investor</p>
+                            </div>
+                            <div class="brand-mini-logo">
+                                <img src="assets/logo.png" alt="KIMI" style="height: 24px; width: auto;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 2 -->
+                <div class="testimonial-slide">
+                    <div class="testimonial-person-box" style="background-color: #E8F4FD;">
+                        <img src="assets/client-2.png" alt="Rohan Patel">
+                    </div>
+                    <div class="testimonial-content-box" style="background-color: #E7DCFF;">
+                        <div class="rating">★★★★★</div>
+                        <p class="quote">"I've heard horror stories of delayed handovers. While our project had a minor delay, KIMI kept us informed daily. Their communication and dedication is commendable."</p>
+                        <div class="user-meta">
+                            <div class="user-details">
+                                <h3>Rohan Patel</h3>
+                                <p>Home Owner</p>
+                            </div>
+                            <div class="brand-mini-logo">
+                                <img src="assets/logo.png" alt="KIMI" style="height: 24px; width: auto;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 3 -->
+                <div class="testimonial-slide">
+                    <div class="testimonial-person-box" style="background-color: #FDF4E8;">
+                        <img src="assets/client-3.png" alt="Vikram Malhotra">
+                    </div>
+                    <div class="testimonial-content-box" style="background-color: #E7DCFF;">
+                        <div class="rating">★★★★★</div>
+                        <p class="quote">"As a retiree looking for a peaceful home, I valued KIMI's patience. They didn't just show me houses; they showed me communities where I could truly belong."</p>
+                        <div class="user-meta">
+                            <div class="user-details">
+                                <h3>Vikram Malhotra</h3>
+                                <p>Retired Officer</p>
+                            </div>
+                            <div class="brand-mini-logo">
+                                <img src="assets/logo.png" alt="KIMI" style="height: 24px; width: auto;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 4 -->
+                <div class="testimonial-slide">
+                    <div class="testimonial-person-box" style="background-color: #E8FDEE;">
+                        <img src="assets/client-4.png" alt="Ananya Singh">
+                    </div>
+                    <div class="testimonial-content-box" style="background-color: #E7DCFF;">
+                        <div class="rating">★★★★★</div>
+                        <p class="quote">"Finding a modern studio that matches my aesthetic was a challenge. KIMI's curated listings were a breath of fresh air. I found my dream home in just two weeks!"</p>
+                        <div class="user-meta">
+                            <div class="user-details">
+                                <h3>Ananya Singh</h3>
+                                <p>Creative Director</p>
+                            </div>
+                            <div class="brand-mini-logo">
+                                <img src="assets/logo.png" alt="KIMI" style="height: 24px; width: auto;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 5 -->
+                <div class="testimonial-slide">
+                    <div class="testimonial-person-box" style="background-color: #FDE8F3;">
+                        <img src="assets/client-5.png" alt="Arjun Desai">
+                    </div>
+                    <div class="testimonial-content-box" style="background-color: #E7DCFF;">
+                        <div class="rating">★★★★☆</div>
+                        <p class="quote">"The transparency in pricing was what won me over. No hidden costs, no surprise fees. KIMI properties made the entire buying process smooth and predictable."</p>
+                        <div class="user-meta">
+                            <div class="user-details">
+                                <h3>Arjun Desai</h3>
+                                <p>Software Architect</p>
+                            </div>
+                            <div class="brand-mini-logo">
+                                <img src="assets/logo.png" alt="KIMI" style="height: 24px; width: auto;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 6 -->
+                <div class="testimonial-slide">
+                    <div class="testimonial-person-box" style="background-color: #E8F4FD;">
+                        <img src="assets/client-6.png" alt="Sunita Rao">
+                    </div>
+                    <div class="testimonial-content-box" style="background-color: #E7DCFF;">
+                        <div class="rating">★★★★★</div>
+                        <p class="quote">"We needed a spacious villa for our joint family. KIMI understood our cultural needs and found us a place with enough room for everyone and beautiful gardens."</p>
+                        <div class="user-meta">
+                            <div class="user-details">
+                                <h3>Sunita Rao</h3>
+                                <p>Educationist</p>
+                            </div>
+                            <div class="brand-mini-logo">
+                                <img src="assets/logo.png" alt="KIMI" style="height: 24px; width: auto;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 7 -->
+                <div class="testimonial-slide">
+                    <div class="testimonial-person-box" style="background-color: #FDF4E8;">
+                        <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?q=80&w=600&auto=format&fit=crop" alt="Karan Mehta">
+                    </div>
+                    <div class="testimonial-content-box" style="background-color: #E7DCFF;">
+                        <div class="rating">★★★★★</div>
+                        <p class="quote">"I've worked with many agencies, but KIMI's local market knowledge is unparalleled. They helped me secure a high-yield investment property in record time."</p>
+                        <div class="user-meta">
+                            <div class="user-details">
+                                <h3>Karan Mehta</h3>
+                                <p>Business Consultant</p>
+                            </div>
+                            <div class="brand-mini-logo">
+                                <img src="assets/logo.png" alt="KIMI" style="height: 24px; width: auto;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="marquee-content" aria-hidden="true">
+                <!-- Testimonial 1 -->
+                <div class="testimonial-slide">
+                    <div class="testimonial-person-box" style="background-color: #FDE8F3;">
+                        <img src="assets/client-1.png" alt="Priya Sharma">
+                    </div>
+                    <div class="testimonial-content-box" style="background-color: #E7DCFF;">
+                        <div class="rating">★★★★★</div>
+                        <p class="quote">"The legal paperwork for buying property in the city always intimidated me. KIMI properties handled every document with total professionalism. They ensured all clearances were perfect."</p>
+                        <div class="user-meta">
+                            <div class="user-details">
+                                <h3>Priya Sharma</h3>
+                                <p>Property Investor</p>
+                            </div>
+                            <div class="brand-mini-logo">
+                                <img src="assets/logo.png" alt="KIMI" style="height: 24px; width: auto;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 2 -->
+                <div class="testimonial-slide">
+                    <div class="testimonial-person-box" style="background-color: #E8F4FD;">
+                        <img src="assets/client-2.png" alt="Rohan Patel">
+                    </div>
+                    <div class="testimonial-content-box" style="background-color: #E7DCFF;">
+                        <div class="rating">★★★★★</div>
+                        <p class="quote">"I've heard horror stories of delayed handovers. While our project had a minor delay, KIMI kept us informed daily. Their communication and dedication is commendable."</p>
+                        <div class="user-meta">
+                            <div class="user-details">
+                                <h3>Rohan Patel</h3>
+                                <p>Home Owner</p>
+                            </div>
+                            <div class="brand-mini-logo">
+                                <img src="assets/logo.png" alt="KIMI" style="height: 24px; width: auto;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 3 -->
+                <div class="testimonial-slide">
+                    <div class="testimonial-person-box" style="background-color: #FDF4E8;">
+                        <img src="assets/client-3.png" alt="Vikram Malhotra">
+                    </div>
+                    <div class="testimonial-content-box" style="background-color: #E7DCFF;">
+                        <div class="rating">★★★★★</div>
+                        <p class="quote">"As a retiree looking for a peaceful home, I valued KIMI's patience. They didn't just show me houses; they showed me communities where I could truly belong."</p>
+                        <div class="user-meta">
+                            <div class="user-details">
+                                <h3>Vikram Malhotra</h3>
+                                <p>Retired Officer</p>
+                            </div>
+                            <div class="brand-mini-logo">
+                                <img src="assets/logo.png" alt="KIMI" style="height: 24px; width: auto;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 4 -->
+                <div class="testimonial-slide">
+                    <div class="testimonial-person-box" style="background-color: #E8FDEE;">
+                        <img src="assets/client-4.png" alt="Ananya Singh">
+                    </div>
+                    <div class="testimonial-content-box" style="background-color: #E7DCFF;">
+                        <div class="rating">★★★★★</div>
+                        <p class="quote">"Finding a modern studio that matches my aesthetic was a challenge. KIMI's curated listings were a breath of fresh air. I found my dream home in just two weeks!"</p>
+                        <div class="user-meta">
+                            <div class="user-details">
+                                <h3>Ananya Singh</h3>
+                                <p>Creative Director</p>
+                            </div>
+                            <div class="brand-mini-logo">
+                                <img src="assets/logo.png" alt="KIMI" style="height: 24px; width: auto;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="container-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Featured Listings</h2>
+                <a href="#" class="browse-link">Browse All Featured <span class="arrow">→</span></a>
+            </div>
+            
+            <div class="listings-grid">
+                <!-- Card 1 -->
+                <div class="property-card">
+                    <div class="card-image">
+                        <img src="assets/property-1.png" alt="Riverbend Retreat">
+                        <span class="featured-tag">✦ FEATURED</span>
+                    </div>
+                    <div class="card-content">
+                        <p class="price">$4,299<span>/month</span></p>
+                        <h3 class="property-name">Riverbend Retreat</h3>
+                        <p class="address">3 Leame Close, Hull, HU3 6ND</p>
+                        <div class="specs">
+                            <span><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8'/%3E%3Cpath d='M4 10V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4'/%3E%3Cpath d='M12 4v6'/%3E%3Cpath d='M2 18h20'/%3E%3C/svg%3E" alt="Bed"> 3 Beds</span>
+                            <span><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 6 6.5 3.5a1.5 1.5 0 0 0-2.12 0l-1.88 1.88a1.5 1.5 0 0 0 0 2.12L5 10'/%3E%3Cpath d='M10 5l10 10'/%3E%3Cpath d='M3 17l1 1a2 2 0 0 0 2.83 0L21 4'/%3E%3C/svg%3E" alt="Bath"> 2 Baths</span>
+                            <span><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect width='18' height='18' x='3' y='3' rx='2' ry='2'/%3E%3Cpath d='M3 9h18'/%3E%3Cpath d='M3 15h18'/%3E%3Cpath d='M9 3v18'/%3E%3Cpath d='M15 3v18'/%3E%3C/svg%3E" alt="Area"> 7x7 m²</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="property-card">
+                    <div class="card-image">
+                        <img src="assets/property-2.png" alt="Oakwood Cottage">
+                        <span class="featured-tag">✦ FEATURED</span>
+                    </div>
+                    <div class="card-content">
+                        <p class="price">$2,095<span>/month</span></p>
+                        <h3 class="property-name">Oakwood Cottage</h3>
+                        <p class="address">2699 Green Valley, Highland Lake, FL</p>
+                        <div class="specs">
+                            <span><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8'/%3E%3Cpath d='M4 10V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4'/%3E%3Cpath d='M12 4v6'/%3E%3Cpath d='M2 18h20'/%3E%3C/svg%3E" alt="Bed"> 4 Beds</span>
+                            <span><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 6 6.5 3.5a1.5 1.5 0 0 0-2.12 0l-1.88 1.88a1.5 1.5 0 0 0 0 2.12L5 10'/%3E%3Cpath d='M10 5l10 10'/%3E%3Cpath d='M3 17l1 1a2 2 0 0 0 2.83 0L21 4'/%3E%3C/svg%3E" alt="Bath"> 4 Baths</span>
+                            <span><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect width='18' height='18' x='3' y='3' rx='2' ry='2'/%3E%3Cpath d='M3 9h18'/%3E%3Cpath d='M3 15h18'/%3E%3Cpath d='M9 3v18'/%3E%3Cpath d='M15 3v18'/%3E%3C/svg%3E" alt="Area"> 6x8 m²</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="property-card">
+                    <div class="card-image">
+                        <img src="assets/property-3.png" alt="Herringbone Realty">
+                        <span class="featured-tag">✦ FEATURED</span>
+                    </div>
+                    <div class="card-content">
+                        <p class="price">$5,099<span>/month</span></p>
+                        <h3 class="property-name">Herringbone Realty</h3>
+                        <p class="address">28B Highgate Road, London, NW5 1NS</p>
+                        <div class="specs">
+                            <span><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8'/%3E%3Cpath d='M4 10V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4'/%3E%3Cpath d='M12 4v6'/%3E%3Cpath d='M2 18h20'/%3E%3C/svg%3E" alt="Bed"> 2 Beds</span>
+                            <span><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 6 6.5 3.5a1.5 1.5 0 0 0-2.12 0l-1.88 1.88a1.5 1.5 0 0 0 0 2.12L5 10'/%3E%3Cpath d='M10 5l10 10'/%3E%3Cpath d='M3 17l1 1a2 2 0 0 0 2.83 0L21 4'/%3E%3C/svg%3E" alt="Bath"> 3 Baths</span>
+                            <span><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect width='18' height='18' x='3' y='3' rx='2' ry='2'/%3E%3Cpath d='M3 9h18'/%3E%3Cpath d='M3 15h18'/%3E%3Cpath d='M9 3v18'/%3E%3Cpath d='M15 3v18'/%3E%3C/svg%3E" alt="Area"> 7x7 m²</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-box">
+                <div class="cta-content">
+                    <h2 class="cta-title">Need Consultation With Our Experienced Agent?</h2>
+                    <p class="cta-desc">Contact us now to get professional advice on your property journey.</p>
+                    <a href="contact.html" class="btn-connect">
+                        Get Started
+                        <div class="fake-cursor">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M5.65376 12.3822L2.10329 1.48651C1.88256 0.809513 2.58784 0.183576 3.20731 0.505329L12.544 5.35401C13.2305 5.71049 13.1554 6.71188 12.433 6.96646L8.85044 8.22915L5.65376 12.3822Z" fill="white" stroke="black" stroke-width="1"/>
+                            </svg>
+                            <div class="click-ripple"></div>
+                        </div>
+                    </a>
+                </div>
+                <div class="cta-bg">
+                    <img src="assets/cta-town-buildings.png" alt="Buildings">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="logo">
+                        <img src="assets/logo.png" alt="KIMI properties" style="height: 100px; width: auto;">
+                    </div>
+                    <p class="footer-desc">KIMI properties is a leading real estate agency specializing in helping you find the perfect place to call home.</p>
+                    <div class="social-links">
+                        <a href="#"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+                        <a href="#"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+                        <a href="#"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg></a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="properties.html">Properties</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h3>Categories</h3>
+                    <ul>
+                        <li><a href="#">Studio</a></li>
+                        <li><a href="#">Apartment</a></li>
+                        <li><a href="#">Office</a></li>
+                        <li><a href="#">Villa</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h3>Contact Us</h3>
+                    <p>Greenwich Village, NY</p>
+                    <p>+1 234 567 890</p>
+                    <p>hello@kimiproperties.co</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 KIMI properties. All rights reserved.</p>
+                <div class="bottom-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -56,6 +56,20 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Mobile Menu Toggle
+    const hamburger = document.querySelector('.hamburger');
+    const navLinks = document.querySelector('.nav-links');
+    
+    if (hamburger && navLinks) {
+        hamburger.addEventListener('click', () => {
+            // Toggle Nav
+            navLinks.classList.toggle('nav-active');
+            
+            // Burger Animation
+            hamburger.classList.toggle('toggle');
+        });
+    }
+
     // Handle URL parameters for filters
     const urlParams = new URLSearchParams(window.location.search);
     const paramLocation = urlParams.get('location');

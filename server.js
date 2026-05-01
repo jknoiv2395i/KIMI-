@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 const bodyParser = require('body-parser');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 const SECRET_KEY = 'kimi-secret-key'; // In production, use env variables
 const ADMIN_PASSWORD = 'admin123'; // In production, use env variables
 

@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KIMI Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Modern Reset */
+        body { margin: 0; font-family: 'Outfit', sans-serif; background: #F8F9FA; color: #333; display: flex; height: 100vh; overflow: hidden; }
+        * { box-sizing: border-box; }
+        
+        /* Sidebar */
+        .sidebar { width: 260px; background: white; border-right: 1px solid #E5E7EB; display: flex; flex-direction: column; padding: 24px 0; z-index: 10; }
+        .sidebar-brand { font-size: 22px; font-weight: 700; color: #1E3A8A; padding: 0 24px; margin-bottom: 40px; display: flex; align-items: center; gap: 10px; letter-spacing: -0.5px; }
+        .nav-item { padding: 14px 24px; color: #4B5563; text-decoration: none; display: flex; align-items: center; gap: 14px; cursor: pointer; font-weight: 500; transition: all 0.2s; font-size: 15px; }
+        .nav-item:hover { background: #F3F4F6; }
+        .nav-item.active { background: #EEF2FF; color: #2563EB; font-weight: 600; border-right: 4px solid #2563EB; }
+        .nav-item svg { width: 20px; height: 20px; opacity: 0.7; }
+        .nav-item.active svg { opacity: 1; }
+        
+        /* Main Layout */
+        .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+        .header { background: white; border-bottom: 1px solid #E5E7EB; padding: 16px 32px; display: flex; justify-content: flex-end; align-items: center; height: 70px; }
+        .content { flex: 1; padding: 40px; overflow-y: auto; }
+        
+        /* Login Overlay */
+        .login-overlay { position: fixed; inset: 0; background: #F8F9FA; display: flex; align-items: center; justify-content: center; z-index: 100; }
+        .login-card { background: white; padding: 40px; border-radius: 16px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); width: 100%; max-width: 400px; text-align: center; }
+        .login-card h2 { margin: 0 0 24px 0; color: #111827; }
+        .login-card input { width: 100%; padding: 14px; margin-bottom: 20px; border: 1px solid #D1D5DB; border-radius: 8px; font-family: 'Outfit'; font-size: 16px; }
+        .btn-primary { width: 100%; background: #2563EB; color: white; border: none; padding: 14px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 16px; transition: background 0.2s; }
+        .btn-primary:hover { background: #1D4ED8; }
+        
+        /* Views */
+        .view-section { display: none; }
+        .view-section.active { display: block; }
+        
+        /* Content Manager Styles */
+        .content-card { background: white; border-radius: 12px; border: 1px solid #E5E7EB; padding: 32px; margin-bottom: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .content-card h3 { margin: 0 0 24px 0; font-size: 18px; color: #111827; display: flex; align-items: center; justify-content: space-between; }
+        
+        /* Property View Filters */
+        .filter-tabs { display: flex; gap: 12px; margin-bottom: 30px; flex-wrap: wrap; }
+        .filter-btn { padding: 10px 16px; border: 1px solid #E5E7EB; background: white; border-radius: 8px; color: #4B5563; cursor: pointer; display: flex; align-items: center; gap: 10px; font-weight: 500; font-size: 14px; transition: all 0.2s; }
+        .filter-btn:hover { border-color: #D1D5DB; background: #F9FAFB; }
+        .filter-btn.active { background: #10B981; color: white; border-color: #10B981; }
+        .filter-btn span.badge { background: #F3F4F6; color: #4B5563; padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: 600; }
+        .filter-btn.active span.badge { background: rgba(255,255,255,0.2); color: white; }
+
+        .add-property-btn { width: 100%; padding: 18px; border: 2px dashed #D1D5DB; background: white; color: #6B7280; border-radius: 12px; cursor: pointer; margin-bottom: 24px; font-weight: 500; font-size: 15px; transition: all 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px; }
+        .add-property-btn:hover { border-color: #9CA3AF; color: #4B5563; background: #F9FAFB; }
+
+        /* Property List */
+        .property-list { display: flex; flex-direction: column; gap: 16px; }
+        .property-row { background: white; border: 1px solid #E5E7EB; border-radius: 12px; padding: 20px; display: flex; justify-content: space-between; align-items: center; transition: box-shadow 0.2s; }
+        .property-row:hover { box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+        .property-info { display: flex; gap: 24px; align-items: center; }
+        .property-info img { width: 140px; height: 90px; object-fit: cover; border-radius: 8px; border: 1px solid #F3F4F6; }
+        .property-details h4 { margin: 0 0 10px 0; color: #111827; font-size: 16px; font-weight: 600; }
+        .property-meta { display: flex; gap: 20px; color: #6B7280; font-size: 13px; align-items: center; }
+        .property-meta span { display: flex; align-items: center; gap: 6px; }
+        .property-meta svg { width: 14px; height: 14px; color: #9CA3AF; }
+        .property-actions { display: flex; gap: 12px; }
+        .btn-outline { padding: 8px 16px; border: 1px solid #E5E7EB; background: white; border-radius: 6px; color: #4B5563; cursor: pointer; display: flex; align-items: center; gap: 8px; font-weight: 500; font-size: 14px; font-family: 'Outfit'; }
+        .btn-outline:hover { background: #F9FAFB; }
+        .btn-outline.text-red { color: #EF4444; border-color: #FECACA; }
+        .btn-outline.text-red:hover { background: #FEF2F2; }
+
+        /* Form Layout */
+        .form-header { display: flex; align-items: center; gap: 16px; margin-bottom: 32px; }
+        .back-btn { background: white; border: 1px solid #E5E7EB; border-radius: 8px; padding: 8px 12px; cursor: pointer; color: #4B5563; display: flex; align-items: center; gap: 8px; font-weight: 500; font-family: 'Outfit'; }
+        .back-btn:hover { background: #F9FAFB; }
+        .form-header h2 { margin: 0; font-size: 24px; color: #111827; }
+        
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; background: white; padding: 40px; border-radius: 16px; border: 1px solid #E5E7EB; }
+        .form-group { display: flex; flex-direction: column; gap: 10px; }
+        .form-group.full { grid-column: span 2; }
+        .form-group label { font-size: 12px; font-weight: 600; color: #6B7280; text-transform: uppercase; letter-spacing: 0.5px; }
+        .form-group input, .form-group select, .form-group textarea { padding: 14px; border: 1px solid #D1D5DB; border-radius: 8px; font-family: 'Outfit', sans-serif; font-size: 15px; color: #111827; background: #F9FAFB; transition: border-color 0.2s; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: #2563EB; background: white; }
+        
+        /* Image Upload Box */
+        .image-upload-area { grid-column: span 2; border: 2px dashed #D1D5DB; padding: 50px 20px; text-align: center; border-radius: 12px; color: #6B7280; cursor: pointer; background: #F9FAFB; position: relative; overflow: hidden; transition: all 0.2s; }
+        .image-upload-area input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+        .image-upload-area:hover { border-color: #9CA3AF; background: #F3F4F6; }
+        .image-upload-area svg { width: 32px; height: 32px; color: #9CA3AF; margin-bottom: 12px; }
+        .image-upload-area p { margin: 0 0 6px 0; font-weight: 500; color: #374151; font-size: 16px; }
+        .image-upload-area span { font-size: 13px; color: #9CA3AF; }
+        
+        .thumbnail-container { grid-column: span 2; margin-top: 10px; }
+        .thumbnail-container h5 { margin: 0 0 12px 0; font-size: 13px; color: #6B7280; font-weight: 500; display: flex; align-items: center; gap: 6px; }
+        .thumbnail-preview { display: flex; gap: 16px; flex-wrap: wrap; }
+        .thumbnail-wrapper { position: relative; width: 120px; height: 90px; border-radius: 8px; overflow: hidden; border: 1px solid #E5E7EB; }
+        .thumbnail-wrapper img { width: 100%; height: 100%; object-fit: cover; }
+        .thumbnail-wrapper .remove-btn { position: absolute; top: 6px; right: 6px; background: rgba(0,0,0,0.6); color: white; border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 14px; padding: 0; }
+        
+        /* Utilities */
+        .btn-success { background: #10B981; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 15px; font-family: 'Outfit'; transition: background 0.2s; }
+        .btn-success:hover { background: #059669; }
+        .toast { position: fixed; bottom: 24px; right: 24px; background: #111827; color: white; padding: 16px 24px; border-radius: 8px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); display: none; align-items: center; gap: 12px; font-weight: 500; z-index: 1000; animation: slideUp 0.3s ease; }
+        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    </style>
+</head>
+<body>
+
+    <!-- Login Screen -->
+    <div id="login-screen" class="login-overlay">
+        <div class="login-card">
+            <img src="assets/logo.png" alt="KIMI Properties" style="height: 60px; margin-bottom: 20px;">
+            <h2 style="margin-top: 0;">Admin Login</h2>
+            <input type="password" id="password" placeholder="Enter Admin Password">
+            <button class="btn-primary" onclick="login()">Login to Dashboard</button>
+            <p id="error" style="color: #EF4444; margin-top: 16px; font-size: 14px; display: none;"></p>
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-brand" style="margin-bottom: 30px;">
+            <img src="assets/logo.png" alt="KIMI Properties" style="height: 35px; width: auto;">
+        </div>
+        
+        <a class="nav-item" onclick="switchView('content-view')" id="nav-content">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+            Site Content
+        </a>
+        <a class="nav-item active" onclick="switchView('properties-view')" id="nav-properties">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h18v18H3z"></path><path d="M3 9h18"></path><path d="M9 21V9"></path></svg>
+            Properties
+        </a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main">
+        <div class="header">
+            <button class="btn-primary" style="width: auto; padding: 10px 20px;" onclick="logout()">Log Out</button>
+        </div>
+        
+        <div class="content">
+            
+            <!-- Site Content View -->
+            <div id="content-view" class="view-section">
+                <div class="form-header">
+                    <h2>Site Content Manager</h2>
+                </div>
+                
+                <div class="content-card">
+                    <h3>Hero Section</h3>
+                    <div class="form-group" style="margin-bottom: 20px;">
+                        <label>Hero Title</label>
+                        <textarea id="hero-title" rows="2"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Hero Subtitle</label>
+                        <textarea id="hero-subtitle" rows="2"></textarea>
+                    </div>
+                </div>
+
+                <div class="content-card">
+                    <h3>Contact Information</h3>
+                    <div class="form-grid" style="padding: 0; border: none; background: transparent;">
+                        <div class="form-group">
+                            <label>Phone Number</label>
+                            <input type="text" id="contact-phone">
+                        </div>
+                        <div class="form-group">
+                            <label>Email Address</label>
+                            <input type="text" id="contact-email">
+                        </div>
+                        <div class="form-group full">
+                            <label>Address</label>
+                            <input type="text" id="contact-address">
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="display: flex; justify-content: flex-end;">
+                    <button class="btn-success" onclick="saveSiteContent()">Save Content Changes</button>
+                </div>
+            </div>
+
+            <!-- Properties List View -->
+            <div id="properties-view" class="view-section active">
+                <div class="form-header">
+                    <h2>Manage Property Listings</h2>
+                </div>
+                
+                <div class="filter-tabs">
+                    <button class="filter-btn active" onclick="filterProperties('All')">All Properties <span class="badge" id="count-all">0</span></button>
+                    <button class="filter-btn" onclick="filterProperties('Residential (Purchase)')">Residential (Purchase) <span class="badge" id="count-res-buy">0</span></button>
+                    <button class="filter-btn" onclick="filterProperties('Residential Rental')">Residential Rental <span class="badge" id="count-res-rent">0</span></button>
+                    <button class="filter-btn" onclick="filterProperties('Commercial (Purchase)')">Commercial (Purchase) <span class="badge" id="count-com-buy">0</span></button>
+                    <button class="filter-btn" onclick="filterProperties('Commercial Rental')">Commercial Rental <span class="badge" id="count-com-rent">0</span></button>
+                    <button class="filter-btn" onclick="filterProperties('Industrial')">Industrial <span class="badge" id="count-ind">0</span></button>
+                </div>
+
+                <button class="add-property-btn" onclick="showPropertyForm()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    Add New Property
+                </button>
+
+                <div class="property-list" id="property-list">
+                    <!-- Dynamic Property Rows -->
+                </div>
+            </div>
+
+            <!-- Property Edit Form View -->
+            <div id="property-form-view" class="view-section">
+                <div class="form-header">
+                    <button class="back-btn" onclick="switchView('properties-view')">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                        Edit Property
+                    </button>
+                </div>
+
+                <div class="form-grid">
+                    <input type="hidden" id="prop-id">
+                    
+                    <div class="form-group full">
+                        <label>Property Title *</label>
+                        <input type="text" id="prop-name" placeholder="e.g. 2BHK Sq.Ft. Residential Apartment for Sale">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Location</label>
+                        <input type="text" id="prop-address" placeholder="e.g. KT Nagar, Friends Colony, Nagpur">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Price</label>
+                        <input type="text" id="prop-price" placeholder="e.g. Contact for Price or ₹45 L">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Super Area / Size</label>
+                        <input type="text" id="prop-area" placeholder="e.g. 3 BHK 1550 Sqft 4 BHK 3000 Sqft">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select id="prop-status">
+                            <option value="Ready to Move">Ready to Move</option>
+                            <option value="Under Construction">Under Construction</option>
+                            <option value="Recently Sold">Recently Sold</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Transaction Type</label>
+                        <select id="prop-type">
+                            <option value="New">New Property</option>
+                            <option value="Resale">Resale</option>
+                            <option value="Rental">Rental</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Category / Section</label>
+                        <select id="prop-category">
+                            <option value="Residential (Purchase)">Residential (Purchase)</option>
+                            <option value="Residential Rental">Residential Rental</option>
+                            <option value="Commercial (Purchase)">Commercial (Purchase)</option>
+                            <option value="Commercial Rental">Commercial Rental</option>
+                            <option value="Industrial">Industrial</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group full">
+                        <label>Description</label>
+                        <textarea id="prop-description" rows="4" placeholder="Ready to move Residential Sanctioned, Fire NoC and OC are available..."></textarea>
+                    </div>
+
+                    <div class="form-group full" style="margin-top: 10px;">
+                        <label>Images & Videos</label>
+                        <div class="image-upload-area">
+                            <input type="file" id="prop-file-input" accept="image/*,video/*" onchange="handleFileUpload(event)">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                            <p>Click to upload images or videos</p>
+                            <span>JPG, PNG, WebP, MP4 — up to 50MB each</span>
+                        </div>
+                    </div>
+
+                    <div class="thumbnail-container">
+                        <h5>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                            Images (1)
+                        </h5>
+                        <div class="thumbnail-preview" id="prop-thumbnail-preview">
+                            <!-- Thumbnails appear here -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 24px;">
+                    <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; font-weight: 500; color: #4B5563;">
+                        <input type="checkbox" id="prop-featured" style="width: 20px; height: 20px;">
+                        Feature on Homepage
+                    </label>
+                    <button class="btn-success" onclick="saveProperty()">Save Property</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+        <span id="toast-msg">Changes saved successfully!</span>
+    </div>
+
+    <script>
+        let content = {};
+        let currentFilter = 'All';
+        
+        // Base64 storage for the image
+        let currentImageBase64 = "";
+
+        // Check Login Status on Load
+        document.addEventListener("DOMContentLoaded", () => {
+            const token = localStorage.getItem('kimi_token');
+            if (token) {
+                document.getElementById('login-screen').style.display = 'none';
+                fetchData();
+            }
+        });
+
+        async function login() {
+            const password = document.getElementById('password').value;
+            const err = document.getElementById('error');
+            try {
+                const res = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ password })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    localStorage.setItem('kimi_token', data.token);
+                    document.getElementById('login-screen').style.display = 'none';
+                    fetchData();
+                } else {
+                    err.innerText = data.message;
+                    err.style.display = 'block';
+                }
+            } catch (e) {
+                err.innerText = 'Connection error. Is the server running?';
+                err.style.display = 'block';
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('kimi_token');
+            window.location.reload();
+        }
+
+        async function fetchData() {
+            try {
+                const res = await fetch('/api/content');
+                content = await res.json();
+                if (!content.properties) content.properties = [];
+                
+                // Populate Site Content Fields
+                document.getElementById('hero-title').value = content.hero?.title || '';
+                document.getElementById('hero-subtitle').value = content.hero?.subtitle || '';
+                document.getElementById('contact-phone').value = content.contact?.phone || '';
+                document.getElementById('contact-email').value = content.contact?.email || '';
+                document.getElementById('contact-address').value = content.contact?.address || '';
+                
+                renderProperties();
+                updateCounts();
+            } catch (err) {
+                console.error("Failed to fetch data:", err);
+            }
+        }
+
+        // View Navigation
+        function switchView(viewId) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            document.getElementById(viewId).classList.add('active');
+            
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            if(viewId === 'content-view') document.getElementById('nav-content').classList.add('active');
+            if(viewId === 'properties-view') document.getElementById('nav-properties').classList.add('active');
+        }
+
+        // Property Rendering
+        function filterProperties(category) {
+            currentFilter = category;
+            
+            // Update filter button styles
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.innerText.includes(category)) btn.classList.add('active');
+            });
+            
+            renderProperties();
+        }
+
+        function updateCounts() {
+            const counts = { 'All': content.properties.length, 'Residential (Purchase)': 0, 'Residential Rental': 0, 'Commercial (Purchase)': 0, 'Commercial Rental': 0, 'Industrial': 0 };
+            content.properties.forEach(p => {
+                if (counts[p.category] !== undefined) counts[p.category]++;
+            });
+            
+            document.getElementById('count-all').innerText = counts['All'];
+            document.getElementById('count-res-buy').innerText = counts['Residential (Purchase)'];
+            document.getElementById('count-res-rent').innerText = counts['Residential Rental'];
+            document.getElementById('count-com-buy').innerText = counts['Commercial (Purchase)'];
+            document.getElementById('count-com-rent').innerText = counts['Commercial Rental'];
+            document.getElementById('count-ind').innerText = counts['Industrial'];
+        }
+
+        function renderProperties() {
+            const list = document.getElementById('property-list');
+            list.innerHTML = '';
+            
+            const filteredProps = currentFilter === 'All' 
+                ? content.properties 
+                : content.properties.filter(p => p.category === currentFilter);
+                
+            filteredProps.forEach(prop => {
+                const item = document.createElement('div');
+                item.className = 'property-row';
+                
+                const imgSrc = prop.image || 'assets/hero-illustration.png';
+                const price = prop.price || 'Contact for Price';
+                const location = prop.address || '';
+                const area = prop.area || '';
+                
+                item.innerHTML = `
+                    <div class="property-info">
+                        <img src="${imgSrc}" alt="Property Image">
+                        <div class="property-details">
+                            <h4>${prop.name}</h4>
+                            <div class="property-meta">
+                                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> ${location}</span>
+                                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg> ${price}</span>
+                                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8"></path><path d="M4 10V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4"></path></svg> ${area}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="property-actions">
+                        <button class="btn-outline" onclick="editProperty('${prop.id}')">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg> Edit
+                        </button>
+                        <button class="btn-outline text-red" onclick="deleteProperty('${prop.id}')">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg> Delete
+                        </button>
+                    </div>
+                `;
+                list.appendChild(item);
+            });
+            updateCounts();
+        }
+
+        // Form Logic
+        function showPropertyForm(prop = null) {
+            switchView('property-form-view');
+            
+            if (prop) {
+                document.getElementById('prop-id').value = prop.id;
+                document.getElementById('prop-name').value = prop.name;
+                document.getElementById('prop-address').value = prop.address || '';
+                document.getElementById('prop-price').value = prop.price || '';
+                document.getElementById('prop-area').value = prop.area || '';
+                document.getElementById('prop-status').value = prop.status || 'Ready to Move';
+                document.getElementById('prop-type').value = prop.transactionType || 'New';
+                document.getElementById('prop-category').value = prop.category || 'Residential (Purchase)';
+                document.getElementById('prop-description').value = prop.description || '';
+                document.getElementById('prop-featured').checked = prop.isFeatured || false;
+                
+                currentImageBase64 = prop.image || '';
+            } else {
+                // New Form
+                document.getElementById('prop-id').value = 'prop-' + Date.now();
+                document.getElementById('prop-name').value = '';
+                document.getElementById('prop-address').value = '';
+                document.getElementById('prop-price').value = '';
+                document.getElementById('prop-area').value = '';
+                document.getElementById('prop-status').value = 'Ready to Move';
+                document.getElementById('prop-type').value = 'New';
+                document.getElementById('prop-category').value = currentFilter !== 'All' ? currentFilter : 'Residential (Purchase)';
+                document.getElementById('prop-description').value = '';
+                document.getElementById('prop-featured').checked = false;
+                
+                currentImageBase64 = '';
+            }
+            renderThumbnails();
+        }
+
+        function editProperty(id) {
+            const prop = content.properties.find(p => p.id === id);
+            if (prop) showPropertyForm(prop);
+        }
+
+        function deleteProperty(id) {
+            if (confirm('Are you sure you want to delete this property? This action cannot be undone.')) {
+                content.properties = content.properties.filter(p => p.id !== id);
+                syncToServer();
+                renderProperties();
+            }
+        }
+
+        // File Handling
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                currentImageBase64 = e.target.result;
+                renderThumbnails();
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function removeImage() {
+            currentImageBase64 = "";
+            renderThumbnails();
+        }
+
+        function renderThumbnails() {
+            const container = document.getElementById('prop-thumbnail-preview');
+            if (currentImageBase64) {
+                container.innerHTML = `
+                    <div class="thumbnail-wrapper">
+                        <img src="${currentImageBase64}" alt="Property Preview">
+                        <button class="remove-btn" onclick="removeImage()">✕</button>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = '';
+            }
+        }
+
+        // API Sync
+        function saveProperty() {
+            const newProp = {
+                id: document.getElementById('prop-id').value,
+                name: document.getElementById('prop-name').value,
+                address: document.getElementById('prop-address').value,
+                price: document.getElementById('prop-price').value,
+                area: document.getElementById('prop-area').value,
+                status: document.getElementById('prop-status').value,
+                transactionType: document.getElementById('prop-type').value,
+                category: document.getElementById('prop-category').value,
+                description: document.getElementById('prop-description').value,
+                isFeatured: document.getElementById('prop-featured').checked,
+                image: currentImageBase64
+            };
+
+            // Basic Validation
+            if(!newProp.name) { alert("Property Title is required."); return; }
+
+            const existingIndex = content.properties.findIndex(p => p.id === newProp.id);
+            if (existingIndex >= 0) {
+                content.properties[existingIndex] = newProp;
+            } else {
+                content.properties.push(newProp);
+            }
+
+            syncToServer();
+            switchView('properties-view');
+            renderProperties();
+        }
+
+        function saveSiteContent() {
+            content.hero.title = document.getElementById('hero-title').value;
+            content.hero.subtitle = document.getElementById('hero-subtitle').value;
+            content.contact.phone = document.getElementById('contact-phone').value;
+            content.contact.email = document.getElementById('contact-email').value;
+            content.contact.address = document.getElementById('contact-address').value;
+            syncToServer();
+        }
+
+        async function syncToServer() {
+            try {
+                const res = await fetch('/api/content', {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('kimi_token')}`
+                    },
+                    body: JSON.stringify(content)
+                });
+                
+                if (res.ok) {
+                    showToast();
+                } else {
+                    alert('Session expired. Please login again.');
+                    logout();
+                }
+            } catch (err) {
+                console.error("Save error:", err);
+            }
+        }
+
+        function showToast() {
+            const toast = document.getElementById('toast');
+            toast.style.display = 'flex';
+            setTimeout(() => { toast.style.display = 'none'; }, 3000);
+        }
+    </script>
+</body>
+</html>

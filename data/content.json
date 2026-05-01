@@ -1,0 +1,66 @@
+{
+    "hero": {
+        "title": "We help people to realize their dream property",
+        "subtitle": "We are creative people who provide the best way to you who want to have a new comfortable and suitable place to live",
+        "location": "Any Location",
+        "type": "All Types"
+    },
+    "contact": {
+        "phone": "+91 96969 76950",
+        "email": "hello@kimiproperties.co",
+        "address": "Nagpur, Maharashtra, India"
+    },
+    "properties": [
+        {
+            "id": "prop-1",
+            "name": "Riverbend Retreat",
+            "price": "$4,299",
+            "priceUnit": "/month",
+            "address": "3 Leame Close, Hull, HU3 6ND",
+            "category": "Residential",
+            "status": "Ready to Move",
+            "transactionType": "New",
+            "beds": 3,
+            "baths": 2,
+            "area": "7x7 m²",
+            "image": "assets/property-1.png",
+            "video": "",
+            "description": "A beautiful residential retreat offering serene views and modern amenities.",
+            "isFeatured": true
+        },
+        {
+            "id": "prop-2",
+            "name": "Oakwood Cottage",
+            "price": "$2,095",
+            "priceUnit": "/month",
+            "address": "2699 Green Valley, Highland Lake, FL",
+            "category": "Studio",
+            "status": "Under Construction",
+            "transactionType": "Resale",
+            "beds": 4,
+            "baths": 4,
+            "area": "6x8 m²",
+            "image": "assets/property-2.png",
+            "video": "",
+            "description": "A cozy and affordable studio cottage located in the heart of Highland Lake.",
+            "isFeatured": true
+        },
+        {
+            "id": "prop-3",
+            "name": "Herringbone Realty",
+            "price": "$5,099",
+            "priceUnit": "/month",
+            "address": "28B Highgate Road, London, NW5 1NS",
+            "category": "Commercial",
+            "status": "Ready to Move",
+            "transactionType": "New",
+            "beds": 2,
+            "baths": 3,
+            "area": "7x7 m²",
+            "image": "assets/property-3.png",
+            "video": "",
+            "description": "Premium commercial space perfect for high-end retail or boutique offices.",
+            "isFeatured": true
+        }
+    ]
+}

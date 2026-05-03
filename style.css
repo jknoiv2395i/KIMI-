@@ -51,6 +51,11 @@ h1, h2, h3, h4, h5, h6 {
     z-index: 2;
 }
 
+.header {
+    position: relative;
+    z-index: 1000;
+}
+
 /* Navbar */
 .navbar {
     display: flex;
@@ -70,23 +75,29 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--text-main);
 }
 
-.nav-links {
-    display: flex;
-    list-style: none;
-    gap: 40px;
+.navbar .nav-links ul {
+    display: flex !important;
+    list-style: none !important;
+    gap: 40px !important;
+    margin: 0 !important;
+    padding: 0 !important;
 }
 
-.nav-links a {
-    text-decoration: none;
-    color: var(--text-main);
-    font-weight: 500;
-    font-size: 16px;
-    transition: color 0.2s ease;
+.navbar .nav-links ul a {
+    text-decoration: none !important;
+    color: var(--text-main) !important;
+    font-weight: 500 !important;
+    font-size: 16px !important;
+    transition: color 0.2s ease !important;
 }
 
-.nav-links li a:hover,
-.nav-links li a.active {
-    color: #1A1A1A;
+.navbar .nav-links ul li a:hover,
+.navbar .nav-links ul li a.active {
+    color: #1A1A1A !important;
+}
+
+.mobile-nav-header, .mobile-nav-footer {
+    display: none !important;
 }
 
 /* Hamburger Menu Base Styles */
@@ -844,46 +855,52 @@ h1, h2, h3, h4, h5, h6 {
     stroke: white !important;
 }
 
+.utility-links a {
+    color: var(--text-muted);
+    text-decoration: none;
+    display: block;
+    margin-bottom: 12px;
+    font-size: 16px;
+    transition: color 0.3s ease;
+}
+
+.utility-links a:hover {
+    color: #1A1A1A;
+}
+
 .social-links a:hover {
     background-color: #C1A5FF;
     transform: translateY(-3px);
 }
 
 
-.footer-col h4 {
-    font-size: 14px;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    color: #9CA3AF;
-    margin-bottom: 30px;
-    font-weight: 600;
-}
-
-.links-subgrid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 40px;
-}
-
-.sub-col {
+.footer-links {
     display: flex;
     flex-direction: column;
     gap: 15px;
 }
 
-.sub-col a, .utility-links p {
+.footer-links a, .footer-links p {
     text-decoration: none;
     color: var(--text-main);
     font-size: 16px;
-    font-weight: 600;
+    font-weight: 500; /* Slightly lighter than before for a cleaner look */
     transition: color 0.3s ease;
+    margin: 0;
 }
 
-.sub-col a:hover {
+.footer-links a:hover {
     color: #C1A5FF;
 }
 
-.utility-links {
+.footer-col h4 {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #9CA3AF;
+    margin-bottom: 25px;
+    font-weight: 700;
+}
     display: flex;
     flex-direction: column;
     gap: 15px;
@@ -904,6 +921,7 @@ h1, h2, h3, h4, h5, h6 {
 
 
 
+.btn-connect {
     background-color: white;
     color: #1A1A1A;
     text-decoration: none;
@@ -1892,8 +1910,11 @@ h1, h2, h3, h4, h5, h6 {
 /* --- EXACT MOBILE ALIGNMENT FIXES --- */
 @media (max-width: 768px) {
     /* Navbar Alignment */
+    /* Navbar Alignment */
+    .container { z-index: auto !important; width: 100% !important; padding: 0 24px !important; }
+    .header { z-index: 99999999 !important; position: relative; background: white !important; padding: 15px 0 !important; }
     .nav-actions { display: none !important; }
-    .navbar { justify-content: space-between !important; padding: 10px 0 !important; position: relative; }
+    .navbar { justify-content: space-between !important; padding: 0 !important; position: relative; z-index: 99999999 !important; }
     
     /* Mobile Nav Menu Drawer - PREMIUM REDESIGN */
     .nav-links {
@@ -1908,20 +1929,12 @@ h1, h2, h3, h4, h5, h6 {
         padding: 0 !important;
         gap: 0 !important;
         transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
-        z-index: 1000 !important;
+        z-index: 999999 !important; /* Extremely high to stay above filters/hero */
         overflow-y: auto;
     }
     
     .nav-links.nav-active {
         left: 0 !important;
-    }
-
-    .mobile-nav-header {
-        display: none;
-    }
-
-    .mobile-nav-footer {
-        display: none;
     }
 
     .mobile-nav-header {
@@ -1937,39 +1950,54 @@ h1, h2, h3, h4, h5, h6 {
 
     .nav-links ul {
         width: 100% !important;
-        padding: 0 !important;
+        padding: 40px 0 !important; /* Added vertical padding */
         margin: 0 !important;
         list-style: none !important;
+        display: flex !important;
+        flex-direction: column !important; /* Force vertical orientation */
+        align-items: flex-start !important;
+        gap: 0 !important;
     }
 
     .nav-links li { 
         width: 100% !important;
         margin: 0 !important; 
-        padding: 15px 40px !important;
+        padding: 20px 40px !important; /* Balanced spacing */
         border-bottom: 1px solid rgba(255,255,255,0.05) !important;
     }
     
-    .nav-links li a { 
-        color: white !important;
-        font-size: 24px !important; 
+    .navbar .nav-links ul li a,
+    .navbar .nav-links ul li a.active { 
+        color: #FFFFFF !important; /* Forced pure white for both normal and active states */
+        opacity: 1 !important; 
+        font-size: 28px !important; 
         font-weight: 500 !important;
         display: block !important;
         text-align: left !important;
+        letter-spacing: -0.5px !important;
     }
 
     .mobile-nav-footer {
         display: block !important;
         margin-top: auto !important;
-        padding: 40px !important;
+        padding: 30px 40px !important;
         text-align: center !important;
-        border-top: 1px solid rgba(255,255,255,0.1) !important;
+        border-top: 1px solid rgba(255,255,255,0.05) !important;
+        background: rgba(255,255,255,0.02) !important;
     }
 
     .mobile-nav-footer a {
-        color: white !important;
+        color: #1a1a1a !important;
+        background: white !important;
         text-decoration: none !important;
-        font-size: 20px !important;
-        font-weight: 600 !important;
+        font-size: 18px !important;
+        font-weight: 700 !important;
+        padding: 16px 32px !important;
+        border-radius: 12px !important;
+        display: inline-block !important;
+        width: 100% !important;
+        text-transform: uppercase !important;
+        letter-spacing: 1px !important;
     }
 
 
@@ -1980,8 +2008,9 @@ h1, h2, h3, h4, h5, h6 {
         width: 30px !important;
         height: 21px !important;
         cursor: pointer !important;
-        z-index: 1100 !important; /* Above everything */
+        z-index: 9999999 !important; /* Above everything including the drawer */
     }
+
     
     .hamburger span {
         display: block !important;
@@ -2011,25 +2040,35 @@ h1, h2, h3, h4, h5, h6 {
 
     /* Hero Section Alignment (RESTORED) */
     .hero-section {
-        padding: 0 !important; /* Removed top padding entirely */
+        padding: 20px 0 0 0 !important; /* Removed bottom padding entirely */
         text-align: left !important;
         background-color: #F8F7FF !important;
-        overflow: hidden;
+        overflow: visible !important;
     }
     .hero-content {
-        padding: 0 !important; /* Removed horizontal padding to align with container edges */
+        padding: 0 !important;
         text-align: left !important;
+        position: relative;
+        z-index: 5;
     }
     .hero-title {
-        font-size: 40px !important;
-        line-height: 1.15 !important;
+        font-size: 46px !important; /* Re-scaled to match desktop "impact" feel */
+        line-height: 1.1 !important; /* Tighter line height for the luxury look */
         text-align: left !important;
-        margin-bottom: 15px !important; /* Reduced from 20px */
+        margin-bottom: 25px !important;
         width: 100% !important;
+        color: #1a1a1a !important;
+        letter-spacing: -2px !important; /* Exact match to original spacing */
+    }
+    .title-pill {
+        width: 75px !important; /* Proportional scaling */
+        height: 36px !important;
+        top: -3px !important;
+        margin: 0 6px !important;
     }
     .hero-subtitle {
-        font-size: 15px !important;
-        margin: 0 0 20px 0 !important; /* Reduced from 30px */
+        font-size: 18px !important; /* Matched to original readability */
+        margin: 0 0 45px 0 !important; /* Balanced gap before filter */
         text-align: left !important;
         color: #777 !important;
         max-width: 100% !important;
@@ -2075,8 +2114,8 @@ h1, h2, h3, h4, h5, h6 {
         padding-bottom: 0 !important;
     }
     .segment-icon {
-        width: 72px !important;
-        height: 72px !important;
+        width: 56px !important; /* Scaled down for mobile */
+        height: 56px !important;
         background: #F0E9FF !important;
         border-radius: 50% !important;
         display: flex !important;
@@ -2109,10 +2148,10 @@ h1, h2, h3, h4, h5, h6 {
     }
     .btn-browse-action {
         width: 100% !important;
-        margin-top: 15px !important;
-        padding: 24px !important;
-        border-radius: 16px !important;
-        font-size: 20px !important;
+        margin-top: 10px !important;
+        padding: 18px !important;
+        border-radius: 14px !important;
+        font-size: 18px !important;
         font-weight: 600 !important;
         background: #1A1A1A !important;
         color: white !important;
@@ -2134,7 +2173,7 @@ h1, h2, h3, h4, h5, h6 {
 
     /* Home Page Section Optimizations */
     .container-section {
-        padding: 60px 0 !important;
+        padding: 20px 0 40px 0 !important; /* Reduced top padding to close the gap */
     }
     .section-title {
         font-size: 32px !important;
@@ -2148,8 +2187,62 @@ h1, h2, h3, h4, h5, h6 {
 
     .listings-grid { 
         grid-template-columns: 1fr !important; 
-        gap: 30px !important; 
+        gap: 20px !important; 
         padding: 10px 0 !important;
+    }
+
+    /* Horizontal property cards on mobile */
+    .property-card {
+        flex-direction: row !important;
+        border-radius: 16px !important;
+        height: auto !important;
+    }
+
+    .property-card .card-image {
+        width: 140px !important;
+        min-width: 140px !important;
+        height: auto !important;
+        min-height: 160px !important;
+        border-radius: 16px 0 0 16px !important;
+    }
+
+    .property-card .card-content {
+        padding: 16px !important;
+        flex: 1 !important;
+        justify-content: center !important;
+    }
+
+    .property-card .price {
+        font-size: 20px !important;
+        margin-bottom: 4px !important;
+    }
+
+    .property-card .property-name {
+        font-size: 16px !important;
+        margin-bottom: 4px !important;
+    }
+
+    .property-card .address {
+        font-size: 12px !important;
+        margin-bottom: 12px !important;
+    }
+
+    .property-card .specs {
+        padding-top: 10px !important;
+        gap: 8px !important;
+    }
+
+    .property-card .specs span {
+        font-size: 11px !important;
+    }
+
+    .property-card .featured-tag {
+        top: 10px !important;
+        right: auto !important;
+        left: 10px !important;
+        padding: 4px 8px !important;
+        font-size: 8px !important;
+        border-radius: 8px !important;
     }
 
     /* Priority Section */
@@ -2218,7 +2311,7 @@ h1, h2, h3, h4, h5, h6 {
         border-radius: 30px !important; 
         text-align: left !important;
         background-image: url('assets/cta-bg-new.png') !important; /* New background image with border included */
-        background-size: cover !important;
+        background-size: 100% 100% !important; /* Fixes clipped border on the left/right */
         background-position: center !important;
         background-repeat: no-repeat !important;
         border: none !important; /* Image already has the border */
@@ -2331,5 +2424,62 @@ h1, h2, h3, h4, h5, h6 {
     .form-row {
         flex-direction: column !important;
         gap: 0 !important;
+    }
+}
+
+/* WhatsApp Floating Button */
+.whatsapp-float {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    background-color: #25d366;
+    color: white;
+    border-radius: 50%;
+    text-align: center;
+    font-size: 30px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.whatsapp-float:hover {
+    transform: scale(1.1) translateY(-5px);
+    box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4);
+    background-color: #128c7e;
+}
+
+.whatsapp-float svg {
+    width: 32px;
+    height: 32px;
+    fill: white;
+}
+
+/* Pulse animation */
+@keyframes whatsapp-pulse {
+    0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.4); }
+    70% { box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+}
+
+.whatsapp-float {
+    animation: whatsapp-pulse 2s infinite;
+}
+
+@media (max-width: 768px) {
+    .whatsapp-float {
+        bottom: 20px;
+        right: 20px;
+        width: 50px;
+        height: 50px;
+    }
+    .whatsapp-float svg {
+        width: 26px;
+        height: 26px;
     }
 }

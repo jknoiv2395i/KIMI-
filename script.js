@@ -14,6 +14,19 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Default Data for Fallback
+    const defaultContent = {
+        hero: { title: "We help people to realize their dream property", subtitle: "We are creative people who provide the best way to you who want to have a new comfortable and suitable place to live" },
+        contact: { phone: "+91 96969 76950", email: "hello@kimiproperties.in", address: "Nagpur, Maharashtra, India" },
+        locations: ["Nagpur", "Mumbai", "Pune"],
+        categories: ["Residential (Purchase)", "Residential Rental", "Commercial (Purchase)", "Commercial Rental", "Industrial"],
+        properties: [
+            { id: "prop-1", name: "Riverbend Retreat", price: "$4,299", address: "3 Leame Close, Hull, HU3 6ND", location: "Mumbai", category: "Residential (Purchase)", status: "Ready to Move", transactionType: "New", area: "7x7 m²", image: "assets/property-1.png", isFeatured: true, description: "Experience the epitome of luxury living at Riverbend Retreat. This stunning residential masterpiece combines modern architecture with serene natural surroundings.", beds: 3, baths: 2 },
+            { id: "prop-2", name: "Oakwood Cottage", price: "$2,095", address: "2699 Green Valley, Highland Lake, FL", location: "Pune", category: "Residential Rental", status: "Under Construction", transactionType: "Resale", area: "6x8 m²", image: "assets/property-2.png", isFeatured: true, description: "Perfect for families or those seeking a peaceful escape without compromising on urban convenience.", beds: 2, baths: 1 },
+            { id: "prop-3", name: "Herringbone Realty", price: "$5,099", address: "28B Highgate Road, London, NW5 1NS", location: "Nagpur", category: "Commercial (Purchase)", status: "Ready to Move", transactionType: "New", area: "7x7 m²", image: "assets/property-3.png", isFeatured: true, description: "Located in the heart of Hull, with easy access to premium amenities and schools.", beds: 4, baths: 2 }
+        ]
+    };
+
     // Fetch Data for Frontend
     async function fetchFrontendData() {
         let content = null;
@@ -31,6 +44,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if (localData) {
                 content = JSON.parse(localData);
             }
+        }
+
+        // Final Fallback to defaults if still no content
+        if (!content) {
+            content = defaultContent;
         }
 
         if (content) {
@@ -65,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (paragraphs.length >= 3) {
                         paragraphs[0].innerText = content.contact.address || 'Nagpur, India';
                         paragraphs[1].innerText = content.contact.phone || '+91 96969 76950';
-                        paragraphs[2].innerText = content.contact.email || 'hello@kimiproperties.co';
+                        paragraphs[2].innerText = content.contact.email || 'hello@kimiproperties.in';
                     }
                 }
 
@@ -75,14 +93,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 const cpEmail = document.getElementById('contact-page-email');
                 if (cpAddr) cpAddr.innerText = content.contact.address || 'Nagpur, Maharashtra, India';
                 if (cpPhone) cpPhone.innerText = content.contact.phone || '+91 96969 76950';
-                if (cpEmail) cpEmail.innerText = content.contact.email || 'hello@kimiproperties.co';
+                if (cpEmail) cpEmail.innerText = content.contact.email || 'hello@kimiproperties.in';
             }
 
             // Populate Properties Grid
             const grid = document.getElementById('properties-grid');
             if (grid && content.properties) {
                 // If on homepage, only show featured
-                const isHomePage = window.location.pathname.endsWith('index.html') || window.location.pathname === '/';
+                const path = window.location.pathname;
+                const isHomePage = path.endsWith('index.html') || path.endsWith('/') || path === '' || path.split('/').pop() === '';
                 let propsToShow = isHomePage 
                     ? content.properties.filter(p => p.isFeatured) 
                     : content.properties;
@@ -110,6 +129,44 @@ document.addEventListener('DOMContentLoaded', () => {
                 const resultCountSpan = document.getElementById('result-count');
                 if (resultCountSpan && !isHomePage) {
                     resultCountSpan.textContent = propsToShow.length;
+                }
+            }
+
+            // Populate Individual Property Details (if on detail page)
+            if (window.location.pathname.includes('property-detail.html')) {
+                const urlParams = new URLSearchParams(window.location.search);
+                const propId = urlParams.get('id');
+                if (propId && content.properties) {
+                    const prop = content.properties.find(p => p.id === propId);
+                    if (prop) {
+                        // Update basic info
+                        const titleEl = document.querySelector('.property-detail-header h1');
+                        const priceEl = document.querySelector('.detail-price strong');
+                        const addrEl = document.querySelector('.detail-address');
+                        const breadcrumbSpan = document.querySelector('.breadcrumb span');
+                        
+                        if (titleEl) titleEl.innerText = prop.name;
+                        if (priceEl) priceEl.innerText = prop.price;
+                        if (addrEl) addrEl.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> ${prop.address} ${prop.location ? '(' + prop.location + ')' : ''}`;
+                        if (breadcrumbSpan) breadcrumbSpan.innerText = prop.name;
+
+                        // Update gallery
+                        const mainImg = document.querySelector('.main-image img');
+                        if (mainImg && prop.image) mainImg.src = prop.image;
+
+                        // Update specs
+                        const specs = document.querySelectorAll('.spec-value');
+                        if (specs.length >= 4) {
+                            specs[0].innerText = (prop.beds || '3') + ' Beds';
+                            specs[1].innerText = (prop.baths || '2') + ' Baths';
+                            specs[2].innerText = prop.area || 'N/A';
+                            specs[3].innerText = prop.category || 'Residential';
+                        }
+
+                        // Update description
+                        const descEl = document.querySelector('.description-box p');
+                        if (descEl && prop.description) descEl.innerText = prop.description;
+                    }
                 }
             }
         }

@@ -28,7 +28,7 @@ const defaultContent = {
     },
     contact: {
         phone: "+91 96969 76950",
-        email: "hello@kimiproperties.co",
+        email: "hello@kimiproperties.in",
         address: "Nagpur, Maharashtra, India"
     },
     properties: [

@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KIMI Admin</title>
     <link rel="icon" type="image/png" href="assets/logo.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/logo.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/logo.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/logo.png">
+    <link rel="shortcut icon" href="assets/logo.png">
+    <link rel="manifest" href="manifest.json">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         /* Modern Reset */
@@ -13,7 +18,8 @@
         
         /* Sidebar */
         .sidebar { width: 260px; background: white; border-right: 1px solid #E5E7EB; display: flex; flex-direction: column; padding: 24px 0; z-index: 10; }
-        .sidebar-brand { font-size: 22px; font-weight: 700; color: #1E3A8A; padding: 0 24px; margin-bottom: 40px; display: flex; align-items: center; gap: 10px; letter-spacing: -0.5px; }
+        .sidebar-brand { font-size: 22px; font-weight: 700; color: #111; padding: 0 24px; margin-bottom: 40px; display: flex; align-items: center; gap: 12px; letter-spacing: -0.5px; }
+        .sidebar-brand img { height: 40px; width: auto; }
         .nav-item { padding: 14px 24px; color: #4B5563; text-decoration: none; display: flex; align-items: center; gap: 14px; cursor: pointer; font-weight: 500; transition: all 0.2s; font-size: 15px; }
         .nav-item:hover { background: #F3F4F6; }
         .nav-item.active { background: #EEF2FF; color: #2563EB; font-weight: 600; border-right: 4px solid #2563EB; }
@@ -258,6 +264,16 @@
                     </div>
 
                     <div class="form-group">
+                        <label>Bedrooms</label>
+                        <input type="number" id="prop-beds" placeholder="e.g. 3">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Bathrooms</label>
+                        <input type="number" id="prop-baths" placeholder="e.g. 2">
+                    </div>
+
+                    <div class="form-group">
                         <label>Transaction Type</label>
                         <select id="prop-type">
                             <option value="New">New Property</option>
@@ -335,7 +351,7 @@
         // Default Data
         const defaultContent = {
             hero: { title: "We help people to realize their dream property", subtitle: "We are creative people who provide the best way to you who want to have a new comfortable and suitable place to live" },
-            contact: { phone: "+91 96969 76950", email: "hello@kimiproperties.co", address: "Nagpur, Maharashtra, India" },
+            contact: { phone: "+91 96969 76950", email: "hello@kimiproperties.in", address: "Nagpur, Maharashtra, India" },
             locations: ["Nagpur", "Mumbai", "Pune"],
             categories: ["Residential (Purchase)", "Residential Rental", "Commercial (Purchase)", "Commercial Rental", "Industrial"],
             properties: [
@@ -593,6 +609,8 @@
                 document.getElementById('prop-type').value = prop.transactionType || 'New';
                 document.getElementById('prop-category').value = prop.category || 'Residential (Purchase)';
                 document.getElementById('prop-description').value = prop.description || '';
+                document.getElementById('prop-beds').value = prop.beds || '';
+                document.getElementById('prop-baths').value = prop.baths || '';
                 document.getElementById('prop-featured').checked = prop.isFeatured || false;
                 
                 currentImages = prop.images || [];
@@ -610,6 +628,8 @@
                 document.getElementById('prop-type').value = 'New';
                 document.getElementById('prop-category').value = currentFilter !== 'All' ? currentFilter : 'Residential (Purchase)';
                 document.getElementById('prop-description').value = '';
+                document.getElementById('prop-beds').value = '';
+                document.getElementById('prop-baths').value = '';
                 document.getElementById('prop-featured').checked = false;
                 
                 currentImages = [];
@@ -719,6 +739,8 @@
                 transactionType: document.getElementById('prop-type').value,
                 category: document.getElementById('prop-category').value,
                 description: document.getElementById('prop-description').value,
+                beds: document.getElementById('prop-beds').value,
+                baths: document.getElementById('prop-baths').value,
                 isFeatured: document.getElementById('prop-featured').checked,
                 image: currentImages.length > 0 ? currentImages[0] : "", // Keep for grid compatibility
                 images: currentImages,

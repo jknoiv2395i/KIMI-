@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /admin.html
+Disallow: /script.js
+
+Sitemap: https://kimiproperties.co/sitemap.xml

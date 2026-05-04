@@ -1314,7 +1314,13 @@ h1, h2, h3, h4, h5, h6 {
 
 @media (max-width: 600px) {
     .footer-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px 20px;
+    }
+    
+    .footer-brand-col {
+        grid-column: 1 / -1;
+        margin-bottom: 30px;
     }
     
     .footer-bottom {
@@ -2191,39 +2197,35 @@ h1, h2, h3, h4, h5, h6 {
         padding: 10px 0 !important;
     }
 
-    /* Horizontal property cards on mobile */
+    /* Property cards stay vertical on mobile */
     .property-card {
-        flex-direction: row !important;
-        border-radius: 16px !important;
+        flex-direction: column !important;
+        border-radius: 20px !important;
         height: auto !important;
     }
 
     .property-card .card-image {
-        width: 140px !important;
-        min-width: 140px !important;
-        height: auto !important;
-        min-height: 160px !important;
-        border-radius: 16px 0 0 16px !important;
+        width: 100% !important;
+        height: 200px !important;
+        border-radius: 20px 20px 0 0 !important;
     }
 
     .property-card .card-content {
         padding: 16px !important;
-        flex: 1 !important;
-        justify-content: center !important;
     }
 
     .property-card .price {
-        font-size: 20px !important;
+        font-size: 22px !important;
         margin-bottom: 4px !important;
     }
 
     .property-card .property-name {
-        font-size: 16px !important;
+        font-size: 17px !important;
         margin-bottom: 4px !important;
     }
 
     .property-card .address {
-        font-size: 12px !important;
+        font-size: 13px !important;
         margin-bottom: 12px !important;
     }
 
@@ -2233,16 +2235,17 @@ h1, h2, h3, h4, h5, h6 {
     }
 
     .property-card .specs span {
-        font-size: 11px !important;
+        font-size: 12px !important;
     }
 
     .property-card .featured-tag {
         top: 10px !important;
-        right: auto !important;
         left: 10px !important;
-        padding: 4px 8px !important;
-        font-size: 8px !important;
-        border-radius: 8px !important;
+        right: auto !important;
+        width: fit-content !important;
+        padding: 5px 10px !important;
+        font-size: 9px !important;
+        border-radius: 10px !important;
     }
 
     /* Priority Section */
@@ -2285,21 +2288,34 @@ h1, h2, h3, h4, h5, h6 {
         padding: 60px 0 !important;
     }
     .testimonial-slide {
-        flex-direction: column !important;
-        height: auto !important;
-        flex: 0 0 320px !important; /* Adjust slide width for mobile */
+        flex-direction: row !important;
+        height: 220px !important;
+        flex: 0 0 420px !important;
         margin-right: 20px !important;
+        border-radius: 18px !important;
     }
     .testimonial-person-box {
-        width: 100% !important;
-        height: 200px !important;
+        width: 35% !important;
+        height: 100% !important;
     }
     .testimonial-content-box {
-        width: 100% !important;
-        padding: 25px !important;
+        width: 65% !important;
+        padding: 18px !important;
     }
     .quote {
-        font-size: 14px !important;
+        font-size: 12px !important;
+        line-height: 1.5 !important;
+        margin-bottom: 10px !important;
+    }
+    .rating {
+        font-size: 16px !important;
+        margin-bottom: 10px !important;
+    }
+    .user-meta h3 {
+        font-size: 13px !important;
+    }
+    .user-meta p {
+        font-size: 11px !important;
     }
 
     /* CTA Section */
@@ -2314,7 +2330,9 @@ h1, h2, h3, h4, h5, h6 {
         background-size: 100% 100% !important; /* Fixes clipped border on the left/right */
         background-position: center !important;
         background-repeat: no-repeat !important;
-        border: none !important; /* Image already has the border */
+        border: 2px solid #1A1A1A !important;
+        background-clip: padding-box !important;
+        background-color: #C1A5FF !important;
         width: 100% !important;
         max-width: 523px !important;
         min-height: 240px !important; /* Decreased height slightly from 304px */
@@ -2455,9 +2473,43 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .whatsapp-float svg {
-    width: 32px;
-    height: 32px;
+    width: 38px;
+    height: 38px;
     fill: white;
+}
+
+/* Call Floating Button */
+.call-float {
+    position: fixed;
+    bottom: 30px;
+    left: 30px;
+    width: 60px;
+    height: 60px;
+    background-color: #1A1A1A;
+    color: white;
+    border-radius: 50%;
+    text-align: center;
+    font-size: 30px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.call-float:hover {
+    transform: scale(1.1) translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    background-color: #000;
+}
+
+.call-float svg {
+    width: 34px;
+    height: 34px;
+    stroke: white;
+    fill: none;
 }
 
 /* Pulse animation */
@@ -2467,8 +2519,18 @@ h1, h2, h3, h4, h5, h6 {
     100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
 }
 
+@keyframes call-pulse {
+    0% { box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.2); }
+    70% { box-shadow: 0 0 0 15px rgba(0, 0, 0, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(0, 0, 0, 0); }
+}
+
 .whatsapp-float {
     animation: whatsapp-pulse 2s infinite;
+}
+
+.call-float {
+    animation: call-pulse 2s infinite 1s; /* delayed slightly */
 }
 
 @media (max-width: 768px) {
@@ -2479,7 +2541,17 @@ h1, h2, h3, h4, h5, h6 {
         height: 50px;
     }
     .whatsapp-float svg {
-        width: 26px;
-        height: 26px;
+        width: 32px;
+        height: 32px;
+    }
+    .call-float {
+        bottom: 20px;
+        left: 20px;
+        width: 50px;
+        height: 50px;
+    }
+    .call-float svg {
+        width: 30px;
+        height: 30px;
     }
 }

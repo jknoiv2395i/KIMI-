@@ -45,6 +45,39 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (propLocation) propLocation.innerHTML = locOptions;
             }
 
+            // Populate Category/Type Dropdowns
+            const heroType = document.getElementById('hero-type');
+            const typeFilter = document.getElementById('type-filter');
+            
+            if (content.categories && content.categories.length > 0) {
+                const catOptions = `<option value="all">All Types</option>` + 
+                                  content.categories.map(cat => `<option value="${cat}">${cat}</option>`).join('');
+                if (heroType) heroType.innerHTML = catOptions;
+                if (typeFilter) typeFilter.innerHTML = catOptions;
+            }
+
+            // Update Footer & Contact Page
+            if (content.contact) {
+                // Update Footer
+                const footerContact = document.querySelector('.footer-col .footer-links:last-child');
+                if (footerContact) {
+                    const paragraphs = footerContact.querySelectorAll('p');
+                    if (paragraphs.length >= 3) {
+                        paragraphs[0].innerText = content.contact.address || 'Nagpur, India';
+                        paragraphs[1].innerText = content.contact.phone || '+91 96969 76950';
+                        paragraphs[2].innerText = content.contact.email || 'hello@kimiproperties.co';
+                    }
+                }
+
+                // Update Contact Page Fields
+                const cpAddr = document.getElementById('contact-page-address');
+                const cpPhone = document.getElementById('contact-page-phone');
+                const cpEmail = document.getElementById('contact-page-email');
+                if (cpAddr) cpAddr.innerText = content.contact.address || 'Nagpur, Maharashtra, India';
+                if (cpPhone) cpPhone.innerText = content.contact.phone || '+91 96969 76950';
+                if (cpEmail) cpEmail.innerText = content.contact.email || 'hello@kimiproperties.co';
+            }
+
             // Populate Properties Grid
             const grid = document.getElementById('properties-grid');
             if (grid && content.properties) {
@@ -55,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     : content.properties;
 
                 grid.innerHTML = propsToShow.map(prop => `
-                    <div class="property-card" data-location="${prop.location || 'all'}" data-type="${prop.category}">
+                    <div class="property-card" onclick="window.location.href='property-detail.html?id=${prop.id}'" style="cursor: pointer;" data-location="${prop.location || 'all'}" data-type="${prop.category}">
                         <div class="card-image">
                             <img src="${prop.image || 'assets/hero-illustration.png'}" alt="${prop.name}">
                             ${prop.isFeatured ? '<span class="featured-tag">✦ FEATURED</span>' : ''}

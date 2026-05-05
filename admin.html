@@ -784,12 +784,17 @@
                     fetchData();
                     switchView('properties-view');
                 } else {
-                    const errorData = await res.json().catch(() => ({}));
-                    alert('Failed to save property: ' + (errorData.error || res.statusText || 'Unknown error'));
+                    if (res.status === 401 || res.status === 403) {
+                        alert('Your session has expired. Please log in again.');
+                        logout();
+                    } else {
+                        const errorData = await res.json().catch(() => ({}));
+                        alert(`Failed to save (${res.status}): ` + (errorData.error || res.statusText || 'Unknown server error'));
+                    }
                 }
             } catch(e) {
                 console.error(e);
-                alert('Server connection failed. Please ensure the backend is running (npm start).');
+                alert('Connection to server failed. Please make sure the terminal shows "Server running" and refresh the page.');
             }
         }
 

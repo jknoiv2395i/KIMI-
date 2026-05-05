@@ -14,7 +14,7 @@
         {
             "id": "prop-1",
             "name": "Riverbend Retreat",
-            "price": "$4,299",
+            "price": "₹4,299",
             "priceUnit": "/month",
             "address": "3 Leame Close, Hull, HU3 6ND",
             "category": "Residential",
@@ -31,7 +31,7 @@
         {
             "id": "prop-2",
             "name": "Oakwood Cottage",
-            "price": "$2,095",
+            "price": "₹2,095",
             "priceUnit": "/month",
             "address": "2699 Green Valley, Highland Lake, FL",
             "category": "Studio",
@@ -48,7 +48,7 @@
         {
             "id": "prop-3",
             "name": "Herringbone Realty",
-            "price": "$5,099",
+            "price": "₹5,099",
             "priceUnit": "/month",
             "address": "28B Highgate Road, London, NW5 1NS",
             "category": "Commercial",

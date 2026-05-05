@@ -155,11 +155,21 @@ app.post('/api/properties', authenticateToken, async (req, res) => {
             res.json({ success: true, property });
         } else {
             const data = JSON.parse(fs.readFileSync(DATA_PATH, 'utf8'));
+            if (!data.properties) data.properties = [];
+            
             if (propData._id) {
+                // Update existing: check both _id and id
                 const idx = data.properties.findIndex(p => (p._id || p.id) === propData._id);
-                if (idx !== -1) data.properties[idx] = propData;
+                if (idx !== -1) {
+                    data.properties[idx] = propData;
+                } else {
+                    return res.status(404).json({ error: 'Property not found in JSON' });
+                }
             } else {
-                propData._id = 'prop-' + Date.now();
+                // Add new
+                const newId = 'prop-' + Date.now();
+                propData._id = newId;
+                propData.id = newId; // Maintain legacy 'id' for compatibility
                 data.properties.push(propData);
             }
             fs.writeFileSync(DATA_PATH, JSON.stringify(data, null, 4));

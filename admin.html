@@ -784,11 +784,12 @@
                     fetchData();
                     switchView('properties-view');
                 } else {
-                    alert('Failed to save property');
+                    const errorData = await res.json().catch(() => ({}));
+                    alert('Failed to save property: ' + (errorData.error || res.statusText || 'Unknown error'));
                 }
             } catch(e) {
                 console.error(e);
-                alert('Server error – is the server running?');
+                alert('Server connection failed. Please ensure the backend is running (npm start).');
             }
         }
 

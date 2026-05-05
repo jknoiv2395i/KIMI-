@@ -581,10 +581,10 @@
                         </div>
                     </div>
                     <div class="property-actions">
-                        <button class="btn-outline" onclick="editProperty('${prop.id}')">
+                        <button class="btn-outline" onclick="editProperty('${prop._id || prop.id}')">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg> Edit
                         </button>
-                        <button class="btn-outline text-red" onclick="deleteProperty('${prop.id}', this)">
+                        <button class="btn-outline text-red" onclick="deleteProperty('${prop._id || prop.id}', this)">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg> Delete
                         </button>
                     </div>
@@ -599,7 +599,7 @@
             switchView('property-form-view');
             
             if (prop) {
-                document.getElementById('prop-id').value = prop.id;
+                document.getElementById('prop-id').value = prop._id || prop.id || '';
                 document.getElementById('prop-name').value = prop.name;
                 document.getElementById('prop-address').value = prop.address || '';
                 document.getElementById('prop-location-select').value = prop.location || (content.locations.length ? content.locations[0] : '');
@@ -618,7 +618,7 @@
                 currentVideos = prop.videos || [];
             } else {
                 // New Form
-                document.getElementById('prop-id').value = 'prop-' + Date.now();
+                document.getElementById('prop-id').value = '';
                 document.getElementById('prop-name').value = '';
                 document.getElementById('prop-address').value = '';
                 document.getElementById('prop-location-select').value = content.locations.length ? content.locations[0] : '';
@@ -639,11 +639,11 @@
         }
 
         function editProperty(id) {
-            const prop = content.properties.find(p => p.id === id);
+            const prop = content.properties.find(p => (p._id || p.id) === id);
             if (prop) showPropertyForm(prop);
         }
 
-        function deleteProperty(id, btnElement) {
+        async function deleteProperty(id, btnElement) {
             if (btnElement && !btnElement.hasAttribute('data-confirm')) {
                 btnElement.setAttribute('data-confirm', 'true');
                 const originalHTML = btnElement.innerHTML;
@@ -664,31 +664,48 @@
                 return;
             }
             
-            content.properties = content.properties.filter(p => p.id !== id);
-            syncToServer();
-            renderProperties();
-            updateCounts();
+            try {
+                await fetch(`/api/properties/${id}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${localStorage.getItem('kimi_token')}` }
+                });
+                fetchData();
+            } catch(e) { console.error(e); }
         }
 
         // File Handling
-        function handleFileUpload(event) {
+        async function handleFileUpload(event) {
             const files = Array.from(event.target.files);
             if (!files.length) return;
 
-            files.forEach(file => {
-                if (file.type.startsWith('image/') && currentImages.length < 10) {
-                    readAsBase64(file, (base64) => {
-                        currentImages.push(base64);
-                        renderThumbnails();
+            const formData = new FormData();
+            files.forEach(file => formData.append('files', file));
+
+            const loadingToast = document.createElement('div');
+            loadingToast.innerText = "Uploading to Cloud...";
+            loadingToast.style = "position:fixed; bottom:20px; right:20px; background:#2563EB; color:white; padding:10px 20px; border-radius:8px; z-index:9999;";
+            document.body.appendChild(loadingToast);
+
+            try {
+                const res = await fetch('/api/upload', {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${localStorage.getItem('kimi_token')}` },
+                    body: formData
+                });
+                const data = await res.json();
+                if (data.success) {
+                    data.urls.forEach(url => {
+                        if (url.match(/\.(mp4|mov|avi)$/i)) currentVideos.push(url);
+                        else currentImages.push(url);
                     });
-                } else if (file.type.startsWith('video/') && currentVideos.length < 3) {
-                    readAsBase64(file, (base64) => {
-                        currentVideos.push(base64);
-                        renderThumbnails();
-                    });
+                    renderThumbnails();
                 }
-            });
-            event.target.value = ''; // Reset input
+            } catch (err) {
+                alert("Upload failed: " + err.message);
+            } finally {
+                loadingToast.remove();
+            }
+            event.target.value = ''; 
         }
 
         function readAsBase64(file, callback) {
@@ -727,9 +744,9 @@
         }
 
         // API Sync
-        function saveProperty() {
+        async function saveProperty() {
+            const propId = document.getElementById('prop-id').value;
             const newProp = {
-                id: document.getElementById('prop-id').value,
                 name: document.getElementById('prop-name').value,
                 address: document.getElementById('prop-address').value,
                 location: document.getElementById('prop-location-select').value,
@@ -742,56 +759,62 @@
                 beds: document.getElementById('prop-beds').value,
                 baths: document.getElementById('prop-baths').value,
                 isFeatured: document.getElementById('prop-featured').checked,
-                image: currentImages.length > 0 ? currentImages[0] : "", // Keep for grid compatibility
+                image: currentImages.length > 0 ? currentImages[0] : "",
                 images: currentImages,
                 videos: currentVideos
             };
 
+            // Include _id only when editing an existing property
+            if (propId) newProp._id = propId;
+
             if(!newProp.name) { alert("Property Title is required."); return; }
             if(!newProp.location) { alert("City/Location is required."); return; }
 
-            const existingIndex = content.properties.findIndex(p => p.id === newProp.id);
-            if (existingIndex >= 0) {
-                content.properties[existingIndex] = newProp;
-            } else {
-                content.properties.push(newProp);
-            }
-
-            syncToServer();
-            switchView('properties-view');
-            renderProperties();
-        }
-
-        function saveSiteContent() {
-            content.hero.title = document.getElementById('hero-title').value;
-            content.hero.subtitle = document.getElementById('hero-subtitle').value;
-            content.contact.phone = document.getElementById('contact-phone').value;
-            content.contact.email = document.getElementById('contact-email').value;
-            content.contact.address = document.getElementById('contact-address').value;
-            syncToServer();
-        }
-
-        async function syncToServer() {
             try {
-                const res = await fetch('/api/content', {
+                const res = await fetch('/api/properties', {
                     method: 'POST',
                     headers: { 
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${localStorage.getItem('kimi_token')}`
                     },
-                    body: JSON.stringify(content)
+                    body: JSON.stringify(newProp)
                 });
-                
                 if (res.ok) {
                     showToast();
+                    fetchData();
+                    switchView('properties-view');
                 } else {
-                    throw new Error("API failed");
+                    alert('Failed to save property');
                 }
-            } catch (err) {
-                // Fallback to localStorage
-                localStorage.setItem('kimi_content', JSON.stringify(content));
-                showToast();
+            } catch(e) {
+                console.error(e);
+                alert('Server error – is the server running?');
             }
+        }
+
+        async function saveSiteContent() {
+            const settings = {
+                hero: {
+                    title: document.getElementById('hero-title').value,
+                    subtitle: document.getElementById('hero-subtitle').value
+                },
+                contact: {
+                    phone: document.getElementById('contact-phone').value,
+                    email: document.getElementById('contact-email').value,
+                    address: document.getElementById('contact-address').value
+                }
+            };
+            try {
+                const res = await fetch('/api/settings', {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('kimi_token')}`
+                    },
+                    body: JSON.stringify(settings)
+                });
+                if (res.ok) showToast();
+            } catch(e) { console.error(e); }
         }
 
         function showToast() {

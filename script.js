@@ -56,9 +56,16 @@ document.addEventListener('DOMContentLoaded', () => {
             const heroLocation = document.getElementById('hero-location');
             const propLocation = document.getElementById('location-filter');
             
-            if (content.locations && content.locations.length > 0) {
+            // Extract unique locations from properties if available
+            let dynamicLocations = content.locations || [];
+            if (content.properties && content.properties.length > 0) {
+                const propLocs = content.properties.map(p => p.location).filter(Boolean);
+                dynamicLocations = [...new Set([...dynamicLocations, ...propLocs])];
+            }
+
+            if (dynamicLocations.length > 0) {
                 const locOptions = `<option value="all">Any Location</option>` + 
-                                  content.locations.map(loc => `<option value="${loc}">${loc}</option>`).join('');
+                                  dynamicLocations.map(loc => `<option value="${loc}">${loc}</option>`).join('');
                 if (heroLocation) heroLocation.innerHTML = locOptions;
                 if (propLocation) propLocation.innerHTML = locOptions;
             }

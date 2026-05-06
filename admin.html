@@ -396,15 +396,9 @@
                     err.style.display = 'block';
                 }
             } catch (e) {
-                // Fallback for static server
-                if (password === 'admin123') {
-                    localStorage.setItem('kimi_token', 'local_token');
-                    document.getElementById('login-screen').style.display = 'none';
-                    fetchData();
-                } else {
-                    err.innerText = 'Invalid password (use admin123)';
-                    err.style.display = 'block';
-                }
+                console.error('Login connection error:', e);
+                err.innerText = 'Server connection failed. Please check if your backend is running.';
+                err.style.display = 'block';
             }
         }
 

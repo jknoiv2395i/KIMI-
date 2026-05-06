@@ -55,10 +55,12 @@ if (process.env.MONGODB_URI) {
     console.warn('NO MONGODB_URI FOUND. RUNNING IN LOCAL JSON MODE.');
 }
 
-console.log('--- SERVER CONFIG ---');
-console.log('PORT:', PORT);
-console.log('ADMIN_PASSWORD set:', process.env.ADMIN_PASSWORD ? 'YES' : 'NO');
-console.log('---------------------');
+// Security Diagnostic: Ensure keys are loaded
+if (!JWT_SECRET || JWT_SECRET === 'undefined') {
+    console.error('CRITICAL ERROR: JWT_SECRET is not defined!');
+    process.exit(1);
+}
+console.log('JWT Secret Validated: YES (' + JWT_SECRET.substring(0, 3) + '...)');
 
 app.use(cors());
 app.use(express.json({ limit: '50mb' }));
@@ -75,22 +77,24 @@ const authenticateToken = (req, res, next) => {
     const authHeader = req.headers.authorization;
     const token = authHeader && authHeader.split(' ')[1];
     
+    console.log(`[AUTH] Request to ${req.url} | Token Present: ${!!token}`);
+
     if (!token || token === 'null' || token === 'undefined' || token === 'local_token') {
-        console.warn('Blocked Request: Missing or invalid token string');
+        console.warn(`[AUTH FAIL] Missing/Invalid token string for ${req.url}`);
         return res.status(401).json({ success: false, error: 'Auth Required', message: 'Your session is missing. Please log in.' });
     }
     
     jwt.verify(token, JWT_SECRET, (err, user) => {
         if (err) {
-            console.error('JWT Verification Error:', err.message);
-            // Distinguish between expired and actually invalid
+            console.error(`[AUTH FAIL] JWT Error for ${req.url}:`, err.message);
             const isExpired = err.name === 'TokenExpiredError';
             return res.status(403).json({ 
                 success: false, 
                 error: isExpired ? 'Session Expired' : 'Forbidden',
-                message: isExpired ? 'Your session has timed out. Please log in again.' : 'Invalid security token.'
+                message: isExpired ? 'Your session has timed out. Please log in again.' : `Invalid token: ${err.message}`
             });
         }
+        console.log(`[AUTH SUCCESS] User: ${user.role} for ${req.url}`);
         req.user = user;
         next();
     });

@@ -31,7 +31,7 @@ const storage = new CloudinaryStorage({
     cloudinary: cloudinary,
     params: {
         folder: 'kimi-properties',
-        allowed_formats: ['jpg', 'png', 'jpeg', 'mp4']
+        allowed_formats: ['jpg', 'png', 'jpeg', 'webp', 'gif', 'mp4', 'mov']
     },
 });
 
@@ -159,8 +159,12 @@ app.post('/api/upload', (req, res, next) => {
             return res.status(500).json({ success: false, error: err.message });
         }
         try {
+            if (!req.files || req.files.length === 0) {
+                return res.status(400).json({ success: false, error: 'No files received by server' });
+            }
             const urls = req.files.map(file => file.path);
-            res.json({ success: true, urls });
+            console.log('Upload successful. URLs:', urls);
+            res.json({ success: true, urls, count: urls.length });
         } catch (error) {
             console.error('Upload Process Error:', error);
             res.status(500).json({ success: false, error: error.message });

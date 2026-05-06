@@ -315,7 +315,7 @@
                     <div class="thumbnail-container">
                         <h5>
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
-                            Images (1)
+                            Images & Videos (<span id="media-count">0</span>)
                         </h5>
                         <div class="thumbnail-preview" id="prop-thumbnail-preview">
                             <!-- Thumbnails appear here -->
@@ -703,11 +703,21 @@
                 }
 
                 const data = await res.json();
+                console.log('Upload Response:', data);
+                
                 if (data.success) {
-                    data.urls.forEach(url => {
-                        if (url.match(/\.(mp4|mov|avi)$/i)) currentVideos.push(url);
-                        else currentImages.push(url);
-                    });
+                    if (data.urls && data.urls.length > 0) {
+                        data.urls.forEach(url => {
+                            if (url.match(/\.(mp4|mov|avi|m4v)$/i)) {
+                                currentVideos.push(url);
+                            } else {
+                                currentImages.push(url);
+                            }
+                        });
+                        showToast(`Successfully uploaded ${data.urls.length} file(s)`);
+                    } else {
+                        console.warn('Upload success but no URLs returned');
+                    }
                     renderThumbnails();
                 } else {
                     alert("Upload failed: " + (data.error || "Unknown error"));
@@ -734,13 +744,18 @@
 
         function renderThumbnails() {
             const container = document.getElementById('prop-thumbnail-preview');
+            const countEl = document.getElementById('media-count');
+            if (!container) return;
+            
             container.innerHTML = '';
+            const total = currentImages.length + currentVideos.length;
+            if (countEl) countEl.innerText = total;
             
             currentImages.forEach((src, idx) => {
                 container.innerHTML += `
                     <div class="thumbnail-wrapper" style="position:relative; display:inline-block; margin-right: 10px; margin-top: 10px;">
-                        <img src="${src}" alt="Preview" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px;">
-                        <button class="remove-btn" onclick="removeMedia('image', ${idx})" style="position:absolute; top:-5px; right:-5px; background:red; color:white; border:none; border-radius:50%; width:20px; height:20px; cursor:pointer; font-size:12px; display:flex; align-items:center; justify-content:center;">✕</button>
+                        <img src="${src}" alt="Preview" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px; border: 1px solid #e5e7eb;">
+                        <button class="remove-btn" onclick="removeMedia('image', ${idx})" style="position:absolute; top:-5px; right:-5px; background:#EF4444; color:white; border:none; border-radius:50%; width:20px; height:20px; cursor:pointer; font-size:12px; display:flex; align-items:center; justify-content:center; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">✕</button>
                     </div>
                 `;
             });
@@ -748,8 +763,13 @@
             currentVideos.forEach((src, idx) => {
                 container.innerHTML += `
                     <div class="thumbnail-wrapper" style="position:relative; display:inline-block; margin-right: 10px; margin-top: 10px;">
-                        <video src="${src}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px;"></video>
-                        <button class="remove-btn" onclick="removeMedia('video', ${idx})" style="position:absolute; top:-5px; right:-5px; background:red; color:white; border:none; border-radius:50%; width:20px; height:20px; cursor:pointer; font-size:12px; display:flex; align-items:center; justify-content:center;">✕</button>
+                        <div style="position:relative; width: 80px; height: 80px;">
+                            <video src="${src}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px; border: 1px solid #e5e7eb;"></video>
+                            <div style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); pointer-events:none;">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="white" style="filter: drop-shadow(0 0 2px rgba(0,0,0,0.5));"><path d="M8 5v14l11-7z"/></svg>
+                            </div>
+                        </div>
+                        <button class="remove-btn" onclick="removeMedia('video', ${idx})" style="position:absolute; top:-5px; right:-5px; background:#EF4444; color:white; border:none; border-radius:50%; width:20px; height:20px; cursor:pointer; font-size:12px; display:flex; align-items:center; justify-content:center; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">✕</button>
                     </div>
                 `;
             });
@@ -835,8 +855,10 @@
             } catch(e) { console.error(e); }
         }
 
-        function showToast() {
+        function showToast(msg = 'Changes saved successfully!') {
             const toast = document.getElementById('toast');
+            const msgEl = document.getElementById('toast-msg');
+            if (msgEl) msgEl.innerText = msg;
             toast.style.display = 'flex';
             setTimeout(() => { toast.style.display = 'none'; }, 3000);
         }

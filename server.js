@@ -212,7 +212,11 @@ app.delete('/api/properties/:id', authenticateToken, async (req, res) => {
 });
 
 // Admin: Upload Image to Cloudinary
-app.post('/api/upload', authenticateToken, (req, res, next) => {
+app.post('/api/upload', (req, res, next) => {
+    console.log('--- UPLOAD REQUEST RECEIVED ---');
+    console.log('Headers:', req.headers);
+    next();
+}, authenticateToken, (req, res, next) => {
     upload.array('files', 10)(req, res, (err) => {
         if (err) {
             console.error('Multer/Cloudinary Error:', err);
@@ -223,9 +227,13 @@ app.post('/api/upload', authenticateToken, (req, res, next) => {
             res.json({ success: true, urls });
         } catch (error) {
             console.error('Upload Process Error:', error);
-            res.status(500).json({ success: false, error: error.message });
         }
     });
+});
+
+// API Catch-all: Ensure any /api error returns JSON, not HTML
+app.use('/api', (req, res) => {
+    res.status(404).json({ success: false, error: 'API Route Not Found' });
 });
 
 // Serve HTML files without extensions

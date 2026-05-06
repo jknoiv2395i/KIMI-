@@ -14,7 +14,8 @@ const fs = require('fs');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const JWT_SECRET = process.env.JWT_SECRET || 'kimi-secret-key';
+// Hardened Secret: Ensures consistent verification even if .env load is delayed
+const JWT_SECRET = process.env.JWT_SECRET || 'kimi-super-permanent-secret-2026-v1';
 const DATA_PATH = path.join(__dirname, 'data', 'content.json');
 
 let useMongoDB = false;

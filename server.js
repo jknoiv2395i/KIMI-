@@ -35,7 +35,10 @@ const storage = new CloudinaryStorage({
     },
 });
 
-const upload = multer({ storage: storage });
+const upload = multer({ 
+    storage: storage,
+    limits: { fileSize: 100 * 1024 * 1024 } // Increase to 100MB
+});
 
 // Database Connection with Fallback
 if (process.env.MONGODB_URI) {

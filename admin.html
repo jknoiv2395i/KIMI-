@@ -328,7 +328,10 @@
                         <input type="checkbox" id="prop-featured" style="width: 20px; height: 20px;">
                         Feature on Homepage
                     </label>
-                    <button class="btn-success" onclick="saveProperty()">Save Property</button>
+                    <div style="display: flex; flex-direction: column; align-items: flex-end;">
+                        <button class="btn-success" onclick="saveProperty()">Save Property</button>
+                        <span style="font-size: 10px; color: #9CA3AF; margin-top: 8px;">Admin v2.0 - Stable</span>
+                    </div>
                 </div>
             </div>
 
@@ -703,10 +706,10 @@
                 }
 
                 const data = await res.json();
-                console.log('Upload Response:', data);
+                console.log('Server Raw Response:', data);
                 
                 if (data.success) {
-                    if (data.urls && data.urls.length > 0) {
+                    if (data.urls && Array.isArray(data.urls)) {
                         data.urls.forEach(url => {
                             if (url.match(/\.(mp4|mov|avi|m4v)$/i)) {
                                 currentVideos.push(url);
@@ -714,16 +717,18 @@
                                 currentImages.push(url);
                             }
                         });
-                        showToast(`Successfully uploaded ${data.urls.length} file(s)`);
+                        showToast(`Uploaded ${data.urls.length} file(s)`);
                     } else {
-                        console.warn('Upload success but no URLs returned');
+                        alert("Server error: Success reported but no URLs received. Check console.");
+                        console.error('Missing URLs in response:', data);
                     }
                     renderThumbnails();
                 } else {
-                    alert("Upload failed: " + (data.error || "Unknown error"));
+                    alert("Upload failed: " + (data.error || "Server denied the request"));
                 }
             } catch (err) {
-                alert("Upload failed: " + err.message);
+                console.error('Network or Parse Error:', err);
+                alert("Critical error: " + err.message + "\nCheck if the server is running and you are logged in.");
             } finally {
                 loadingToast.remove();
             }

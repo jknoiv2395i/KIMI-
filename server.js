@@ -142,6 +142,31 @@ app.post('/api/login', (req, res) => {
     }
 });
 
+// Admin: Upload Image to Cloudinary
+app.post('/api/upload', (req, res, next) => {
+    console.log('--- UPLOAD REQUEST RECEIVED ---');
+    // Verify credentials exist on server
+    if (!process.env.CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY) {
+        console.error('CRITICAL: Cloudinary credentials missing on server!');
+        return res.status(500).json({ success: false, error: 'Server configuration error: Missing Cloudinary keys' });
+    }
+    next();
+}, authenticateToken, (req, res, next) => {
+    upload.array('files', 10)(req, res, (err) => {
+        if (err) {
+            console.error('Multer/Cloudinary Error:', err);
+            return res.status(500).json({ success: false, error: err.message });
+        }
+        try {
+            const urls = req.files.map(file => file.path);
+            res.json({ success: true, urls });
+        } catch (error) {
+            console.error('Upload Process Error:', error);
+            res.status(500).json({ success: false, error: error.message });
+        }
+    });
+});
+
 // Admin: Update Settings
 app.post('/api/settings', authenticateToken, async (req, res) => {
     try {
@@ -217,26 +242,6 @@ app.delete('/api/properties/:id', authenticateToken, async (req, res) => {
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
-});
-
-// Admin: Upload Image to Cloudinary
-app.post('/api/upload', (req, res, next) => {
-    console.log('--- UPLOAD REQUEST RECEIVED ---');
-    console.log('Headers:', req.headers);
-    next();
-}, authenticateToken, (req, res, next) => {
-    upload.array('files', 10)(req, res, (err) => {
-        if (err) {
-            console.error('Multer/Cloudinary Error:', err);
-            return res.status(500).json({ success: false, error: err.message });
-        }
-        try {
-            const urls = req.files.map(file => file.path);
-            res.json({ success: true, urls });
-        } catch (error) {
-            console.error('Upload Process Error:', error);
-        }
-    });
 });
 
 // API Catch-all: Ensure any /api error returns JSON, not HTML

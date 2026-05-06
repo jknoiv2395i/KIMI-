@@ -75,14 +75,21 @@ const authenticateToken = (req, res, next) => {
     const authHeader = req.headers.authorization;
     const token = authHeader && authHeader.split(' ')[1];
     
-    if (!token || token === 'null' || token === 'undefined') {
-        return res.status(401).json({ success: false, error: 'Unauthorized: No token provided' });
+    if (!token || token === 'null' || token === 'undefined' || token === 'local_token') {
+        console.warn('Blocked Request: Missing or invalid token string');
+        return res.status(401).json({ success: false, error: 'Auth Required', message: 'Your session is missing. Please log in.' });
     }
     
     jwt.verify(token, JWT_SECRET, (err, user) => {
         if (err) {
             console.error('JWT Verification Error:', err.message);
-            return res.status(403).json({ success: false, error: 'Forbidden: Invalid or expired token' });
+            // Distinguish between expired and actually invalid
+            const isExpired = err.name === 'TokenExpiredError';
+            return res.status(403).json({ 
+                success: false, 
+                error: isExpired ? 'Session Expired' : 'Forbidden',
+                message: isExpired ? 'Your session has timed out. Please log in again.' : 'Invalid security token.'
+            });
         }
         req.user = user;
         next();

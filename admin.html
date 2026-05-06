@@ -367,15 +367,29 @@
         // Check Login Status on Load
         document.addEventListener("DOMContentLoaded", () => {
             const token = localStorage.getItem('kimi_token');
-            if (token) {
+            if (token && token !== 'local_token' && token !== 'null') {
                 document.getElementById('login-screen').style.display = 'none';
                 fetchData();
-            } else if (window.location.hostname === 'localhost') {
-                // Auto-login for local development
-                document.getElementById('password').value = 'admin123';
-                login();
+                startHeartbeat();
+            } else {
+                localStorage.removeItem('kimi_token'); // Clean up bad tokens
             }
         });
+
+        function startHeartbeat() {
+            // Check session every 5 minutes
+            setInterval(async () => {
+                const token = localStorage.getItem('kimi_token');
+                if (!token) return;
+                try {
+                    const res = await fetch('/api/content');
+                    if (res.status === 401 || res.status === 403) {
+                        alert("Session expired in background. Please log in again to save your work.");
+                        logout();
+                    }
+                } catch(e) {}
+            }, 300000);
+        }
 
         async function login() {
             const password = document.getElementById('password').value;

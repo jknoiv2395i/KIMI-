@@ -212,13 +212,20 @@ app.delete('/api/properties/:id', authenticateToken, async (req, res) => {
 });
 
 // Admin: Upload Image to Cloudinary
-app.post('/api/upload', authenticateToken, upload.array('files', 10), (req, res) => {
-    try {
-        const urls = req.files.map(file => file.path);
-        res.json({ success: true, urls });
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
+app.post('/api/upload', authenticateToken, (req, res, next) => {
+    upload.array('files', 10)(req, res, (err) => {
+        if (err) {
+            console.error('Multer/Cloudinary Error:', err);
+            return res.status(500).json({ success: false, error: err.message });
+        }
+        try {
+            const urls = req.files.map(file => file.path);
+            res.json({ success: true, urls });
+        } catch (error) {
+            console.error('Upload Process Error:', error);
+            res.status(500).json({ success: false, error: error.message });
+        }
+    });
 });
 
 // Serve HTML files without extensions
@@ -236,6 +243,16 @@ app.get('/:page', (req, res, next) => {
     } else {
         next();
     }
+});
+
+// Global Error Handler - Ensures JSON response even for crashes
+app.use((err, req, res, next) => {
+    console.error('Global Server Error:', err);
+    res.status(500).json({
+        success: false,
+        error: 'Internal Server Error',
+        message: err.message
+    });
 });
 
 app.listen(PORT, () => {

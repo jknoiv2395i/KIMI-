@@ -364,10 +364,13 @@
         // Check Login Status on Load
         document.addEventListener("DOMContentLoaded", () => {
             const token = localStorage.getItem('kimi_token');
-            if (token || window.location.hostname === 'localhost') {
-                // Bypass login for local development to make it easier
+            if (token) {
                 document.getElementById('login-screen').style.display = 'none';
                 fetchData();
+            } else if (window.location.hostname === 'localhost') {
+                // Auto-login for local development
+                document.getElementById('password').value = 'admin123';
+                login();
             }
         });
 

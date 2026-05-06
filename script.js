@@ -123,7 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     grid.innerHTML = propsToShow.map(prop => `
                         <div class="property-card" onclick="window.location.href='/property-detail?id=${prop._id || prop.id}'" style="cursor: pointer;" data-location="${prop.location || 'all'}" data-type="${prop.category}">
                             <div class="card-image">
-                                <img src="${prop.image || 'assets/hero-illustration.png'}" alt="${prop.name}">
+                                <img src="${prop.image || 'assets/hero-illustration.png'}" alt="${prop.name} - Property for Sale in Nagpur ${prop.location ? 'at ' + prop.location : ''}" loading="lazy">
                                 ${prop.isFeatured ? '<span class="featured-tag">✦ FEATURED</span>' : ''}
                             </div>
                             <div class="card-content">

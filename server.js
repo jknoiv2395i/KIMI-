@@ -15,17 +15,23 @@ const fs = require('fs');
 const app = express();
 const PORT = process.env.PORT || 3000;
 // Hardened Secret: Matches .env exactly for maximum stability
-const JWT_SECRET = process.env.JWT_SECRET || 'kimi-super-secret-key';
+const JWT_SECRET = process.env.JWT_SECRET || 'kimi-stable-production-key-2026';
 const DATA_PATH = path.join(__dirname, 'data', 'content.json');
 
 let useMongoDB = false;
 
-// Cloudinary Setup
-cloudinary.config({
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET
-});
+// Cloudinary Setup - Explicit Check
+const cloudinaryConfig = {
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME || 'dlfhg6zwb',
+    api_key: process.env.CLOUDINARY_API_KEY || '851647893777389',
+    api_secret: process.env.CLOUDINARY_API_SECRET || 'prxGWaQ_R29ePifasdloJfkrfd4'
+};
+cloudinary.config(cloudinaryConfig);
+
+console.log('--- STORAGE CONFIG ---');
+console.log('Cloudinary Cloud Name:', cloudinaryConfig.cloud_name);
+console.log('Cloudinary API Key Loaded:', !!cloudinaryConfig.api_key);
+console.log('----------------------');
 
 const storage = new CloudinaryStorage({
     cloudinary: cloudinary,

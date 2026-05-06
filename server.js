@@ -68,10 +68,18 @@ app.use((req, res, next) => {
 
 // Middleware for Auth
 const authenticateToken = (req, res, next) => {
-    const token = req.headers.authorization?.split(' ')[1];
-    if (!token) return res.sendStatus(401);
+    const authHeader = req.headers.authorization;
+    const token = authHeader && authHeader.split(' ')[1];
+    
+    if (!token || token === 'null' || token === 'undefined') {
+        return res.status(401).json({ success: false, error: 'Unauthorized: No token provided' });
+    }
+    
     jwt.verify(token, JWT_SECRET, (err, user) => {
-        if (err) return res.sendStatus(403);
+        if (err) {
+            console.error('JWT Verification Error:', err.message);
+            return res.status(403).json({ success: false, error: 'Forbidden: Invalid or expired token' });
+        }
         req.user = user;
         next();
     });

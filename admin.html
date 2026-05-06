@@ -695,6 +695,13 @@
                     headers: { 'Authorization': `Bearer ${localStorage.getItem('kimi_token')}` },
                     body: formData
                 });
+
+                if (res.status === 401 || res.status === 403) {
+                    alert("Session expired. Please login again.");
+                    logout();
+                    return;
+                }
+
                 const data = await res.json();
                 if (data.success) {
                     data.urls.forEach(url => {
@@ -702,6 +709,8 @@
                         else currentImages.push(url);
                     });
                     renderThumbnails();
+                } else {
+                    alert("Upload failed: " + (data.error || "Unknown error"));
                 }
             } catch (err) {
                 alert("Upload failed: " + err.message);

@@ -21,7 +21,7 @@ let useMongoDB = false;
 const storage = multer.memoryStorage();
 const upload = multer({ 
     storage: storage,
-    limits: { fileSize: 10 * 1024 * 1024 } // 10MB limit for Base64 efficiency
+    limits: { fileSize: 15 * 1024 * 1024 } // 15MB limit for videos and high-res images
 });
 
 // Database Connection with Fallback

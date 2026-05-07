@@ -719,7 +719,7 @@
                 if (data.success) {
                     if (data.urls && Array.isArray(data.urls)) {
                         data.urls.forEach(url => {
-                            if (url.match(/\.(mp4|mov|avi|m4v)$/i)) {
+                            if (url.startsWith('data:video/')) {
                                 currentVideos.push(url);
                             } else {
                                 currentImages.push(url);

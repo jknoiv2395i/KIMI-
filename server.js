@@ -1,8 +1,6 @@
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
-const cloudinary = require('cloudinary').v2;
-const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const multer = require('multer');
 const jwt = require('jsonwebtoken');
 const path = require('path');
@@ -20,30 +18,10 @@ const DATA_PATH = path.join(__dirname, 'data', 'content.json');
 
 let useMongoDB = false;
 
-// Cloudinary Setup - Explicit Check
-const cloudinaryConfig = {
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME || 'dlfhg6zwb',
-    api_key: process.env.CLOUDINARY_API_KEY || '851647893777389',
-    api_secret: process.env.CLOUDINARY_API_SECRET || 'prxGWaQ_R29ePifasdloJfkrfd4'
-};
-cloudinary.config(cloudinaryConfig);
-
-console.log('--- STORAGE CONFIG ---');
-console.log('Cloudinary Cloud Name:', cloudinaryConfig.cloud_name);
-console.log('Cloudinary API Key Loaded:', !!cloudinaryConfig.api_key);
-console.log('----------------------');
-
-const storage = new CloudinaryStorage({
-    cloudinary: cloudinary,
-    params: {
-        folder: 'kimi-properties',
-        allowed_formats: ['jpg', 'png', 'jpeg', 'webp', 'gif', 'mp4', 'mov']
-    },
-});
-
+const storage = multer.memoryStorage();
 const upload = multer({ 
     storage: storage,
-    limits: { fileSize: 100 * 1024 * 1024 } // Increase to 100MB
+    limits: { fileSize: 10 * 1024 * 1024 } // 10MB limit for Base64 efficiency
 });
 
 // Database Connection with Fallback
@@ -162,30 +140,28 @@ app.post('/api/login', (req, res) => {
 });
 
 // Admin: Upload Image to Cloudinary
-app.post('/api/upload', (req, res, next) => {
-    console.log('--- UPLOAD REQUEST RECEIVED ---');
-    // Verify credentials exist on server
-    if (!process.env.CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY) {
-        console.error('CRITICAL: Cloudinary credentials missing on server!');
-        return res.status(500).json({ success: false, error: 'Server configuration error: Missing Cloudinary keys' });
-    }
-    next();
-}, authenticateToken, (req, res, next) => {
+app.post('/api/upload', authenticateToken, (req, res) => {
     upload.array('files', 10)(req, res, (err) => {
         if (err) {
-            console.error('Multer/Cloudinary Error:', err);
+            console.error('Upload Error:', err);
             return res.status(500).json({ success: false, error: err.message });
         }
+        
         try {
             if (!req.files || req.files.length === 0) {
-                return res.status(400).json({ success: false, error: 'No files received by server' });
+                return res.status(400).json({ success: false, error: 'No files received' });
             }
-            const urls = req.files.map(file => file.path);
-            console.log('Upload successful. URLs:', urls);
+
+            const urls = req.files.map(file => {
+                const b64 = file.buffer.toString('base64');
+                return `data:${file.mimetype};base64,${b64}`;
+            });
+
+            console.log(`[STORAGE] Converted ${urls.length} files to Base64`);
             res.json({ success: true, urls, count: urls.length });
         } catch (error) {
-            console.error('Upload Process Error:', error);
-            res.status(500).json({ success: false, error: error.message });
+            console.error('Processing Error:', error);
+            res.status(500).json({ success: false, error: 'Failed to process images' });
         }
     });
 });

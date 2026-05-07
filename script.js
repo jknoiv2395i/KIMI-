@@ -121,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const propsToShow = allProps.slice(0, end);
                     
                     grid.innerHTML = propsToShow.map(prop => `
-                        <div class="property-card" onclick="window.location.href='/property-detail?id=${prop._id || prop.id}'" style="cursor: pointer;" data-location="${prop.location || 'all'}" data-type="${prop.category}">
+                        <div class="property-card" onclick="window.location.href='property-detail.html?id=${prop._id || prop.id}'" style="cursor: pointer;" data-location="${prop.location || 'all'}" data-type="${prop.category}">
                             <div class="card-image">
                                 <img src="${prop.image || 'assets/hero-illustration.png'}" alt="${prop.name} - Property for Sale in Nagpur ${prop.location ? 'at ' + prop.location : ''}" loading="lazy">
                                 ${prop.isFeatured ? '<span class="featured-tag">✦ FEATURED</span>' : ''}
@@ -182,8 +182,48 @@ document.addEventListener('DOMContentLoaded', () => {
                         if (breadcrumbSpan) breadcrumbSpan.innerText = prop.name;
 
                         // Update gallery
-                        const mainImg = document.querySelector('.main-image img');
-                        if (mainImg && prop.image) mainImg.src = prop.image;
+                        const mainImgContainer = document.querySelector('.main-image');
+                        const subImagesContainer = document.querySelector('.sub-images');
+                        
+                        const allImages = prop.images && prop.images.length > 0 ? prop.images : [prop.image].filter(Boolean);
+                        
+                        if (allImages.length > 0) {
+                            if (mainImgContainer) mainImgContainer.innerHTML = `<img src="${allImages[0]}" alt="${prop.name}" style="cursor:zoom-in" onclick="window.open('${allImages[0]}', '_blank')">`;
+                            
+                            if (subImagesContainer) {
+                                subImagesContainer.innerHTML = allImages.slice(1, 4).map(src => 
+                                    `<img src="${src}" alt="Gallery" onclick="window.open('${src}', '_blank')" style="cursor:pointer">`
+                                ).join('');
+                                
+                                if (allImages.length > 4) {
+                                    subImagesContainer.innerHTML += `
+                                        <div class="more-images" onclick="window.open('${allImages[4]}', '_blank')">
+                                            <img src="${allImages[4]}" alt="More">
+                                            <span>+${allImages.length - 4} Photos</span>
+                                        </div>
+                                    `;
+                                }
+                            }
+                        }
+
+                        // Update Video Section
+                        if (prop.videos && prop.videos.length > 0) {
+                            const mainContent = document.getElementById('main-content');
+                            const videoSection = document.createElement('section');
+                            videoSection.className = 'property-video-walkthrough';
+                            videoSection.style = "padding: 40px 0; background: #fdfdfd;";
+                            videoSection.innerHTML = `
+                                <div class="container">
+                                    <h3 style="margin-bottom: 24px; font-size: 24px;">Video Walkthrough</h3>
+                                    <div class="video-container" style="border-radius: 20px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.1); background: #000;">
+                                        <video src="${prop.videos[0]}" controls style="width: 100%; display: block;"></video>
+                                    </div>
+                                </div>
+                            `;
+                            // Insert before features list or at end of left column
+                            const infoLeft = document.querySelector('.info-left');
+                            if (infoLeft) infoLeft.appendChild(videoSection);
+                        }
 
                         // Update specs
                         const specs = document.querySelectorAll('.spec-value');

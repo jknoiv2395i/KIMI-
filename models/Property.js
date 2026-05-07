@@ -16,6 +16,7 @@ const propertySchema = new mongoose.Schema({
     images: [String], // Array of image URLs
     videos: [String], // Array of video URLs
     description: String,
+    googleMapsLink: String,
     isFeatured: { type: Boolean, default: false },
     createdAt: { type: Date, default: Date.now }
 });

@@ -123,7 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     grid.innerHTML = propsToShow.map(prop => `
                         <div class="property-card" onclick="window.location.href='property-detail.html?id=${prop._id || prop.id}'" style="cursor: pointer;" data-location="${prop.location || 'all'}" data-type="${prop.category}">
                             <div class="card-image">
-                                <img src="${prop.image || 'assets/hero-illustration.png'}" alt="${prop.name} - Property for Sale in Nagpur ${prop.location ? 'at ' + prop.location : ''}" loading="lazy">
+                                <img src="${(prop.images && prop.images[0]) || prop.image || 'assets/hero-illustration.png'}" alt="${prop.name} - Property for Sale in Nagpur ${prop.location ? 'at ' + prop.location : ''}" loading="lazy">
                                 ${prop.isFeatured ? '<span class="featured-tag">✦ FEATURED</span>' : ''}
                             </div>
                             <div class="card-content">
@@ -182,54 +182,52 @@ document.addEventListener('DOMContentLoaded', () => {
                         if (breadcrumbSpan) breadcrumbSpan.innerText = prop.name;
 
                         // Update gallery
-                        const mainImgContainer = document.querySelector('.main-image');
-                        const subImagesContainer = document.querySelector('.sub-images');
-                        
-                        const allImages = prop.images && prop.images.length > 0 ? prop.images : [prop.image].filter(Boolean);
-                        
-                        if (allImages.length > 0) {
-                            if (mainImgContainer) mainImgContainer.innerHTML = `<img src="${allImages[0]}" alt="${prop.name}" style="cursor:zoom-in" onclick="window.open('${allImages[0]}', '_blank')">`;
-                            
-                            if (subImagesContainer) {
-                                subImagesContainer.innerHTML = allImages.slice(1, 4).map(src => 
-                                    `<img src="${src}" alt="Gallery" onclick="window.open('${src}', '_blank')" style="cursor:pointer">`
-                                ).join('');
-                                
-                                if (allImages.length > 4) {
-                                    subImagesContainer.innerHTML += `
-                                        <div class="more-images" onclick="window.open('${allImages[4]}', '_blank')">
-                                            <img src="${allImages[4]}" alt="More">
-                                            <span>+${allImages.length - 4} Photos</span>
-                                        </div>
-                                    `;
-                                }
-                            }
+                        const galleryContainer = document.querySelector('.thumbnail-grid');
+                        if (galleryContainer && prop.images) {
+                            galleryContainer.innerHTML = prop.images.map(img => `
+                                <div class="thumb-item" onclick="document.querySelector('.main-image img').src='${img}'">
+                                    <img src="${img}" alt="Property view">
+                                </div>
+                            `).join('');
                         }
+                        const mainImg = document.querySelector('.main-image img');
+                        if (mainImg && prop.images && prop.images.length > 0) mainImg.src = prop.images[0];
+                        else if (mainImg && prop.image) mainImg.src = prop.image;
 
                         // Update Video Section
-                        if (prop.videos && prop.videos.length > 0) {
-                            const mainContent = document.getElementById('main-content');
-                            const videoSection = document.createElement('section');
-                            videoSection.className = 'property-video-walkthrough';
-                            videoSection.style = "padding: 40px 0; background: #fdfdfd;";
-                            videoSection.innerHTML = `
-                                <div class="container">
-                                    <h3 style="margin-bottom: 24px; font-size: 24px;">Video Walkthrough</h3>
-                                    <div class="video-container" style="border-radius: 20px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.1); background: #000;">
-                                        <video src="${prop.videos[0]}" controls style="width: 100%; display: block;"></video>
-                                    </div>
-                                </div>
+                        const videoSection = document.querySelector('.video-section');
+                        const videoContainer = document.querySelector('.video-player-container');
+                        if (prop.videos && prop.videos.length > 0 && videoContainer) {
+                            if (videoSection) videoSection.style.display = 'block';
+                            videoContainer.innerHTML = `
+                                <video controls style="width:100%; border-radius:15px; background:#000;">
+                                    <source src="${prop.videos[0]}" type="video/mp4">
+                                </video>
                             `;
-                            // Insert before features list or at end of left column
-                            const infoLeft = document.querySelector('.info-left');
-                            if (infoLeft) infoLeft.appendChild(videoSection);
+                        } else if (videoSection) {
+                            videoSection.style.display = 'none';
+                        }
+
+                        // Update Map
+                        const mapContainer = document.querySelector('.detail-map-container');
+                        if (prop.googleMapsLink && mapContainer) {
+                            if (prop.googleMapsLink.includes('embed')) {
+                                mapContainer.innerHTML = `<iframe src="${prop.googleMapsLink}" width="100%" height="400" style="border:0; border-radius: 20px;" allowfullscreen="" loading="lazy"></iframe>`;
+                            } else {
+                                mapContainer.innerHTML = `
+                                    <div style="background:#f3f4f6; padding:40px; border-radius:20px; text-align:center;">
+                                        <p style="margin-bottom:20px; color:#4b5563;">Location pinned on Google Maps</p>
+                                        <a href="${prop.googleMapsLink}" target="_blank" class="contact-btn" style="display:inline-block;">View on Google Maps</a>
+                                    </div>
+                                `;
+                            }
                         }
 
                         // Update specs
                         const specs = document.querySelectorAll('.spec-value');
                         if (specs.length >= 4) {
-                            specs[0].innerText = (prop.beds || '3') + ' Beds';
-                            specs[1].innerText = (prop.baths || '2') + ' Baths';
+                            specs[0].innerText = (prop.beds || 'N/A') + ' Beds';
+                            specs[1].innerText = (prop.baths || 'N/A') + ' Baths';
                             specs[2].innerText = prop.area || 'N/A';
                             specs[3].innerText = prop.category || 'Residential';
                         }

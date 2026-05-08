@@ -335,9 +335,13 @@
                             Feature on Homepage
                         </label>
                         <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; font-weight: 500; color: #EF4444;">
-                            <input type="checkbox" id="prop-sold" style="width: 20px; height: 20px;">
+                            <input type="checkbox" id="prop-sold" style="width: 20px; height: 20px;" onchange="document.getElementById('buyer-input-wrapper').style.display = this.checked ? 'block' : 'none'">
                             Mark as Sold Out
                         </label>
+                    </div>
+                    <div id="buyer-input-wrapper" style="display: none; margin-top: 10px;">
+                        <label style="font-size: 12px; color: #6B7280; display: block; margin-bottom: 4px;">Buyer's Name</label>
+                        <input type="text" id="prop-buyer" placeholder="Enter buyer name..." style="padding: 8px; border: 1px solid #E5E7EB; border-radius: 8px; width: 200px;">
                     </div>
                     <div style="display: flex; flex-direction: column; align-items: flex-end;">
                         <button class="btn-success" onclick="saveProperty()">Save Property</button>
@@ -597,7 +601,7 @@
                     <div class="property-info">
                         <img src="${imgSrc}" alt="Property Image">
                         <div class="property-details">
-                            <h4>${prop.name} ${prop.isSoldOut ? '<span class="sold-badge-admin">SOLD</span>' : ''}</h4>
+                            <h4>${prop.name} ${prop.isSoldOut ? `<span class="sold-badge-admin">SOLD ${prop.buyerName ? 'to ' + prop.buyerName : ''}</span>` : ''}</h4>
                             <div class="property-meta">
                                 <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> ${location} (${city})</span>
                                 <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg> ${price}</span>
@@ -640,6 +644,8 @@
                 document.getElementById('prop-baths').value = prop.baths || '';
                 document.getElementById('prop-featured').checked = prop.isFeatured || false;
                 document.getElementById('prop-sold').checked = prop.isSoldOut || false;
+                document.getElementById('prop-buyer').value = prop.buyerName || '';
+                document.getElementById('buyer-input-wrapper').style.display = prop.isSoldOut ? 'block' : 'none';
                 
                 currentImages = prop.images || [];
                 if (prop.image && currentImages.length === 0) currentImages.push(prop.image); // Backwards compat
@@ -661,6 +667,8 @@
                 document.getElementById('prop-baths').value = '';
                 document.getElementById('prop-featured').checked = false;
                 document.getElementById('prop-sold').checked = false;
+                document.getElementById('prop-buyer').value = '';
+                document.getElementById('buyer-input-wrapper').style.display = 'none';
                 
                 currentImages = [];
                 currentVideos = [];
@@ -674,18 +682,27 @@
         }
 
         async function toggleSoldStatus(id, newStatus) {
+            let buyerName = '';
+            if (newStatus) {
+                buyerName = prompt("Enter Buyer's Name:", "");
+                if (buyerName === null) return; // Cancelled
+            }
+            
             try {
                 const res = await fetch(`/api/properties/${id}`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ isSoldOut: newStatus })
+                    body: JSON.stringify({ 
+                        isSoldOut: newStatus,
+                        buyerName: buyerName
+                    })
                 });
                 if (res.ok) {
                     const updatedProp = await res.json();
                     const index = content.properties.findIndex(p => (p._id || p.id) === id);
                     if (index !== -1) content.properties[index] = updatedProp;
                     renderProperties();
-                    showToast(newStatus ? 'Property marked as SOLD!' : 'Property is now Available');
+                    showToast(newStatus ? `Sold to ${buyerName || 'Client'}!` : 'Property is now Available');
                 }
             } catch (e) {
                 console.error(e);
@@ -842,6 +859,7 @@
                 baths: document.getElementById('prop-baths').value,
                 isFeatured: document.getElementById('prop-featured').checked,
                 isSoldOut: document.getElementById('prop-sold').checked,
+                buyerName: document.getElementById('prop-buyer').value,
                 image: currentImages.length > 0 ? currentImages[0] : "",
                 images: currentImages,
                 videos: currentVideos

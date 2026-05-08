@@ -19,6 +19,7 @@ const propertySchema = new mongoose.Schema({
     googleMapsLink: String,
     isFeatured: { type: Boolean, default: false },
     isSoldOut: { type: Boolean, default: false },
+    buyerName: String,
     createdAt: { type: Date, default: Date.now }
 });
 

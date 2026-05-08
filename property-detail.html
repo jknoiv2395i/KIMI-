@@ -239,7 +239,7 @@
         if (!prop) { document.getElementById('pd-name').textContent = 'Property not found'; return; }
 
         // Title, Address, Price
-        document.getElementById('pd-name').innerHTML = `${prop.name || 'Untitled Property'} ${prop.isSoldOut ? '<span class="sold-tag">SOLD OUT</span>' : ''}`;
+        document.getElementById('pd-name').innerHTML = `${prop.name || 'Untitled Property'} ${prop.isSoldOut ? `<span class="sold-tag">SOLD OUT ${prop.buyerName ? 'to ' + prop.buyerName : ''}</span>` : ''}`;
         document.title = (prop.isSoldOut ? '[SOLD] ' : '') + (prop.name || 'Property') + ' | KIMI Properties';
         document.getElementById('pd-address').textContent = [prop.address, prop.location].filter(Boolean).join(', ') || 'Nagpur';
         document.getElementById('pd-price').textContent = prop.price || 'Contact for Price';

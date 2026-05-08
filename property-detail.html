@@ -77,6 +77,7 @@
             .pd-title { font-size: 24px; }
             .pd-price { font-size: 22px; }
         }
+        .sold-tag { background: #EF4444; color: #fff; padding: 4px 12px; border-radius: 6px; font-size: 12px; font-weight: 700; text-transform: uppercase; margin-left: 12px; vertical-align: middle; }
     </style>
 </head>
 <body>
@@ -238,8 +239,8 @@
         if (!prop) { document.getElementById('pd-name').textContent = 'Property not found'; return; }
 
         // Title, Address, Price
-        document.getElementById('pd-name').textContent = prop.name || 'Untitled Property';
-        document.title = (prop.name || 'Property') + ' | KIMI Properties';
+        document.getElementById('pd-name').innerHTML = `${prop.name || 'Untitled Property'} ${prop.isSoldOut ? '<span class="sold-tag">SOLD OUT</span>' : ''}`;
+        document.title = (prop.isSoldOut ? '[SOLD] ' : '') + (prop.name || 'Property') + ' | KIMI Properties';
         document.getElementById('pd-address').textContent = [prop.address, prop.location].filter(Boolean).join(', ') || 'Nagpur';
         document.getElementById('pd-price').textContent = prop.price || 'Contact for Price';
 

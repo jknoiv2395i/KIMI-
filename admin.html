@@ -329,10 +329,16 @@
                 </div>
                 
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 24px;">
-                    <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; font-weight: 500; color: #4B5563;">
-                        <input type="checkbox" id="prop-featured" style="width: 20px; height: 20px;">
-                        Feature on Homepage
-                    </label>
+                    <div style="display: flex; flex-direction: column; gap: 8px;">
+                        <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; font-weight: 500; color: #4B5563;">
+                            <input type="checkbox" id="prop-featured" style="width: 20px; height: 20px;">
+                            Feature on Homepage
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; font-weight: 500; color: #EF4444;">
+                            <input type="checkbox" id="prop-sold" style="width: 20px; height: 20px;">
+                            Mark as Sold Out
+                        </label>
+                    </div>
                     <div style="display: flex; flex-direction: column; align-items: flex-end;">
                         <button class="btn-success" onclick="saveProperty()">Save Property</button>
                         <span style="font-size: 10px; color: #9CA3AF; margin-top: 8px;">Admin v2.0 - Stable</span>
@@ -591,7 +597,7 @@
                     <div class="property-info">
                         <img src="${imgSrc}" alt="Property Image">
                         <div class="property-details">
-                            <h4>${prop.name}</h4>
+                            <h4>${prop.name} ${prop.isSoldOut ? '<span class="sold-badge-admin">SOLD</span>' : ''}</h4>
                             <div class="property-meta">
                                 <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> ${location} (${city})</span>
                                 <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg> ${price}</span>
@@ -603,8 +609,9 @@
                         <button class="btn-outline" onclick="editProperty('${prop._id || prop.id}')">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg> Edit
                         </button>
-                        <button class="btn-outline text-red" onclick="deleteProperty('${prop._id || prop.id}', this)">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg> Delete
+                        <button class="btn-outline ${prop.isSoldOut ? 'text-green' : 'text-red'}" onclick="toggleSoldStatus('${prop._id || prop.id}', ${!prop.isSoldOut})">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"></path></svg> 
+                            ${prop.isSoldOut ? 'Mark Available' : 'Sell Out'}
                         </button>
                     </div>
                 `;
@@ -632,6 +639,7 @@
                 document.getElementById('prop-beds').value = prop.beds || '';
                 document.getElementById('prop-baths').value = prop.baths || '';
                 document.getElementById('prop-featured').checked = prop.isFeatured || false;
+                document.getElementById('prop-sold').checked = prop.isSoldOut || false;
                 
                 currentImages = prop.images || [];
                 if (prop.image && currentImages.length === 0) currentImages.push(prop.image); // Backwards compat
@@ -652,6 +660,7 @@
                 document.getElementById('prop-beds').value = '';
                 document.getElementById('prop-baths').value = '';
                 document.getElementById('prop-featured').checked = false;
+                document.getElementById('prop-sold').checked = false;
                 
                 currentImages = [];
                 currentVideos = [];
@@ -662,6 +671,26 @@
         function editProperty(id) {
             const prop = content.properties.find(p => (p._id || p.id) === id);
             if (prop) showPropertyForm(prop);
+        }
+
+        async function toggleSoldStatus(id, newStatus) {
+            try {
+                const res = await fetch(`/api/properties/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ isSoldOut: newStatus })
+                });
+                if (res.ok) {
+                    const updatedProp = await res.json();
+                    const index = content.properties.findIndex(p => (p._id || p.id) === id);
+                    if (index !== -1) content.properties[index] = updatedProp;
+                    renderProperties();
+                    showToast(newStatus ? 'Property marked as SOLD!' : 'Property is now Available');
+                }
+            } catch (e) {
+                console.error(e);
+                showToast('Failed to update status', true);
+            }
         }
 
         async function deleteProperty(id, btnElement) {
@@ -812,6 +841,7 @@
                 beds: document.getElementById('prop-beds').value,
                 baths: document.getElementById('prop-baths').value,
                 isFeatured: document.getElementById('prop-featured').checked,
+                isSoldOut: document.getElementById('prop-sold').checked,
                 image: currentImages.length > 0 ? currentImages[0] : "",
                 images: currentImages,
                 videos: currentVideos

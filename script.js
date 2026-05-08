@@ -124,7 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="property-card" onclick="window.location.href='property-detail.html?id=${prop._id || prop.id}'" style="cursor: pointer;" data-location="${prop.location || 'all'}" data-type="${prop.category}">
                             <div class="card-image">
                                 <img src="${(prop.images && prop.images[0]) || prop.image || 'assets/hero-illustration.png'}" alt="${prop.name} - Property for Sale in Nagpur ${prop.location ? 'at ' + prop.location : ''}" loading="lazy">
-                                ${prop.isFeatured ? '<span class="featured-tag">✦ FEATURED</span>' : ''}
+                                ${prop.isSoldOut ? '<span class="sold-tag">SOLD OUT</span>' : (prop.isFeatured ? '<span class="featured-tag">✦ FEATURED</span>' : '')}
                             </div>
                             <div class="card-content">
                                 <p class="price">${prop.price}<span>${prop.priceUnit || ''}</span></p>

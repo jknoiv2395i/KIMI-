@@ -8,6 +8,7 @@ const cors = require('cors');
 
 const Property = require('./models/Property');
 const Settings = require('./models/Settings');
+const Media = require('./models/Media');
 const fs = require('fs');
 
 const app = express();
@@ -89,8 +90,8 @@ app.get('/api/content', async (req, res) => {
     try {
         if (useMongoDB) {
             const settings = await Settings.findOne() || {};
-            const featuredProperties = await Property.find({ isFeatured: true }).limit(6);
-            const allProperties = await Property.find().sort({ createdAt: -1 }).limit(100);
+            const featuredProperties = await Property.find({ isFeatured: true }).select('-images -videos').limit(6);
+            const allProperties = await Property.find().sort({ createdAt: -1 }).select('-images -videos').limit(100);
             
             res.json({
                 hero: settings.hero || {},
@@ -116,9 +117,21 @@ app.get('/api/properties', async (req, res) => {
     const skip = (page - 1) * limit;
 
     try {
-        const properties = await Property.find().sort({ createdAt: -1 }).skip(skip).limit(limit);
+        const properties = await Property.find().sort({ createdAt: -1 }).select('-images -videos').skip(skip).limit(limit);
         const total = await Property.countDocuments();
         res.json({ properties, total, pages: Math.ceil(total / limit) });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Public: Get full media for a property
+app.get('/api/properties/:id/media', async (req, res) => {
+    try {
+        const media = await Media.find({ propertyId: req.params.id });
+        const images = media.filter(m => m.type === 'image').map(m => m.data);
+        const videos = media.filter(m => m.type === 'video').map(m => m.data);
+        res.json({ images, videos });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
@@ -191,6 +204,14 @@ app.post('/api/properties', authenticateToken, async (req, res) => {
     try {
         const propData = req.body;
         if (useMongoDB) {
+            // Extract heavy media arrays
+            const images = propData.images || [];
+            const videos = propData.videos || [];
+            
+            // Remove them from the main propData to avoid 16MB limit
+            propData.images = []; 
+            propData.videos = [];
+
             let property;
             if (propData._id) {
                 property = await Property.findByIdAndUpdate(propData._id, propData, { new: true });
@@ -199,6 +220,22 @@ app.post('/api/properties', authenticateToken, async (req, res) => {
                 property = new Property(propData);
                 await property.save();
             }
+
+            // Save media separately
+            if (images.length > 0 || videos.length > 0) {
+                // Clear old media if updating
+                await Media.deleteMany({ propertyId: property._id });
+                
+                const mediaToSave = [
+                    ...images.map(img => ({ propertyId: property._id, type: 'image', data: img })),
+                    ...videos.map(vid => ({ propertyId: property._id, type: 'video', data: vid }))
+                ];
+                
+                if (mediaToSave.length > 0) {
+                    await Media.insertMany(mediaToSave);
+                }
+            }
+
             res.json({ success: true, property });
         } else {
             const data = JSON.parse(fs.readFileSync(DATA_PATH, 'utf8'));
@@ -232,6 +269,7 @@ app.delete('/api/properties/:id', authenticateToken, async (req, res) => {
     try {
         if (useMongoDB) {
             await Property.findByIdAndDelete(req.params.id);
+            await Media.deleteMany({ propertyId: req.params.id });
         } else {
             const data = JSON.parse(fs.readFileSync(DATA_PATH, 'utf8'));
             data.properties = data.properties.filter(p => (p._id || p.id) !== req.params.id);

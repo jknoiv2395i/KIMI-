@@ -11,6 +11,11 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Syne:wght@400..800&display=swap" rel="stylesheet">
+    <!-- Smooth Scroll Engine -->
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.33/dist/lenis.min.js"></script>
+    <!-- GSAP Animation Engine -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
     <style>
         /* Property Detail — Self-contained styles */
         .pd-page { padding: 40px 0 80px; background: #fff; }
@@ -237,6 +242,16 @@
         }
 
         if (!prop) { document.getElementById('pd-name').textContent = 'Property not found'; return; }
+
+        // Fetch full media separately for detail view
+        try {
+            const mediaRes = await fetch(`/api/properties/${propId}/media`);
+            if (mediaRes.ok) {
+                const mediaData = await mediaRes.json();
+                prop.images = mediaData.images || [];
+                prop.videos = mediaData.videos || [];
+            }
+        } catch(e) { console.error('Media fetch failed:', e); }
 
         // Title, Address, Price
         document.getElementById('pd-name').innerHTML = `${prop.name || 'Untitled Property'} ${prop.isSoldOut ? `<span class="sold-tag">SOLD OUT ${prop.buyerName ? 'to ' + prop.buyerName : ''}</span>` : ''}`;

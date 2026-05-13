@@ -14,7 +14,147 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Default Data for Fallback
+    // Initialize Lenis Smooth Scroll
+    const lenis = new Lenis({
+        duration: 1.2,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        orientation: 'vertical',
+        gestureOrientation: 'vertical',
+        smoothWheel: true,
+        wheelMultiplier: 1,
+        smoothTouch: false,
+        touchMultiplier: 2,
+        infinite: false,
+    });
+
+    // Sync Lenis with GSAP ScrollTrigger
+    lenis.on('scroll', ScrollTrigger.update);
+
+    gsap.ticker.add((time) => {
+        lenis.raf(time * 1000);
+    });
+
+    gsap.ticker.lagSmoothing(0);
+
+    // GSAP Scroll Animations (Framer Style Spring) - EXCEPT HERO SECTION
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Benefit Cards Reveal (Priority Section) - Spring Slide
+    gsap.to(".benefit-card", {
+        x: 0,
+        opacity: 1,
+        duration: 1.2,
+        stagger: 0.1,
+        ease: "back.out(1.2)",
+        scrollTrigger: {
+            trigger: ".priority-section",
+            start: "top 85%",
+            toggleActions: "play none none none"
+        }
+    });
+
+    // Categories Reveal - Spring Scale
+    gsap.to(".category-card", {
+        scale: 1,
+        opacity: 1,
+        duration: 1,
+        stagger: 0.1,
+        ease: "back.out(1.5)",
+        scrollTrigger: {
+            trigger: ".categories-section",
+            start: "top 80%",
+            toggleActions: "play none none none"
+        }
+    });
+
+    // City Cards Reveal - Smooth Float Up
+    gsap.to(".city-card", {
+        y: 0,
+        opacity: 1,
+        duration: 1.2,
+        stagger: 0.1,
+        ease: "power4.out",
+        scrollTrigger: {
+            trigger: ".cities-grid",
+            start: "top 85%",
+            toggleActions: "play none none none"
+        }
+    });
+
+    // Testimonials Title Reveal
+    gsap.to(".testimonials-section .section-title", {
+        y: 0,
+        opacity: 1,
+        duration: 1,
+        ease: "power3.out",
+        scrollTrigger: {
+            trigger: ".testimonials-section",
+            start: "top 90%"
+        }
+    });
+
+    // CTA Box Reveal - Elegant Stretch
+    gsap.to(".cta-box", {
+        scaleX: 1,
+        opacity: 1,
+        duration: 1.4,
+        ease: "power2.inOut",
+        scrollTrigger: {
+            trigger: ".cta-section",
+            start: "top 80%"
+        }
+    });
+
+    // Parallax for Buildings in Priority Section
+    gsap.to(".priority-bg img", {
+        y: -100,
+        scrollTrigger: {
+            trigger: ".priority-section",
+            start: "top bottom",
+            end: "bottom top",
+            scrub: true
+        }
+    });
+
+    // GSAP HERO ENTRANCE (ON PAGE LOAD)
+    const heroTl = gsap.timeline({ defaults: { ease: "power4.out" } });
+
+    heroTl.to(".main-hero-image", {
+        opacity: 1,
+        scale: 1,
+        duration: 1.8,
+        ease: "power2.out",
+        startAt: { scale: 1.05 }
+    })
+    .to(".hero-title span", {
+        opacity: 1,
+        y: 0,
+        duration: 1,
+        stagger: 0.2,
+        startAt: { y: 40 }
+    }, "-=1.2")
+    .to(".hero-subtitle", {
+        opacity: 1,
+        y: 0,
+        duration: 1,
+        startAt: { y: 20 }
+    }, "-=0.8")
+    .to(".search-bar-container", {
+        opacity: 1,
+        y: 0,
+        duration: 1.4,
+        ease: "back.out(1.2)",
+        startAt: { y: 60 }
+    }, "-=0.8");
+
+    // Ensure ScrollTrigger refreshes after initial renders
+    window.addEventListener('load', () => {
+        setTimeout(() => {
+            ScrollTrigger.refresh();
+        }, 500);
+    });
+
+    // 1. DATA INFRASTRUCTURE
     const defaultContent = {
         hero: { title: "We help people to realize their dream property", subtitle: "We are creative people who provide the best way to you who want to have a new comfortable and suitable place to live" },
         contact: { phone: "+91 96969 76950", email: "hello@kimiproperties.in", address: "Nagpur, Maharashtra, India" },
@@ -27,221 +167,141 @@ document.addEventListener('DOMContentLoaded', () => {
         ]
     };
 
-    // Fetch Data for Frontend
-    async function fetchFrontendData() {
-        let content = null;
-        try {
-            const res = await fetch('/api/content');
-            if (res.ok) {
-                content = await res.json();
-            }
-        } catch (e) {
-            // Fallback
+    // Universal Content Population Function
+    function populatePageContent(content) {
+        if (!content) return;
+
+        // Populate Location Dropdowns
+        const heroLocation = document.getElementById('hero-location');
+        const propLocation = document.getElementById('location-filter');
+        
+        let dynamicLocations = content.locations || [];
+        if (content.properties && content.properties.length > 0) {
+            const propLocs = content.properties.map(p => p.location).filter(Boolean);
+            dynamicLocations = [...new Set([...dynamicLocations, ...propLocs])];
         }
 
-        if (!content) {
-            const localData = localStorage.getItem('kimi_content');
-            if (localData) {
-                content = JSON.parse(localData);
-            }
+        if (dynamicLocations.length > 0) {
+            const locOptions = `<option value="all">Any Location</option>` + 
+                              dynamicLocations.map(loc => `<option value="${loc}">${loc}</option>`).join('');
+            if (heroLocation) heroLocation.innerHTML = locOptions;
+            if (propLocation) propLocation.innerHTML = locOptions;
         }
 
-        // Final Fallback to defaults if still no content
-        if (!content) {
-            content = defaultContent;
+        // Populate Category Dropdowns
+        const heroType = document.getElementById('hero-type');
+        const typeFilter = document.getElementById('type-filter');
+        if (content.categories && content.categories.length > 0) {
+            const catOptions = `<option value="all">All Types</option>` + 
+                              content.categories.map(cat => `<option value="${cat}">${cat}</option>`).join('');
+            if (heroType) heroType.innerHTML = catOptions;
+            if (typeFilter) typeFilter.innerHTML = catOptions;
         }
 
-        if (content) {
-            // Populate Location Dropdowns
-            const heroLocation = document.getElementById('hero-location');
-            const propLocation = document.getElementById('location-filter');
-            
-            // Extract unique locations from properties if available
-            let dynamicLocations = content.locations || [];
-            if (content.properties && content.properties.length > 0) {
-                const propLocs = content.properties.map(p => p.location).filter(Boolean);
-                dynamicLocations = [...new Set([...dynamicLocations, ...propLocs])];
-            }
+        // Populate Grids
+        const grids = document.querySelectorAll('.dynamic-properties-grid, #properties-grid');
+        if (grids.length > 0 && content.properties) {
+            const path = window.location.pathname;
+            const isHomePage = path.endsWith('index.html') || path.endsWith('/') || path === '' || path.split('/').pop() === '';
+            let allProps = isHomePage ? content.properties.filter(p => p.isFeatured) : content.properties;
+            let itemsPerPage = 12;
+            let currentPage = 1;
 
-            if (dynamicLocations.length > 0) {
-                const locOptions = `<option value="all">Any Location</option>` + 
-                                  dynamicLocations.map(loc => `<option value="${loc}">${loc}</option>`).join('');
-                if (heroLocation) heroLocation.innerHTML = locOptions;
-                if (propLocation) propLocation.innerHTML = locOptions;
-            }
-
-            // Populate Category/Type Dropdowns
-            const heroType = document.getElementById('hero-type');
-            const typeFilter = document.getElementById('type-filter');
-            
-            if (content.categories && content.categories.length > 0) {
-                const catOptions = `<option value="all">All Types</option>` + 
-                                  content.categories.map(cat => `<option value="${cat}">${cat}</option>`).join('');
-                if (heroType) heroType.innerHTML = catOptions;
-                if (typeFilter) typeFilter.innerHTML = catOptions;
-            }
-
-            // Update Footer & Contact Page
-            if (content.contact) {
-                // Update Footer
-                const footerContact = document.querySelector('.footer-col .footer-links:last-child');
-                if (footerContact) {
-                    const paragraphs = footerContact.querySelectorAll('p');
-                    if (paragraphs.length >= 3) {
-                        paragraphs[0].innerText = content.contact.address || 'Nagpur, India';
-                        paragraphs[1].innerText = content.contact.phone || '+91 96969 76950';
-                        paragraphs[2].innerText = content.contact.email || 'hello@kimiproperties.in';
+            const renderGrid = (page) => {
+                const end = page * itemsPerPage;
+                const propsToShow = allProps.slice(0, end);
+                const formatPrice = (price) => {
+                    if (!price) return '';
+                    const num = String(price).replace(/,/g, '');
+                    if (!isNaN(num) && num.trim() !== '') {
+                        return '₹' + Number(num).toLocaleString('en-IN');
                     }
-                }
+                    return String(price).includes('₹') ? price : '₹' + price;
+                };
 
-                // Update Contact Page Fields
-                const cpAddr = document.getElementById('contact-page-address');
-                const cpPhone = document.getElementById('contact-page-phone');
-                const cpEmail = document.getElementById('contact-page-email');
-                if (cpAddr) cpAddr.innerText = content.contact.address || 'Nagpur, Maharashtra, India';
-                if (cpPhone) cpPhone.innerText = content.contact.phone || '+91 96969 76950';
-                if (cpEmail) cpEmail.innerText = content.contact.email || 'hello@kimiproperties.in';
-            }
-
-            // Populate Properties Grid
-            const grid = document.getElementById('properties-grid');
-            if (grid && content.properties) {
-                const path = window.location.pathname;
-                const isHomePage = path.endsWith('index.html') || path.endsWith('/') || path === '' || path.split('/').pop() === '';
-                
-                let allProps = isHomePage 
-                    ? content.properties.filter(p => p.isFeatured) 
-                    : content.properties;
-
-                let itemsPerPage = 12;
-                let currentPage = 1;
-
-                const renderGrid = (page) => {
-                    const end = page * itemsPerPage;
-                    const propsToShow = allProps.slice(0, end);
-                    
-                    grid.innerHTML = propsToShow.map(prop => `
-                        <div class="property-card" onclick="window.location.href='property-detail.html?id=${prop._id || prop.id}'" style="cursor: pointer;" data-location="${prop.location || 'all'}" data-type="${prop.category}">
-                            <div class="card-image">
-                                <img src="${(prop.images && prop.images[0]) || prop.image || 'assets/hero-illustration.png'}" alt="${prop.name} - Property for Sale in Nagpur ${prop.location ? 'at ' + prop.location : ''}" loading="lazy">
-                                ${prop.isSoldOut ? '<span class="sold-tag">SOLD OUT</span>' : (prop.isFeatured ? '<span class="featured-tag">✦ FEATURED</span>' : '')}
-                            </div>
-                            <div class="card-content">
-                                <p class="price">${prop.price}<span>${prop.priceUnit || ''}</span></p>
-                                <h3 class="property-name">${prop.name}</h3>
-                                <p class="address">${prop.address} ${prop.location ? '(' + prop.location + ')' : ''}</p>
-                                <div class="specs">
-                                    ${prop.beds ? `<span><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8'/%3E%3Cpath d='M4 10V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4'/%3E%3Cpath d='M12 4v6'/%3E%3Cpath d='M2 18h20'/%3E%3C/svg%3E" alt="Bed"> ${prop.beds} Beds</span>` : ''}
-                                    ${prop.baths ? `<span><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 6 6.5 3.5a1.5 1.5 0 0 0-2.12 0l-1.88 1.88a1.5 1.5 0 0 0 0 2.12L5 10'/%3E%3Cpath d='M10 5l10 10'/%3E%3Cpath d='M3 17l1 1a2 2 0 0 0 2.83 0L21 4'/%3E%3C/svg%3E" alt="Bath"> ${prop.baths} Baths</span>` : ''}
-                                    ${prop.area ? `<span><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect width='18' height='18' x='3' y='3' rx='2' ry='2'/%3E%3Cpath d='M3 9h18'/%3E%3Cpath d='M3 15h18'/%3E%3Cpath d='M9 3v18'/%3E%3Cpath d='M15 3v18'/%3E%3C/svg%3E" alt="Area"> ${prop.area}</span>` : ''}
-                                </div>
+                const gridHTML = propsToShow.map(prop => `
+                    <div class="property-card" onclick="window.location.href='property-detail.html?id=${prop._id || prop.id}'" style="cursor: pointer;" data-location="${prop.location || 'all'}" data-type="${prop.category}">
+                        <div class="card-image">
+                            <img src="${(prop.images && prop.images[0]) || prop.image || 'assets/hero-illustration.png'}" alt="${prop.name}" loading="lazy">
+                            <div class="card-overlay">
+                                <span class="view-btn-hover">View Property <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 4px; display: inline-block; vertical-align: middle;"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg></span>
                             </div>
                         </div>
-                    `).join('');
+                        <div class="card-content">
+                            ${prop.isSoldOut ? '<span class="sold-tag">SOLD OUT</span>' : (prop.isFeatured ? '<span class="featured-tag"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z"/></svg> FEATURED</span>' : '')}
+                            <p class="price">${formatPrice(prop.price)}<span>${prop.priceUnit || ''}</span></p>
+                            <h3 class="property-name">${prop.name}</h3>
+                            <p class="address">${prop.address} ${prop.location ? '(' + prop.location + ')' : ''}</p>
+                            <div class="specs">
+                                ${prop.beds ? `<span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-6l-2 2H5a2 2 0 0 0-2 2z"/></svg>${prop.beds} Beds</span>` : ''}
+                                ${prop.baths ? `<span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12h20"/><path d="M4 12v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4"/><path d="M10 8h4"/><path d="M12 4v4"/></svg>${prop.baths} Baths</span>` : ''}
+                                ${prop.area ? `<span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>${prop.area}</span>` : ''}
+                            </div>
+                            <div class="card-action">
+                                <button class="btn-view-dream">View Dream <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 6px; display: inline-block; vertical-align: middle;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
 
-                    // Add Load More button if there are more items
-                    if (allProps.length > end) {
+                grids.forEach(grid => {
+                    grid.innerHTML = gridHTML;
+                    if (grid.id === 'properties-grid' && allProps.length > end) {
                         const loadMoreBtn = document.createElement('button');
                         loadMoreBtn.innerText = 'Load More Properties';
                         loadMoreBtn.className = 'btn-browse-action';
                         loadMoreBtn.style.gridColumn = '1 / -1';
                         loadMoreBtn.style.margin = '40px auto';
-                        loadMoreBtn.onclick = () => {
-                            currentPage++;
-                            renderGrid(currentPage);
-                        };
+                        loadMoreBtn.onclick = () => { currentPage++; renderGrid(currentPage); };
                         grid.appendChild(loadMoreBtn);
                     }
+                });
+                initScrollObserver();
+            };
+            renderGrid(currentPage);
+        }
 
-                    // Update result count
-                    const resultCountSpan = document.getElementById('result-count');
-                    if (resultCountSpan && !isHomePage) {
-                        resultCountSpan.textContent = allProps.length;
-                    }
-                };
-
-                renderGrid(currentPage);
-            }
-
-            // Populate Individual Property Details (if on detail page)
-            if (window.location.pathname.includes('property-detail.html')) {
-                const urlParams = new URLSearchParams(window.location.search);
-                const propId = urlParams.get('id');
-                if (propId && content.properties) {
-                    const prop = content.properties.find(p => (p._id || p.id) === propId);
-                    if (prop) {
-                        // Update basic info
-                        const titleEl = document.querySelector('.property-detail-header h1');
-                        const priceEl = document.querySelector('.detail-price strong');
-                        const addrEl = document.querySelector('.detail-address');
-                        const breadcrumbSpan = document.querySelector('.breadcrumb span');
-                        
-                        if (titleEl) titleEl.innerText = prop.name;
-                        if (priceEl) priceEl.innerText = prop.price;
-                        if (addrEl) addrEl.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> ${prop.address} ${prop.location ? '(' + prop.location + ')' : ''}`;
-                        if (breadcrumbSpan) breadcrumbSpan.innerText = prop.name;
-
-                        // Update gallery
-                        const galleryContainer = document.querySelector('.thumbnail-grid');
-                        if (galleryContainer && prop.images) {
-                            galleryContainer.innerHTML = prop.images.map(img => `
-                                <div class="thumb-item" onclick="document.querySelector('.main-image img').src='${img}'">
-                                    <img src="${img}" alt="Property view">
-                                </div>
-                            `).join('');
-                        }
-                        const mainImg = document.querySelector('.main-image img');
-                        if (mainImg && prop.images && prop.images.length > 0) mainImg.src = prop.images[0];
-                        else if (mainImg && prop.image) mainImg.src = prop.image;
-
-                        // Update Video Section
-                        const videoSection = document.querySelector('.video-section');
-                        const videoContainer = document.querySelector('.video-player-container');
-                        if (prop.videos && prop.videos.length > 0 && videoContainer) {
-                            if (videoSection) videoSection.style.display = 'block';
-                            videoContainer.innerHTML = `
-                                <video controls style="width:100%; border-radius:15px; background:#000;">
-                                    <source src="${prop.videos[0]}" type="video/mp4">
-                                </video>
-                            `;
-                        } else if (videoSection) {
-                            videoSection.style.display = 'none';
-                        }
-
-                        // Update Map
-                        const mapContainer = document.querySelector('.detail-map-container');
-                        if (prop.googleMapsLink && mapContainer) {
-                            if (prop.googleMapsLink.includes('embed')) {
-                                mapContainer.innerHTML = `<iframe src="${prop.googleMapsLink}" width="100%" height="400" style="border:0; border-radius: 20px;" allowfullscreen="" loading="lazy"></iframe>`;
-                            } else {
-                                mapContainer.innerHTML = `
-                                    <div style="background:#f3f4f6; padding:40px; border-radius:20px; text-align:center;">
-                                        <p style="margin-bottom:20px; color:#4b5563;">Location pinned on Google Maps</p>
-                                        <a href="${prop.googleMapsLink}" target="_blank" class="contact-btn" style="display:inline-block;">View on Google Maps</a>
-                                    </div>
-                                `;
-                            }
-                        }
-
-                        // Update specs
-                        const specs = document.querySelectorAll('.spec-value');
-                        if (specs.length >= 4) {
-                            specs[0].innerText = (prop.beds || 'N/A') + ' Beds';
-                            specs[1].innerText = (prop.baths || 'N/A') + ' Baths';
-                            specs[2].innerText = prop.area || 'N/A';
-                            specs[3].innerText = prop.category || 'Residential';
-                        }
-
-                        // Update description
-                        const descEl = document.querySelector('.description-box p');
-                        if (descEl && prop.description) descEl.innerText = prop.description;
-                    }
+        // Populate Individual Details
+        if (window.location.pathname.includes('property-detail.html')) {
+            const urlParams = new URLSearchParams(window.location.search);
+            const propId = urlParams.get('id');
+            if (propId && content.properties) {
+                const prop = content.properties.find(p => (p._id || p.id) === propId);
+                if (prop) {
+                    const titleEl = document.querySelector('.property-detail-header h1');
+                    const priceEl = document.querySelector('.detail-price strong');
+                    if (titleEl) titleEl.innerText = prop.name;
+                    if (priceEl) priceEl.innerText = prop.price;
+                    const mainImg = document.querySelector('.main-image img');
+                    if (mainImg && prop.images && prop.images.length > 0) mainImg.src = prop.images[0];
+                    const descEl = document.querySelector('.description-box p');
+                    if (descEl && prop.description) descEl.innerText = prop.description;
                 }
             }
         }
     }
 
-    // Call the function
+    // 2. DATA FETCHING (HYBRID INSTANT LOAD)
+    async function fetchFrontendData() {
+        // Step A: Immediate render from Cache/Defaults
+        const cached = localStorage.getItem('kimi_content');
+        if (cached) populatePageContent(JSON.parse(cached));
+        else populatePageContent(defaultContent);
+
+        // Step B: Background Fetch & Update
+        try {
+            const res = await fetch('/api/content');
+            if (res.ok) {
+                const liveContent = await res.json();
+                localStorage.setItem('kimi_content', JSON.stringify(liveContent));
+                populatePageContent(liveContent);
+            }
+        } catch (e) {
+            console.log("Using fallback content");
+        }
+    }
+
+    // Start the hybrid loading sequence
     fetchFrontendData();
 
     // Property Filtering Logic
@@ -323,6 +383,48 @@ document.addEventListener('DOMContentLoaded', () => {
             if (applyFiltersBtn) applyFiltersBtn.click();
         }, 100);
     }
+    function initScrollObserver() {
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    // Handle mask-reveal children
+                    const masks = entry.target.querySelectorAll('.mask-reveal-content');
+                    masks.forEach((mask, i) => {
+                        setTimeout(() => mask.classList.add('active'), i * 150);
+                    });
+                    
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal-on-scroll, .mask-reveal').forEach(el => {
+            observer.observe(el);
+        });
+    }
+
+    // Magnetic Buttons Effect
+    document.querySelectorAll('.contact-btn, .btn-browse-action, .btn-submit').forEach(btn => {
+        btn.addEventListener('mousemove', (e) => {
+            const position = btn.getBoundingClientRect();
+            const x = e.pageX - position.left - position.width / 2;
+            const y = e.pageY - position.top - position.height / 2;
+            
+            btn.style.transform = `translate(${x * 0.3}px, ${y * 0.5}px)`;
+        });
+        
+        btn.addEventListener('mouseleave', () => {
+            btn.style.transform = 'translate(0px, 0px)';
+        });
+    });
+
+    initScrollObserver();
 });
 
 

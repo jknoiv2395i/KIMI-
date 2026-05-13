@@ -111,6 +111,11 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Syne:wght@400..800&display=swap" rel="stylesheet">
+    <!-- Smooth Scroll Engine -->
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.33/dist/lenis.min.js"></script>
+    <!-- GSAP Animation Engine -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 </head>
 <body>
     <main class="hero-section">
@@ -149,14 +154,15 @@
             <div class="hero-content">
                 <div class="hero-header">
                     <h1 class="hero-title">
-                        We help people 
-                        <span class="title-pill pill-house-1"></span>
-                        to realize their dream property in Nagpur 
-                        <span class="title-pill pill-house-2"></span>
+                        <span>We help people <span class="title-pill pill-house-1"></span> to</span>
+                        <span>realize their dream</span>
+                        <span>property in Nagpur <span class="title-pill pill-house-2"></span></span>
                     </h1>
-                    <p class="hero-subtitle">
-                        We are creative people who provide the best way to you who want to have a new comfortable and suitable place to live
-                    </p>
+                    <div style="margin-top: 15px;">
+                        <p class="hero-subtitle">
+                            We are creative people who provide the best way to you who want to have a new comfortable and suitable place to live
+                        </p>
+                    </div>
                 </div>
 
                 <div class="search-bar-container">
@@ -215,7 +221,7 @@
         </div> <!-- closes container -->
     </main> <!-- closes main -->
 
-    <section class="container-section">
+    <section class="container-section reveal-on-scroll">
         <div class="container">
             <div class="section-header">
                 <h2 class="section-title">Featured Property Listings in Nagpur</h2>
@@ -229,7 +235,7 @@
     </section>
 
 
-    <section class="priority-section">
+    <section class="priority-section reveal-on-scroll">
         <div class="container">
             <div class="priority-layout">
                 <div class="priority-text">
@@ -238,7 +244,7 @@
                 </div>
                 <div class="priority-cards">
                     <!-- Card 1 -->
-                    <div class="benefit-card">
+                    <div class="benefit-card mask-reveal-content">
                         <div class="benefit-icon">
                             <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <circle cx="24" cy="24" r="24" fill="#F8F7FF"/>
@@ -251,7 +257,7 @@
                         </div>
                     </div>
                     <!-- Card 2 -->
-                    <div class="benefit-card">
+                    <div class="benefit-card mask-reveal-content">
                         <div class="benefit-icon">
                             <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <circle cx="24" cy="24" r="24" fill="#F8F7FF"/>
@@ -264,7 +270,7 @@
                         </div>
                     </div>
                     <!-- Card 3 -->
-                    <div class="benefit-card">
+                    <div class="benefit-card mask-reveal-content">
                         <div class="benefit-icon">
                             <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <circle cx="24" cy="24" r="24" fill="#F8F7FF"/>
@@ -426,6 +432,19 @@
                         <p><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> 25+ listings</p>
                     </div>
                 </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Third Property Section below Popular Locations -->
+    <section class="featured-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">More Featured Listings in Nagpur</h2>
+                <a href="properties.html" class="browse-link">View All Listings <span class="arrow">→</span></a>
+            </div>
+            <div id="properties-grid-3" class="dynamic-properties-grid listings-grid">
+                <!-- Will be populated by JS -->
             </div>
         </div>
     </section>
@@ -664,6 +683,7 @@
 
     <section class="cta-section">
         <div class="container">
+            <p class="cta-sub">Connect with us</p>
             <div class="cta-box">
                 <div class="cta-content">
                     <h2 class="cta-title">Need Consultation With Our Experienced Agent?</h2>

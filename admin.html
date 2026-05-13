@@ -676,9 +676,21 @@
             renderThumbnails();
         }
 
-        function editProperty(id) {
+        async function editProperty(id) {
             const prop = content.properties.find(p => (p._id || p.id) === id);
-            if (prop) showPropertyForm(prop);
+            if (prop) {
+                // Fetch full media separately for editing
+                try {
+                    const res = await fetch(`/api/properties/${id}/media`);
+                    if (res.ok) {
+                        const media = await res.json();
+                        prop.images = media.images || [];
+                        prop.videos = media.videos || [];
+                    }
+                } catch (e) { console.error('Failed to fetch media:', e); }
+                
+                showPropertyForm(prop);
+            }
         }
 
         async function toggleSoldStatus(id, newStatus) {

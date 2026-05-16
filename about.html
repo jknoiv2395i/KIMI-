@@ -33,113 +33,177 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
     <style>
         .about-hero {
-            padding: 120px 0 80px;
-            background-color: #F8F7FF;
+            position: relative;
+            height: 80vh;
+            min-height: 600px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             text-align: center;
+            overflow: hidden;
+            margin-top: 0;
+        }
+
+        .about-hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.5);
+            z-index: -1;
+        }
+
+        .about-hero-content {
+            position: relative;
+            z-index: 2;
+            color: white;
+            padding: 0 20px;
         }
 
         .about-hero h1 {
-            font-size: 72px;
-            font-weight: 700;
+            font-size: 84px;
+            font-weight: 800;
             margin-bottom: 20px;
             letter-spacing: -2px;
+            text-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            text-transform: uppercase;
         }
 
         .about-hero p {
-            font-size: 20px;
-            color: var(--text-muted);
-            max-width: 600px;
+            font-size: 24px;
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 700px;
             margin: 0 auto 40px;
             line-height: 1.6;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .trust-banner {
+            background: #1A1A1A;
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+        }
+
+        .trust-banner h3 {
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            letter-spacing: -0.5px;
+        }
+
+        .trust-banner p {
+            font-size: 18px;
+            color: #A0A0A0;
+            max-width: 600px;
+            margin: 0 auto 40px;
         }
 
         .about-stats {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 30px;
-            margin-top: 60px;
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
         .stat-item {
-            padding: 30px;
-            background: white;
-            border-radius: 24px;
-            border: 1px solid #E7DCFF;
-            transition: transform 0.3s ease;
-        }
-
-        .stat-item:hover {
-            transform: translateY(-5px);
+            text-align: center;
         }
 
         .stat-number {
             display: block;
-            font-size: 48px;
-            font-weight: 700;
-            color: #A855F7;
+            font-size: 64px;
+            font-weight: 800;
+            color: white;
             margin-bottom: 5px;
+            line-height: 1;
         }
 
         .stat-label {
             font-size: 16px;
-            color: var(--text-muted);
+            color: #A0A0A0;
             font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 2px;
         }
 
-        .story-section {
-            padding: 100px 0;
+        .legacy-section {
+            padding: 120px 0;
             background: white;
         }
 
-        .story-grid {
+        .legacy-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 80px;
             align-items: center;
         }
 
-        .story-image {
-            border-radius: 32px;
+        .legacy-image {
+            position: relative;
+            border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.1);
+            box-shadow: 0 40px 80px rgba(0,0,0,0.15);
         }
 
-        .story-image img {
+        .legacy-image img {
             width: 100%;
-            height: auto;
+            height: 700px;
+            object-fit: cover;
             display: block;
         }
 
-        .story-content h2 {
-            font-size: 48px;
-            font-weight: 700;
-            margin-bottom: 24px;
-            line-height: 1.2;
+        .experience-badge {
+            position: absolute;
+            bottom: 40px;
+            right: -40px;
+            background: #1A1A1A;
+            color: white;
+            padding: 40px;
+            border-radius: 50%;
+            width: 180px;
+            height: 180px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
         }
 
-        .story-content p {
-            font-size: 18px;
+        .exp-num { font-size: 48px; font-weight: 800; line-height: 1; }
+        .exp-text { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-top: 5px; }
+
+        .legacy-content h2 {
+            font-size: 56px;
+            font-weight: 800;
+            margin-bottom: 30px;
+            line-height: 1.1;
+            letter-spacing: -1.5px;
+        }
+
+        .legacy-content p {
+            font-size: 20px;
             color: var(--text-muted);
             line-height: 1.8;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
         }
 
-        .mission-box {
-            background-color: #F0E9FF;
-            padding: 40px;
-            border-radius: 24px;
-            margin-top: 40px;
-        }
-
-        .mission-box h3 {
+        .legacy-highlight {
             font-size: 24px;
-            margin-bottom: 15px;
             color: #1A1A1A;
+            font-weight: 600;
+            padding-left: 24px;
+            border-left: 4px solid #1A1A1A;
+            margin: 40px 0;
         }
 
         .team-section {
-            padding: 100px 0;
-            background-color: #FBFAFF;
+            padding: 120px 0;
+            background-color: #F8F7FF;
         }
 
         .team-grid {
@@ -151,19 +215,18 @@
 
         .team-card {
             background: white;
-            border-radius: 24px;
+            border-radius: 20px;
             overflow: hidden;
-            border: 1px solid #E7DCFF;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .team-card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(193, 165, 255, 0.15);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.08);
         }
 
         .team-img {
-            height: 350px;
+            height: 400px;
             overflow: hidden;
         }
 
@@ -171,37 +234,43 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+        
+        .team-card:hover .team-img img {
+            transform: scale(1.05);
         }
 
         .team-info {
             padding: 30px;
-            text-align: center;
+            text-align: left;
         }
 
         .team-info h3 {
-            font-size: 24px;
+            font-size: 28px;
             font-weight: 700;
             margin-bottom: 5px;
+            color: #1A1A1A;
         }
 
         .team-info p {
-            color: #A855F7;
-            font-weight: 600;
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            color: var(--text-muted);
+            font-weight: 500;
+            font-size: 16px;
         }
 
-        @media (max-width: 992px) {
-            .story-grid { grid-template-columns: 1fr; gap: 40px; }
-            .about-stats { grid-template-columns: repeat(2, 1fr); }
-            .team-grid { grid-template-columns: repeat(2, 1fr); }
-            .about-hero h1 { font-size: 52px; }
+        @media (max-width: 1024px) {
+            .legacy-grid { grid-template-columns: 1fr; gap: 60px; }
+            .legacy-image img { height: 500px; }
+            .experience-badge { right: 20px; bottom: 20px; }
+            .about-hero h1 { font-size: 64px; }
         }
 
-        @media (max-width: 600px) {
-            .about-stats { grid-template-columns: 1fr; }
+        @media (max-width: 768px) {
+            .about-stats { grid-template-columns: repeat(2, 1fr); gap: 30px; }
             .team-grid { grid-template-columns: 1fr; }
+            .about-hero h1 { font-size: 48px; }
+            .legacy-content h2 { font-size: 42px; }
         }
     </style>
 </head>
@@ -240,115 +309,130 @@
 
     <main id="main-content">
         <section class="about-hero">
-        <div class="container">
-            <h1>We're Redefining <br> Modern Living</h1>
-            <p>Our mission is to help people realize their dream property by providing a seamless, luxury real estate experience built on trust and innovation.</p>
-            
-            <div class="about-stats">
-                <div class="stat-item">
-                    <span class="stat-number">12k+</span>
-                    <span class="stat-label">Properties Sold</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-number">98%</span>
-                    <span class="stat-label">Happy Clients</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-number">150+</span>
-                    <span class="stat-label">Award Winning</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-number">25+</span>
-                    <span class="stat-label">Years Experience</span>
+            <img src="assets/about_hero_premium.png" alt="Premium Real Estate Office" class="about-hero-bg">
+            <div class="container">
+                <div class="about-hero-content animate-reveal">
+                    <h1>15 Years of <br> Building Trust</h1>
+                    <p>We've worked with everyone. From first-time homebuyers to elite commercial developers, our legacy is defined by the trust we've built.</p>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <section class="story-section">
-        <div class="container">
-            <div class="story-grid">
-                <div class="story-image">
-                    <img src="assets/priority-illustration.png" alt="Graphic illustration representing the growth and history of KIMI Properties">
-                </div>
-                <div class="story-content">
-                    <h2>Built on a foundation <br> of Excellence</h2>
-                    <p>Founded in 2001, KIMI properties has grown from a boutique agency into a market leader. We believe that finding a home is more than just a transaction—it's a significant milestone in our clients' lives.</p>
-                    <p>Our approach combines data-driven insights with a personal touch, ensuring that every property we represent meets our high standards of quality and design.</p>
-                    
-                    <div class="mission-box">
-                        <h3>Our Core Mission</h3>
-                        <p>To provide the best way to you who want to have a new comfortable and suitable place to live, while maintaining the highest level of professional ethics.</p>
+        <section class="trust-banner">
+            <div class="container animate-reveal">
+                <h3>Trusted By Everyone</h3>
+                <p>A decade and a half of unparalleled service across all sectors.</p>
+                <div class="about-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">15+</span>
+                        <span class="stat-label">Years of Trust</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">5k+</span>
+                        <span class="stat-label">Families Settled</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">500+</span>
+                        <span class="stat-label">Business Partners</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">100%</span>
+                        <span class="stat-label">Commitment</span>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <section class="team-section">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Meet Our Experts</h2>
-            </div>
-            
-            <div class="team-grid">
-                <!-- Team Member 1 -->
-                <div class="team-card">
-                    <div class="team-img">
-                        <img src="assets/founder.jpg" alt="KIMI Properties Company Founder & CEO">
-                    </div>
-                    <div class="team-info">
-                        <h3>Company Founder</h3>
-                        <p>Founder & CEO</p>
-                    </div>
-                </div>
-
-                <!-- Team Member 2 -->
-                <div class="team-card">
-                    <div class="team-img">
-                        <img src="assets/property-2.png" alt="Sarah Jenkins - Chief Operating Officer at KIMI Properties">
-                    </div>
-                    <div class="team-info">
-                        <h3>Sarah Jenkins</h3>
-                        <p>Chief Operating Officer</p>
-                    </div>
-                </div>
-
-                <!-- Team Member 3 -->
-                <div class="team-card">
-                    <div class="team-img">
-                        <img src="assets/property-3.png" alt="Marcus Chen - Head of Sales at KIMI Properties">
-                    </div>
-                    <div class="team-info">
-                        <h3>Marcus Chen</h3>
-                        <p>Head of Sales</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    <section class="cta-section">
-        <div class="container">
-            <div class="cta-box">
-                <div class="cta-content">
-                    <h2 class="cta-title">Need Consultation With Our Experienced Agent?</h2>
-                    <p class="cta-desc">Contact us now to get professional advice on your property journey.</p>
-                    <a href="contact.html" class="btn-connect">
-                        Get Started
-                        <div class="fake-cursor">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M5.65376 12.3822L2.10329 1.48651C1.88256 0.809513 2.58784 0.183576 3.20731 0.505329L12.544 5.35401C13.2305 5.71049 13.1554 6.71188 12.433 6.96646L8.85044 8.22915L5.65376 12.3822Z" fill="white" stroke="black" stroke-width="1"/>
-                            </svg>
-                            <div class="click-ripple"></div>
+        <section class="legacy-section">
+            <div class="container">
+                <div class="legacy-grid">
+                    <div class="legacy-image animate-reveal">
+                        <img src="assets/about_legacy_premium.png" alt="Ultra Luxury Interior">
+                        <div class="experience-badge">
+                            <span class="exp-num">15</span>
+                            <span class="exp-text">Years of<br>Excellence</span>
                         </div>
-                    </a>
-                </div>
-                <div class="cta-bg">
-                    <img src="assets/cta-town-buildings.png" alt="Architectural visualization of modern town">
+                    </div>
+                    <div class="legacy-content animate-reveal delay-2">
+                        <h2>Our Legacy is Your Peace of Mind</h2>
+                        <p>For over 15 years, KIMI Properties has been the cornerstone of trust in the real estate market. We didn't just witness the industry evolve; we helped shape it. Our journey began with a simple belief: that every client, regardless of budget or background, deserves elite service and absolute transparency.</p>
+                        
+                        <div class="legacy-highlight">
+                            "We've worked with everyone. That means we know exactly how to work with you."
+                        </div>
+                        
+                        <p>From advising multinational corporations on massive commercial hubs to helping a young couple find their first exquisite residential living space, our network and experience are unmatched. When you work with us, you're not just getting an agent—you're getting 15 years of industry-defining expertise.</p>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
+        <section class="team-section">
+            <div class="container">
+                <div class="section-header animate-reveal">
+                    <h2 class="section-title">The Architects of Trust</h2>
+                    <p style="color: var(--text-muted); font-size: 18px; max-width: 600px; margin-top: 10px;">Meet the visionary leaders who have spent the last 15 years turning real estate dreams into reality.</p>
+                </div>
+                
+                <div class="team-grid">
+                    <!-- Team Member 1 -->
+                    <div class="team-card animate-reveal delay-1">
+                        <div class="team-img">
+                            <img src="assets/founder.jpg" alt="Company Founder">
+                        </div>
+                        <div class="team-info">
+                            <h3>David Thompson</h3>
+                            <p>Founder & CEO</p>
+                        </div>
+                    </div>
+
+                    <!-- Team Member 2 -->
+                    <div class="team-card animate-reveal delay-2">
+                        <div class="team-img">
+                            <img src="assets/property-2.png" alt="Sarah Jenkins">
+                        </div>
+                        <div class="team-info">
+                            <h3>Sarah Jenkins</h3>
+                            <p>Chief Operating Officer</p>
+                        </div>
+                    </div>
+
+                    <!-- Team Member 3 -->
+                    <div class="team-card animate-reveal delay-3">
+                        <div class="team-img">
+                            <img src="assets/property-3.png" alt="Marcus Chen">
+                        </div>
+                        <div class="team-info">
+                            <h3>Marcus Chen</h3>
+                            <p>Head of Commercial Partnerships</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta-section">
+            <div class="container animate-reveal">
+                <div class="cta-box">
+                    <div class="cta-content">
+                        <h2 class="cta-title">Experience 15 Years of Excellence</h2>
+                        <p class="cta-desc">Join the thousands who have trusted us. Let's find your perfect property together.</p>
+                        <a href="contact.html" class="btn-connect">
+                            Consult With Us
+                            <div class="fake-cursor">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M5.65376 12.3822L2.10329 1.48651C1.88256 0.809513 2.58784 0.183576 3.20731 0.505329L12.544 5.35401C13.2305 5.71049 13.1554 6.71188 12.433 6.96646L8.85044 8.22915L5.65376 12.3822Z" fill="white" stroke="black" stroke-width="1"/>
+                                </svg>
+                                <div class="click-ripple"></div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="cta-bg">
+                        <img src="assets/cta-town-buildings.png" alt="Architectural visualization of modern town">
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
 
     <footer class="footer">

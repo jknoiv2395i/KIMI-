@@ -165,6 +165,7 @@
                     </div>
                 </div>
 
+
                 <div class="search-bar-container">
                     <div class="search-filter-bar hero-filter">
                         <!-- Location Segment -->
@@ -200,10 +201,6 @@
                     </div>
                 </div>
 
-                <div class="hero-image-container">
-                    <img src="assets/hero-illustration.png" alt="Modern luxury villa for sale in Nagpur" class="main-hero-image">
-                </div>
-
                 <script>
                     document.querySelector('.hero-filter .btn-browse-action').addEventListener('click', (e) => {
                         e.preventDefault();
@@ -219,7 +216,79 @@
                 </script>
             </div> <!-- closes hero-content -->
         </div> <!-- closes container -->
+
+        <!-- Property Image Carousel (Marquee) moved inside for background continuity -->
+        <div class="property-marquee-container hero-marquee-integrated">
+            <div class="property-marquee-content">
+                <div class="property-marquee-item">
+                    <img src="assets/property-4.jpg" alt="Luxury Interior">
+                </div>
+                <div class="property-marquee-item">
+                    <img src="assets/property-5.jpg" alt="Modern Architecture">
+                </div>
+                <div class="property-marquee-item">
+                    <img src="assets/property-6.jpg" alt="Premium Living">
+                </div>
+                <div class="property-marquee-item">
+                    <img src="assets/property-4.jpg" alt="Luxury Interior">
+                </div>
+                <div class="property-marquee-item">
+                    <img src="assets/property-5.jpg" alt="Modern Architecture">
+                </div>
+                <div class="property-marquee-item">
+                    <img src="assets/property-6.jpg" alt="Premium Living">
+                </div>
+            </div>
+            <!-- Duplicate for seamless loop -->
+            <div class="property-marquee-content" aria-hidden="true">
+                <div class="property-marquee-item">
+                    <img src="assets/property-4.jpg" alt="Luxury Interior">
+                </div>
+                <div class="property-marquee-item">
+                    <img src="assets/property-5.jpg" alt="Modern Architecture">
+                </div>
+                <div class="property-marquee-item">
+                    <img src="assets/property-6.jpg" alt="Premium Living">
+                </div>
+                <div class="property-marquee-item">
+                    <img src="assets/property-4.jpg" alt="Luxury Interior">
+                </div>
+                <div class="property-marquee-item">
+                    <img src="assets/property-5.jpg" alt="Modern Architecture">
+                </div>
+                <div class="property-marquee-item">
+                    <img src="assets/property-6.jpg" alt="Premium Living">
+                </div>
+            </div>
+        </div>
     </main> <!-- closes main -->
+
+    <section class="trusted-section reveal-on-scroll">
+        <div class="container">
+            <div class="trusted-wrapper">
+                <span class="trusted-label">TRUSTED BY INDUSTRY LEADERS</span>
+                <div class="logo-marquee">
+                    <div class="logo-marquee-content">
+                        <div class="logo-item"><span>PRO-EDGE</span></div>
+                        <div class="logo-item"><span>SKYLINE</span></div>
+                        <div class="logo-item"><span>URBAN NEST</span></div>
+                        <div class="logo-item"><span>ELITE DWELL</span></div>
+                        <div class="logo-item"><span>METRO VILLA</span></div>
+                        <div class="logo-item"><span>PRIME REALTY</span></div>
+                        <!-- Duplicate for loop -->
+                        <div class="logo-item"><span>PRO-EDGE</span></div>
+                        <div class="logo-item"><span>SKYLINE</span></div>
+                        <div class="logo-item"><span>URBAN NEST</span></div>
+                        <div class="logo-item"><span>ELITE DWELL</span></div>
+                        <div class="logo-item"><span>METRO VILLA</span></div>
+                        <div class="logo-item"><span>PRIME REALTY</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+
 
     <section class="container-section reveal-on-scroll">
         <div class="container">
@@ -227,9 +296,20 @@
                 <h2 class="section-title">Featured Property Listings in Nagpur</h2>
                 <a href="properties.html" class="browse-link">Browse All Listings <span class="arrow">→</span></a>
             </div>
-            
-            <div class="listings-grid" id="properties-grid">
-                <!-- Cards will be injected dynamically via JavaScript -->
+                 <div class="property-slider-wrapper">
+                <button class="slider-control prev" id="featured-prev" aria-label="Previous Properties">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                </button>
+                
+                <div class="property-marquee-container detailed-slider" id="featured-slider-container">
+                    <div class="property-marquee-content" id="properties-grid">
+                        <!-- Detailed Cards will be injected dynamically via JavaScript -->
+                    </div>
+                </div>
+
+                <button class="slider-control next" id="featured-next" aria-label="Next Properties">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </button>
             </div>
         </div>
     </section>
@@ -441,10 +521,22 @@
         <div class="container">
             <div class="section-header">
                 <h2 class="section-title">More Featured Listings in Nagpur</h2>
-                <a href="properties.html" class="browse-link">View All Listings <span class="arrow">→</span></a>
+                <div class="slider-header-actions">
+                    <div class="slider-nav">
+                        <button id="more-prev" class="nav-btn prev" aria-label="Previous property">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                        </button>
+                        <button id="more-next" class="nav-btn next" aria-label="Next property">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                        </button>
+                    </div>
+                    <a href="properties.html" class="browse-link">View All Listings <span class="arrow">→</span></a>
+                </div>
             </div>
-            <div id="properties-grid-3" class="dynamic-properties-grid listings-grid">
-                <!-- Will be populated by JS -->
+            <div id="more-slider-container" class="property-slider-wrapper">
+                <div id="properties-grid-3" class="dynamic-properties-grid slider-grid">
+                    <!-- Will be populated by JS -->
+                </div>
             </div>
         </div>
     </section>
@@ -452,226 +544,79 @@
     <section class="testimonials-section">
         <div class="container">
             <h2 class="section-title text-center">Kind Words From Our Customers</h2>
-        </div>
-        <div class="marquee-container">
-            <div class="marquee-content">
+            
+            <div class="testimonials-grid-v2">
                 <!-- Testimonial 1 -->
-                <div class="testimonial-slide">
-                    <div class="testimonial-person-box" style="background-color: #FDE8F3;">
-                        <img src="assets/client-1.png" alt="Priya Sharma">
-                    </div>
-                    <div class="testimonial-content-box" style="background-color: #E7DCFF;">
-                        <div class="rating">★★★★★</div>
-                        <p class="quote">"The legal paperwork for buying property in the city always intimidated me. KIMI properties handled every document with total professionalism. They ensured all clearances were perfect."</p>
-                        <div class="user-meta">
-                            <div class="user-details">
-                                <h3>Priya Sharma</h3>
-                                <p>Property Investor</p>
+                <div class="testimonial-item-v2 staggered-up">
+                    <div class="testimonial-card-v2">
+                        <div class="quote-icon-v2">
+                            <svg width="45" height="45" viewBox="0 0 24 24" fill="#555"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.987z"/></svg>
+                        </div>
+                        <p class="quote-text-v2">"KIMI Properties made my first home-buying experience smooth and stress-free. Their team is honest, professional, and truly cares about finding the right property for you."</p>
+                        <div class="client-footer-v2">
+                            <div class="client-avatar-v2">
+                                <img src="assets/client-1.png" alt="Rekha Sharma">
                             </div>
-                            <div class="brand-mini-logo">
-                                <img src="assets/logo.png" alt="KIMI" style="height: 24px; width: auto;">
+                            <div class="client-info-v2">
+                                <h4 class="client-name-v2">Rekha Sharma</h4>
+                                <p class="client-role-v2">Client</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Testimonial 2 -->
-                <div class="testimonial-slide">
-                    <div class="testimonial-person-box" style="background-color: #E8F4FD;">
-                        <img src="assets/client-2.png" alt="Rohan Patel">
-                    </div>
-                    <div class="testimonial-content-box" style="background-color: #E7DCFF;">
-                        <div class="rating">★★★★★</div>
-                        <p class="quote">"I've heard horror stories of delayed handovers. While our project had a minor delay, KIMI kept us informed daily. Their communication and dedication is commendable."</p>
-                        <div class="user-meta">
-                            <div class="user-details">
-                                <h3>Rohan Patel</h3>
-                                <p>Home Owner</p>
+                <div class="testimonial-item-v2 staggered-down">
+                    <div class="testimonial-card-v2">
+                        <div class="quote-icon-v2">
+                            <svg width="45" height="45" viewBox="0 0 24 24" fill="#555"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.987z"/></svg>
+                        </div>
+                        <p class="quote-text-v2">"I was looking for a commercial space for my business, and KIMI Properties delivered exactly what I needed within budget. Highly recommended."</p>
+                        <div class="client-footer-v2">
+                            <div class="client-avatar-v2">
+                                <img src="assets/client-2.png" alt="Jatin Mehta">
                             </div>
-                            <div class="brand-mini-logo">
-                                <img src="assets/logo.png" alt="KIMI" style="height: 24px; width: auto;">
+                            <div class="client-info-v2">
+                                <h4 class="client-name-v2">Jatin Mehta</h4>
+                                <p class="client-role-v2">Client</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Testimonial 3 -->
-                <div class="testimonial-slide">
-                    <div class="testimonial-person-box" style="background-color: #FDF4E8;">
-                        <img src="assets/client-3.png" alt="Vikram Malhotra">
-                    </div>
-                    <div class="testimonial-content-box" style="background-color: #E7DCFF;">
-                        <div class="rating">★★★★★</div>
-                        <p class="quote">"As a retiree looking for a peaceful home, I valued KIMI's patience. They didn't just show me houses; they showed me communities where I could truly belong."</p>
-                        <div class="user-meta">
-                            <div class="user-details">
-                                <h3>Vikram Malhotra</h3>
-                                <p>Retired Officer</p>
+                <div class="testimonial-item-v2 staggered-up">
+                    <div class="testimonial-card-v2">
+                        <div class="quote-icon-v2">
+                            <svg width="45" height="45" viewBox="0 0 24 24" fill="#555"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.987z"/></svg>
+                        </div>
+                        <p class="quote-text-v2">"Excellent service, transparent deals, and quick responses. KIMI Properties is my go-to for all property investments."</p>
+                        <div class="client-footer-v2">
+                            <div class="client-avatar-v2">
+                                <img src="assets/client-3.png" alt="Vinita Patel">
                             </div>
-                            <div class="brand-mini-logo">
-                                <img src="assets/logo.png" alt="KIMI" style="height: 24px; width: auto;">
+                            <div class="client-info-v2">
+                                <h4 class="client-name-v2">Vinita Patel</h4>
+                                <p class="client-role-v2">Client</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Testimonial 4 -->
-                <div class="testimonial-slide">
-                    <div class="testimonial-person-box" style="background-color: #E8FDEE;">
-                        <img src="assets/client-4.png" alt="Ananya Singh">
-                    </div>
-                    <div class="testimonial-content-box" style="background-color: #E7DCFF;">
-                        <div class="rating">★★★★★</div>
-                        <p class="quote">"Finding a modern studio that matches my aesthetic was a challenge. KIMI's curated listings were a breath of fresh air. I found my dream home in just two weeks!"</p>
-                        <div class="user-meta">
-                            <div class="user-details">
-                                <h3>Ananya Singh</h3>
-                                <p>Creative Director</p>
-                            </div>
-                            <div class="brand-mini-logo">
-                                <img src="assets/logo.png" alt="KIMI" style="height: 24px; width: auto;">
-                            </div>
+                <div class="testimonial-item-v2 staggered-down">
+                    <div class="testimonial-card-v2">
+                        <div class="quote-icon-v2">
+                            <svg width="45" height="45" viewBox="0 0 24 24" fill="#555"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.987z"/></svg>
                         </div>
-                    </div>
-                </div>
-
-                <!-- Testimonial 5 -->
-                <div class="testimonial-slide">
-                    <div class="testimonial-person-box" style="background-color: #FDE8F3;">
-                        <img src="assets/client-5.png" alt="Arjun Desai">
-                    </div>
-                    <div class="testimonial-content-box" style="background-color: #E7DCFF;">
-                        <div class="rating">★★★★☆</div>
-                        <p class="quote">"The transparency in pricing was what won me over. No hidden costs, no surprise fees. KIMI properties made the entire buying process smooth and predictable."</p>
-                        <div class="user-meta">
-                            <div class="user-details">
-                                <h3>Arjun Desai</h3>
-                                <p>Software Architect</p>
+                        <p class="quote-text-v2">"Buying a plot seemed complicated until I met the KIMI team. They explained everything patiently and handled all paperwork professionally."</p>
+                        <div class="client-footer-v2">
+                            <div class="client-avatar-v2">
+                                <img src="assets/client-4.png" alt="khushi Dubey">
                             </div>
-                            <div class="brand-mini-logo">
-                                <img src="assets/logo.png" alt="KIMI" style="height: 24px; width: auto;">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Testimonial 6 -->
-                <div class="testimonial-slide">
-                    <div class="testimonial-person-box" style="background-color: #E8F4FD;">
-                        <img src="assets/client-6.png" alt="Sunita Rao">
-                    </div>
-                    <div class="testimonial-content-box" style="background-color: #E7DCFF;">
-                        <div class="rating">★★★★★</div>
-                        <p class="quote">"We needed a spacious villa for our joint family. KIMI understood our cultural needs and found us a place with enough room for everyone and beautiful gardens."</p>
-                        <div class="user-meta">
-                            <div class="user-details">
-                                <h3>Sunita Rao</h3>
-                                <p>Educationist</p>
-                            </div>
-                            <div class="brand-mini-logo">
-                                <img src="assets/logo.png" alt="KIMI" style="height: 24px; width: auto;">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Testimonial 7 -->
-                <div class="testimonial-slide">
-                    <div class="testimonial-person-box" style="background-color: #FDF4E8;">
-                        <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?q=80&w=600&auto=format&fit=crop" alt="Karan Mehta">
-                    </div>
-                    <div class="testimonial-content-box" style="background-color: #E7DCFF;">
-                        <div class="rating">★★★★★</div>
-                        <p class="quote">"I've worked with many agencies, but KIMI's local market knowledge is unparalleled. They helped me secure a high-yield investment property in record time."</p>
-                        <div class="user-meta">
-                            <div class="user-details">
-                                <h3>Karan Mehta</h3>
-                                <p>Business Consultant</p>
-                            </div>
-                            <div class="brand-mini-logo">
-                                <img src="assets/logo.png" alt="KIMI" style="height: 24px; width: auto;">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="marquee-content" aria-hidden="true">
-                <!-- Testimonial 1 -->
-                <div class="testimonial-slide">
-                    <div class="testimonial-person-box" style="background-color: #FDE8F3;">
-                        <img src="assets/client-1.png" alt="Priya Sharma">
-                    </div>
-                    <div class="testimonial-content-box" style="background-color: #E7DCFF;">
-                        <div class="rating">★★★★★</div>
-                        <p class="quote">"The legal paperwork for buying property in the city always intimidated me. KIMI properties handled every document with total professionalism. They ensured all clearances were perfect."</p>
-                        <div class="user-meta">
-                            <div class="user-details">
-                                <h3>Priya Sharma</h3>
-                                <p>Property Investor</p>
-                            </div>
-                            <div class="brand-mini-logo">
-                                <img src="assets/logo.png" alt="KIMI" style="height: 24px; width: auto;">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Testimonial 2 -->
-                <div class="testimonial-slide">
-                    <div class="testimonial-person-box" style="background-color: #E8F4FD;">
-                        <img src="assets/client-2.png" alt="Rohan Patel">
-                    </div>
-                    <div class="testimonial-content-box" style="background-color: #E7DCFF;">
-                        <div class="rating">★★★★★</div>
-                        <p class="quote">"I've heard horror stories of delayed handovers. While our project had a minor delay, KIMI kept us informed daily. Their communication and dedication is commendable."</p>
-                        <div class="user-meta">
-                            <div class="user-details">
-                                <h3>Rohan Patel</h3>
-                                <p>Home Owner</p>
-                            </div>
-                            <div class="brand-mini-logo">
-                                <img src="assets/logo.png" alt="KIMI" style="height: 24px; width: auto;">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Testimonial 3 -->
-                <div class="testimonial-slide">
-                    <div class="testimonial-person-box" style="background-color: #FDF4E8;">
-                        <img src="assets/client-3.png" alt="Vikram Malhotra">
-                    </div>
-                    <div class="testimonial-content-box" style="background-color: #E7DCFF;">
-                        <div class="rating">★★★★★</div>
-                        <p class="quote">"As a retiree looking for a peaceful home, I valued KIMI's patience. They didn't just show me houses; they showed me communities where I could truly belong."</p>
-                        <div class="user-meta">
-                            <div class="user-details">
-                                <h3>Vikram Malhotra</h3>
-                                <p>Retired Officer</p>
-                            </div>
-                            <div class="brand-mini-logo">
-                                <img src="assets/logo.png" alt="KIMI" style="height: 24px; width: auto;">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Testimonial 4 -->
-                <div class="testimonial-slide">
-                    <div class="testimonial-person-box" style="background-color: #E8FDEE;">
-                        <img src="assets/client-4.png" alt="Ananya Singh">
-                    </div>
-                    <div class="testimonial-content-box" style="background-color: #E7DCFF;">
-                        <div class="rating">★★★★★</div>
-                        <p class="quote">"Finding a modern studio that matches my aesthetic was a challenge. KIMI's curated listings were a breath of fresh air. I found my dream home in just two weeks!"</p>
-                        <div class="user-meta">
-                            <div class="user-details">
-                                <h3>Ananya Singh</h3>
-                                <p>Creative Director</p>
-                            </div>
-                            <div class="brand-mini-logo">
-                                <img src="assets/logo.png" alt="KIMI" style="height: 24px; width: auto;">
+                            <div class="client-info-v2">
+                                <h4 class="client-name-v2">khushi Dubey</h4>
+                                <p class="client-role-v2">Client</p>
                             </div>
                         </div>
                     </div>
@@ -683,7 +628,7 @@
 
     <section class="cta-section">
         <div class="container">
-            <p class="cta-sub">Connect with us</p>
+            <p class="cta-sub">Connect With Us</p>
             <div class="cta-box">
                 <div class="cta-content">
                     <h2 class="cta-title">Need Consultation With Our Experienced Agent?</h2>

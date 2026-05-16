@@ -14,6 +14,53 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Modular Property Slider Initialization Function
+    function initSlider(containerId, nextBtnId, prevBtnId, autoPlay = true) {
+        const container = document.getElementById(containerId);
+        const nextBtn = document.getElementById(nextBtnId);
+        const prevBtn = document.getElementById(prevBtnId);
+
+        if (!container || !nextBtn || !prevBtn) return;
+
+        const slideTo = (direction) => {
+            const card = container.querySelector('.property-card');
+            const scrollAmount = card ? card.offsetWidth + 30 : 460;
+            const currentScroll = container.scrollLeft;
+            let targetScroll = direction === 'next' ? currentScroll + scrollAmount : currentScroll - scrollAmount;
+            
+            // Handle loop logic
+            const isAtEnd = container.scrollLeft + container.offsetWidth >= container.scrollWidth - 10;
+            if (direction === 'next' && isAtEnd) {
+                targetScroll = 0;
+            } else if (direction === 'prev' && currentScroll <= 10) {
+                targetScroll = container.scrollWidth;
+            }
+
+            gsap.to(container, {
+                scrollLeft: targetScroll,
+                duration: 1.2,
+                ease: "power4.out",
+                overwrite: true
+            });
+        };
+
+        nextBtn.addEventListener('click', () => slideTo('next'));
+        prevBtn.addEventListener('click', () => slideTo('prev'));
+
+        if (autoPlay) {
+            let autoPlayTimer = setInterval(() => slideTo('next'), 5000);
+            container.addEventListener('mouseenter', () => clearInterval(autoPlayTimer));
+            container.addEventListener('mouseleave', () => {
+                autoPlayTimer = setInterval(() => slideTo('next'), 5000);
+            });
+        }
+    }
+
+    // Initialize both property sliders
+    initSlider('featured-slider-container', 'featured-next', 'featured-prev');
+    initSlider('more-slider-container', 'more-next', 'more-prev');
+
+
     // Initialize Lenis Smooth Scroll
     const lenis = new Lenis({
         duration: 1.2,
@@ -246,7 +293,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 grids.forEach(grid => {
                     grid.innerHTML = gridHTML;
-                    if (grid.id === 'properties-grid' && allProps.length > end) {
+                    
+                    // Handle duplicate for marquee if it exists
+                    if (grid.id === 'properties-grid') {
+                        const duplicate = document.getElementById('properties-grid-duplicate');
+                        if (duplicate) duplicate.innerHTML = gridHTML;
+                    }
+
+                    if (grid.id === 'properties-grid' && !document.querySelector('.detailed-marquee') && allProps.length > end) {
                         const loadMoreBtn = document.createElement('button');
                         loadMoreBtn.innerText = 'Load More Properties';
                         loadMoreBtn.className = 'btn-browse-action';

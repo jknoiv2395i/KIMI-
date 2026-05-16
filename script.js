@@ -56,7 +56,30 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Initialize both property sliders
+    // Hero Slider Logic (Autonomous)
+    function initHeroSlider() {
+        const slider = document.getElementById('hero-slider');
+        if (!slider) return;
+        
+        const slides = slider.querySelectorAll('.hero-slide');
+        if (slides.length === 0) return;
+        
+        let currentIndex = 0;
+        
+        function showSlide(index) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            currentIndex = (index + slides.length) % slides.length;
+            slides[currentIndex].classList.add('active');
+        }
+        
+        // Auto-play every 2 seconds
+        setInterval(() => {
+            showSlide(currentIndex + 1);
+        }, 2000);
+    }
+
+    // Initialize all sliders
+    initHeroSlider();
     initSlider('featured-slider-container', 'featured-next', 'featured-prev');
     initSlider('more-slider-container', 'more-next', 'more-prev');
 

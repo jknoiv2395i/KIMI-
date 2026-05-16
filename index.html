@@ -150,166 +150,58 @@
                     <span></span>
                 </div>
             </nav>
-
-            <div class="hero-content">
-                <div class="hero-header">
-                    <h1 class="hero-title">
-                        <span>We help people <span class="title-pill pill-house-1"></span> to</span>
-                        <span>realize their dream</span>
-                        <span>property in Nagpur <span class="title-pill pill-house-2"></span></span>
-                    </h1>
-                    <div style="margin-top: 15px;">
-                        <p class="hero-subtitle">
-                            We are creative people who provide the best way to you who want to have a new comfortable and suitable place to live
-                        </p>
-                    </div>
-                </div>
-
-
-                <div class="search-bar-container">
-                    <div class="search-filter-bar hero-filter">
-                        <!-- Location Segment -->
-                        <div class="filter-segment">
-                            <div class="segment-icon">
-                                <img src="assets/icon-location.png" alt="Location Icon" style="width: 100%; height: 100%; object-fit: contain;">
-                            </div>
-                            <div class="segment-text">
-                                <span>Location</span>
-                                <select id="hero-location">
-                                    <option value="all">Any Location</option>
-                                </select>
-                            </div>
-                        </div>
-                        
-                        <!-- Type Segment -->
-                        <div class="filter-segment">
-                            <div class="segment-icon">
-                                <img src="assets/icon-type.png" alt="Property Type Icon" style="width: 100%; height: 100%; object-fit: contain;">
-                            </div>
-                            <div class="segment-text">
-                                <span>Type of Property</span>
-                                <select id="hero-type">
-                                    <option value="all">All Types</option>
-                                    <option value="apartment">Apartment</option>
-                                    <option value="residential">Residential</option>
-                                    <option value="commercial">Commercial</option>
-                                </select>
-                            </div>
-                        </div>
-                        
-                        <a href="properties.html" class="btn-browse-action">Browse Property</a>
-                    </div>
-                </div>
-
-                <script>
-                    document.querySelector('.hero-filter .btn-browse-action').addEventListener('click', (e) => {
-                        e.preventDefault();
-                        const location = document.getElementById('hero-location').value;
-                        const type = document.getElementById('hero-type').value;
-                        
-                        const url = new URL('properties.html', window.location.href);
-                        if (location !== 'all') url.searchParams.set('location', location);
-                        if (type !== 'all') url.searchParams.set('type', type);
-                        
-                        window.location.href = url.toString();
-                    });
-                </script>
-            </div> <!-- closes hero-content -->
         </div> <!-- closes container -->
 
-        <!-- Property Image Carousel (Marquee) moved inside for background continuity -->
-        <div class="property-marquee-container hero-marquee-integrated">
-            <div class="property-marquee-content">
-                <div class="property-marquee-item">
+        <div class="hero-slider-container">
+            <div class="hero-slider" id="hero-slider">
+                <div class="hero-slide active">
                     <img src="assets/property-4.jpg" alt="Luxury Interior">
+                    <div class="hero-slide-content">
+                        <h1 class="slide-title">Exquisite Residential Living</h1>
+                        <p class="slide-subtitle">Unmatched comfort in the heart of Nagpur</p>
+                    </div>
                 </div>
-                <div class="property-marquee-item">
+                <div class="hero-slide">
                     <img src="assets/property-5.jpg" alt="Modern Architecture">
+                    <div class="hero-slide-content">
+                        <h1 class="slide-title">Premium Commercial Hubs</h1>
+                        <p class="slide-subtitle">Strategic locations for visionary businesses</p>
+                    </div>
                 </div>
-                <div class="property-marquee-item">
-                    <img src="assets/property-6.jpg" alt="Premium Living">
-                </div>
-                <div class="property-marquee-item">
-                    <img src="assets/property-4.jpg" alt="Luxury Interior">
-                </div>
-                <div class="property-marquee-item">
-                    <img src="assets/property-5.jpg" alt="Modern Architecture">
-                </div>
-                <div class="property-marquee-item">
-                    <img src="assets/property-6.jpg" alt="Premium Living">
-                </div>
-            </div>
-            <!-- Duplicate for seamless loop -->
-            <div class="property-marquee-content" aria-hidden="true">
-                <div class="property-marquee-item">
-                    <img src="assets/property-4.jpg" alt="Luxury Interior">
-                </div>
-                <div class="property-marquee-item">
-                    <img src="assets/property-5.jpg" alt="Modern Architecture">
-                </div>
-                <div class="property-marquee-item">
-                    <img src="assets/property-6.jpg" alt="Premium Living">
-                </div>
-                <div class="property-marquee-item">
-                    <img src="assets/property-4.jpg" alt="Luxury Interior">
-                </div>
-                <div class="property-marquee-item">
-                    <img src="assets/property-5.jpg" alt="Modern Architecture">
-                </div>
-                <div class="property-marquee-item">
-                    <img src="assets/property-6.jpg" alt="Premium Living">
-                </div>
-            </div>
-        </div>
-    </main> <!-- closes main -->
-
-    <section class="trusted-section reveal-on-scroll">
-        <div class="container">
-            <div class="trusted-wrapper">
-                <span class="trusted-label">TRUSTED BY INDUSTRY LEADERS</span>
-                <div class="logo-marquee">
-                    <div class="logo-marquee-content">
-                        <div class="logo-item"><span>PRO-EDGE</span></div>
-                        <div class="logo-item"><span>SKYLINE</span></div>
-                        <div class="logo-item"><span>URBAN NEST</span></div>
-                        <div class="logo-item"><span>ELITE DWELL</span></div>
-                        <div class="logo-item"><span>METRO VILLA</span></div>
-                        <div class="logo-item"><span>PRIME REALTY</span></div>
-                        <!-- Duplicate for loop -->
-                        <div class="logo-item"><span>PRO-EDGE</span></div>
-                        <div class="logo-item"><span>SKYLINE</span></div>
-                        <div class="logo-item"><span>URBAN NEST</span></div>
-                        <div class="logo-item"><span>ELITE DWELL</span></div>
-                        <div class="logo-item"><span>METRO VILLA</span></div>
-                        <div class="logo-item"><span>PRIME REALTY</span></div>
+                <div class="hero-slide">
+                    <img src="assets/property-6.jpg" alt="Industrial Space">
+                    <div class="hero-slide-content">
+                        <h1 class="slide-title">Luxury Industrial Spaces</h1>
+                        <p class="slide-subtitle">Precision-engineered environments for modern industry</p>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
-    
 
 
-    <section class="container-section reveal-on-scroll">
+
+    </main> <!-- closes main -->
+
+    <section class="featured-section reveal-on-scroll">
         <div class="container">
             <div class="section-header">
                 <h2 class="section-title">Featured Property Listings in Nagpur</h2>
-                <a href="properties.html" class="browse-link">Browse All Listings <span class="arrow">→</span></a>
-            </div>
-                 <div class="property-slider-wrapper">
-                <button class="slider-control prev" id="featured-prev" aria-label="Previous Properties">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
-                </button>
-                
-                <div class="property-marquee-container detailed-slider" id="featured-slider-container">
-                    <div class="property-marquee-content" id="properties-grid">
-                        <!-- Detailed Cards will be injected dynamically via JavaScript -->
+                <div class="slider-header-actions">
+                    <div class="slider-nav">
+                        <button id="featured-prev" class="nav-btn prev" aria-label="Previous property">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                        </button>
+                        <button id="featured-next" class="nav-btn next" aria-label="Next property">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                        </button>
                     </div>
+                    <a href="properties.html" class="browse-link">View All Listings <span class="arrow">→</span></a>
                 </div>
-
-                <button class="slider-control next" id="featured-next" aria-label="Next Properties">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                </button>
+            </div>
+            <div id="featured-slider-container" class="property-slider-wrapper">
+                <div id="properties-grid" class="dynamic-properties-grid slider-grid">
+                    <!-- Will be populated by JS -->
+                </div>
             </div>
         </div>
     </section>

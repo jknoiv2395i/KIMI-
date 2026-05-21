@@ -9,7 +9,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://kimi-backend.onrender.com/api/:path*"
+      "destination": "https://kimi-07oi.onrender.com/api/:path*"
     }
   ]
 }

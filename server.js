@@ -10,6 +10,14 @@ const Property = require('./models/Property');
 const Settings = require('./models/Settings');
 const Media = require('./models/Media');
 const fs = require('fs');
+const cloudinary = require('cloudinary').v2;
+
+// Cloudinary Configuration
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+});
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -153,9 +161,9 @@ app.post('/api/login', (req, res) => {
     }
 });
 
-// Admin: Upload Image to Cloudinary
+// Admin: Upload Image (Cloudinary or Base64 fallback)
 app.post('/api/upload', authenticateToken, (req, res) => {
-    upload.array('files', 10)(req, res, (err) => {
+    upload.array('files', 10)(req, res, async (err) => {
         if (err) {
             console.error('Upload Error:', err);
             return res.status(500).json({ success: false, error: err.message });
@@ -166,16 +174,39 @@ app.post('/api/upload', authenticateToken, (req, res) => {
                 return res.status(400).json({ success: false, error: 'No files received' });
             }
 
-            const urls = req.files.map(file => {
-                const b64 = file.buffer.toString('base64');
-                return `data:${file.mimetype};base64,${b64}`;
-            });
+            const hasCloudinary = process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_API_KEY && process.env.CLOUDINARY_API_SECRET;
 
-            console.log(`[STORAGE] Converted ${urls.length} files to Base64`);
-            res.json({ success: true, urls, count: urls.length });
+            if (hasCloudinary) {
+                // Upload all files to Cloudinary in parallel
+                const uploadPromises = req.files.map(file => {
+                    return new Promise((resolve, reject) => {
+                        const b64 = file.buffer.toString('base64');
+                        const dataURI = `data:${file.mimetype};base64,${b64}`;
+                        cloudinary.uploader.upload(dataURI, { folder: 'kimi-properties' }, (uploadErr, result) => {
+                            if (uploadErr) {
+                                reject(uploadErr);
+                            } else {
+                                resolve(result.secure_url);
+                            }
+                        });
+                    });
+                });
+
+                const urls = await Promise.all(uploadPromises);
+                console.log(`[STORAGE] Uploaded ${urls.length} files to Cloudinary`);
+                res.json({ success: true, urls, count: urls.length });
+            } else {
+                // Fallback to local Base64 (legacy)
+                const urls = req.files.map(file => {
+                    const b64 = file.buffer.toString('base64');
+                    return `data:${file.mimetype};base64,${b64}`;
+                });
+                console.warn(`[STORAGE] Cloudinary config missing. Converted ${urls.length} files to Base64`);
+                res.json({ success: true, urls, count: urls.length });
+            }
         } catch (error) {
-            console.error('Processing Error:', error);
-            res.status(500).json({ success: false, error: 'Failed to process images' });
+            console.error('Upload Process Error:', error);
+            res.status(500).json({ success: false, error: 'Failed to process and upload images' });
         }
     });
 });

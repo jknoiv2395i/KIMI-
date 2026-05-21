@@ -26,8 +26,9 @@ const upload = multer({
 });
 
 // Database Connection with Fallback
-if (process.env.MONGODB_URI) {
-    mongoose.connect(process.env.MONGODB_URI)
+const dbUri = process.env.MONGODB_URI || process.env.mongo;
+if (dbUri) {
+    mongoose.connect(dbUri)
         .then(() => {
             console.log('Connected to MongoDB Atlas');
             useMongoDB = true;
@@ -37,7 +38,7 @@ if (process.env.MONGODB_URI) {
             console.warn('FALLING BACK TO LOCAL JSON');
         });
 } else {
-    console.warn('NO MONGODB_URI FOUND. RUNNING IN LOCAL JSON MODE.');
+    console.warn('NO MONGODB_URI or mongo environment variable found. RUNNING IN LOCAL JSON MODE.');
 }
 
 // Security Diagnostic: Ensure keys are loaded

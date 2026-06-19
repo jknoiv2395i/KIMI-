@@ -162,6 +162,30 @@ app.get('/api/properties/:id/media', async (req, res) => {
         const media = await Media.find({ propertyId: req.params.id });
         const images = media.filter(m => m.type === 'image').map(m => m.data);
         const videos = media.filter(m => m.type === 'video').map(m => m.data);
+        
+        // Fallback / Merge with nested fields on the Property document (e.g. legacy/migrated content)
+        try {
+            const property = await Property.findById(req.params.id);
+            if (property) {
+                if (property.images && property.images.length > 0) {
+                    property.images.forEach(img => {
+                        if (img && !images.includes(img)) {
+                            images.push(img);
+                        }
+                    });
+                }
+                if (property.videos && property.videos.length > 0) {
+                    property.videos.forEach(vid => {
+                        if (vid && !videos.includes(vid)) {
+                            videos.push(vid);
+                        }
+                    });
+                }
+            }
+        } catch (e) {
+            console.error('Failed to merge Property document media:', e.message);
+        }
+
         res.json({ images, videos });
     } catch (err) {
         res.status(500).json({ error: err.message });

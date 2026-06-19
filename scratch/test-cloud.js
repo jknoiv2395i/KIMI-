@@ -7,13 +7,15 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_API_SECRET || 'prxGWaQ_R29ePifasdloJfkrfd4'
 });
 
-console.log('Testing Cloudinary Connection...');
-cloudinary.api.ping()
+console.log('Testing Cloudinary Upload...');
+const mockBase64 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==';
+
+cloudinary.uploader.upload(mockBase64, { folder: 'test-folder' })
     .then(result => {
-        console.log('✅ Cloudinary Connection SUCCESS:', result);
+        console.log('✅ Cloudinary Upload SUCCESS:', result.secure_url);
         process.exit(0);
     })
     .catch(error => {
-        console.error('❌ Cloudinary Connection FAILED:', error.message);
+        console.error('❌ Cloudinary Upload FAILED:', error);
         process.exit(1);
     });

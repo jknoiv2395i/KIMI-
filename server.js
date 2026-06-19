@@ -206,7 +206,10 @@ app.post('/api/upload', authenticateToken, (req, res) => {
             }
         } catch (error) {
             console.error('Upload Process Error:', error);
-            res.status(500).json({ success: false, error: 'Failed to process and upload images' });
+            res.status(500).json({ 
+                success: false, 
+                error: error.message || 'Failed to process and upload images'
+            });
         }
     });
 });

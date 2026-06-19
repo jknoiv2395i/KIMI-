@@ -240,6 +240,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Universal Content Population Function
     function populatePageContent(content) {
         if (!content) return;
+        console.log("populatePageContent: called with properties count =", content.properties ? content.properties.length : 0);
 
         // Populate Location Dropdowns
         const heroLocation = document.getElementById('hero-location');
@@ -360,21 +361,43 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 2. DATA FETCHING (HYBRID INSTANT LOAD)
     async function fetchFrontendData() {
+        console.log("fetchFrontendData: starting data load");
         // Step A: Immediate render from Cache/Defaults
         const cached = localStorage.getItem('kimi_content');
-        if (cached) populatePageContent(JSON.parse(cached));
-        else populatePageContent(defaultContent);
+        if (cached) {
+            try {
+                console.log("fetchFrontendData: rendering from cache");
+                populatePageContent(JSON.parse(cached));
+            } catch (e) {
+                console.error("Error parsing cached content:", e);
+                populatePageContent(defaultContent);
+            }
+        } else {
+            console.log("fetchFrontendData: rendering from defaults");
+            populatePageContent(defaultContent);
+        }
 
         // Step B: Background Fetch & Update
         try {
+            console.log("fetchFrontendData: fetching fresh content from API");
             const res = await fetch('/api/content');
             if (res.ok) {
                 const liveContent = await res.json();
-                localStorage.setItem('kimi_content', JSON.stringify(liveContent));
+                console.log("fetchFrontendData: fresh content loaded, properties count:", liveContent.properties ? liveContent.properties.length : 0);
+                // Render first to ensure user sees the content immediately
                 populatePageContent(liveContent);
+                // Attempt to cache in localStorage, handle quota errors gracefully
+                try {
+                    localStorage.setItem('kimi_content', JSON.stringify(liveContent));
+                    console.log("fetchFrontendData: cached fresh content in localStorage");
+                } catch (storageError) {
+                    console.warn("Storage quota exceeded or disabled. Renders live data without caching:", storageError);
+                }
+            } else {
+                console.error("fetchFrontendData: API returned non-OK status:", res.status);
             }
         } catch (e) {
-            console.log("Using fallback content");
+            console.error("Error fetching live content:", e);
         }
     }
 

@@ -839,7 +839,14 @@
                 if (data.success) {
                     if (data.urls && Array.isArray(data.urls)) {
                         data.urls.forEach(url => {
-                            if (url.startsWith('data:video/')) {
+                            const lowercaseUrl = url.toLowerCase();
+                            const isVideo = url.startsWith('data:video/') || 
+                                            lowercaseUrl.endsWith('.mp4') || 
+                                            lowercaseUrl.endsWith('.webm') || 
+                                            lowercaseUrl.endsWith('.ogg') || 
+                                            lowercaseUrl.endsWith('.mov') || 
+                                            lowercaseUrl.endsWith('.avi');
+                            if (isVideo) {
                                 currentVideos.push(url);
                             } else {
                                 currentImages.push(url);

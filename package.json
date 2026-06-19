@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/jknoiv2395i/KIMI-#readme",
   "dependencies": {
+    "@supabase/supabase-js": "^2.108.2",
     "body-parser": "^2.2.2",
     "cloudinary": "^1.41.3",
     "cors": "^2.8.6",

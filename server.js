@@ -11,6 +11,7 @@ const Settings = require('./models/Settings');
 const Media = require('./models/Media');
 const fs = require('fs');
 const cloudinary = require('cloudinary').v2;
+const { createClient } = require('@supabase/supabase-js');
 
 // Cloudinary Configuration
 cloudinary.config({
@@ -18,6 +19,18 @@ cloudinary.config({
     api_key: process.env.CLOUDINARY_API_KEY,
     api_secret: process.env.CLOUDINARY_API_SECRET
 });
+
+// Supabase Configuration
+let supabase = null;
+if (process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    try {
+        supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
+        console.log('Supabase Storage client initialized successfully.');
+    } catch (e) {
+        console.error('Failed to initialize Supabase client:', e.message);
+    }
+}
+
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -161,7 +174,7 @@ app.post('/api/login', (req, res) => {
     }
 });
 
-// Admin: Upload Image (Cloudinary or Base64 fallback)
+// Admin: Upload Image (Supabase, Cloudinary, or Base64 fallback)
 app.post('/api/upload', authenticateToken, (req, res) => {
     upload.array('files', 10)(req, res, async (err) => {
         if (err) {
@@ -174,9 +187,40 @@ app.post('/api/upload', authenticateToken, (req, res) => {
                 return res.status(400).json({ success: false, error: 'No files received' });
             }
 
+            const hasSupabase = supabase !== null;
             const hasCloudinary = process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_API_KEY && process.env.CLOUDINARY_API_SECRET;
 
-            if (hasCloudinary) {
+            if (hasSupabase) {
+                // Upload all files to Supabase Storage in parallel
+                const uploadPromises = req.files.map(file => {
+                    return new Promise(async (resolve, reject) => {
+                        try {
+                            const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 15)}${path.extname(file.originalname) || '.jpg'}`;
+                            const { data, error } = await supabase.storage
+                                .from('kimi-properties')
+                                .upload(fileName, file.buffer, {
+                                    contentType: file.mimetype,
+                                    upsert: true
+                                });
+
+                            if (error) {
+                                reject(error);
+                            } else {
+                                const { data: { publicUrl } } = supabase.storage
+                                    .from('kimi-properties')
+                                    .getPublicUrl(fileName);
+                                resolve(publicUrl);
+                            }
+                        } catch (err) {
+                            reject(err);
+                        }
+                    });
+                });
+
+                const urls = await Promise.all(uploadPromises);
+                console.log(`[STORAGE] Uploaded ${urls.length} files to Supabase Storage`);
+                res.json({ success: true, urls, count: urls.length });
+            } else if (hasCloudinary) {
                 // Upload all files to Cloudinary in parallel
                 const uploadPromises = req.files.map(file => {
                     return new Promise((resolve, reject) => {
@@ -201,7 +245,7 @@ app.post('/api/upload', authenticateToken, (req, res) => {
                     const b64 = file.buffer.toString('base64');
                     return `data:${file.mimetype};base64,${b64}`;
                 });
-                console.warn(`[STORAGE] Cloudinary config missing. Converted ${urls.length} files to Base64`);
+                console.warn(`[STORAGE] Cloudinary and Supabase configs missing. Converted ${urls.length} files to Base64`);
                 res.json({ success: true, urls, count: urls.length });
             }
         } catch (error) {

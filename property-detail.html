@@ -30,11 +30,48 @@
         .pd-price { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 700; color: #111; }
 
         /* Gallery */
-        .pd-gallery { display: grid; grid-template-columns: 2fr 1fr; gap: 12px; margin-bottom: 40px; border-radius: 16px; overflow: hidden; max-height: 450px; }
-        .pd-main-img { width: 100%; height: 450px; object-fit: cover; cursor: pointer; }
+        .pd-gallery-container { position: relative; margin-bottom: 40px; }
+        .pd-gallery { display: grid; grid-template-columns: 2fr 1fr; gap: 12px; border-radius: 16px; overflow: hidden; max-height: 450px; }
+        .pd-main-img { width: 100%; height: 450px; object-fit: cover; cursor: pointer; transition: transform 0.3s ease, filter 0.3s ease; }
+        .pd-main-img:hover { transform: scale(1.01); filter: brightness(0.95); }
         .pd-side-imgs { display: grid; grid-template-rows: 1fr 1fr; gap: 12px; }
-        .pd-side-imgs img { width: 100%; height: 100%; object-fit: cover; cursor: pointer; }
+        .pd-side-item { position: relative; width: 100%; height: 100%; overflow: hidden; cursor: pointer; }
+        .pd-side-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease, filter 0.3s ease; }
+        .pd-side-item:hover img { transform: scale(1.02); filter: brightness(0.95); }
+        .pd-more-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.65); backdrop-filter: blur(4px); color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; font-weight: 600; font-size: 16px; transition: background 0.2s ease; }
+        .pd-more-overlay:hover { background: rgba(0,0,0,0.75); }
+        .pd-view-all-bar { margin-top: 12px; display: flex; justify-content: flex-end; }
+        .pd-view-all-btn { display: inline-flex; align-items: center; gap: 8px; background: #111827; color: #fff; border: 1px solid #374151; padding: 10px 20px; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; }
+        .pd-view-all-btn:hover { background: #1F2937; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
         .pd-no-gallery { background: #F3F4F6; height: 300px; border-radius: 16px; display: flex; align-items: center; justify-content: center; color: #9CA3AF; font-size: 18px; }
+
+        /* Lightbox Modal */
+        .lightbox-modal { position: fixed; inset: 0; z-index: 99999; display: flex; flex-direction: column; justify-content: space-between; font-family: 'Outfit', sans-serif; animation: lbFadeIn 0.25s ease-out; }
+        @keyframes lbFadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
+        .lightbox-overlay { position: absolute; inset: 0; background: rgba(10, 10, 15, 0.95); backdrop-filter: blur(16px); }
+        .lightbox-content { position: relative; z-index: 10; display: flex; flex-direction: column; height: 100vh; width: 100vw; box-sizing: border-box; }
+        .lightbox-header { display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; color: #fff; background: rgba(0,0,0,0.4); border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .lightbox-counter { font-size: 14px; font-weight: 600; letter-spacing: 1px; color: #9CA3AF; background: rgba(255,255,255,0.1); padding: 4px 12px; border-radius: 20px; }
+        .lightbox-title { font-size: 16px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 60%; color: #F3F4F6; }
+        .lightbox-close { background: none; border: none; color: #fff; font-size: 32px; cursor: pointer; line-height: 1; opacity: 0.8; transition: opacity 0.2s; padding: 0 8px; }
+        .lightbox-close:hover { opacity: 1; color: #EF4444; }
+        .lightbox-body { flex: 1; display: flex; align-items: center; justify-content: space-between; padding: 10px 24px; position: relative; min-height: 0; }
+        .lightbox-img-container { flex: 1; display: flex; align-items: center; justify-content: center; height: 100%; width: 100%; position: relative; }
+        #lb-img { max-height: calc(100vh - 200px); max-width: 85vw; object-fit: contain; border-radius: 8px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); transition: opacity 0.2s ease; }
+        .lightbox-nav { background: rgba(255,255,255,0.12); color: #fff; border: 1px solid rgba(255,255,255,0.2); border-radius: 50%; width: 50px; height: 50px; font-size: 22px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s ease; z-index: 20; user-select: none; flex-shrink: 0; }
+        .lightbox-nav:hover { background: rgba(255,255,255,0.25); transform: scale(1.1); }
+        .lightbox-thumbnails { display: flex; gap: 10px; padding: 14px 24px; overflow-x: auto; background: rgba(0,0,0,0.6); border-top: 1px solid rgba(255,255,255,0.1); justify-content: center; max-width: 100vw; box-sizing: border-box; }
+        .lb-thumb { width: 70px; height: 50px; object-fit: cover; border-radius: 6px; cursor: pointer; opacity: 0.5; border: 2px solid transparent; transition: all 0.2s ease; flex-shrink: 0; }
+        .lb-thumb:hover { opacity: 0.85; }
+        .lb-thumb.active { opacity: 1; border-color: #3B82F6; transform: scale(1.05); }
+
+        @media (max-width: 768px) {
+            .lightbox-nav { width: 40px; height: 40px; font-size: 18px; }
+            .lightbox-body { padding: 5px 8px; }
+            #lb-img { max-width: 92vw; max-height: calc(100vh - 220px); }
+            .lightbox-header { padding: 12px 16px; }
+            .lightbox-thumbnails { justify-content: flex-start; }
+        }
 
         /* Specs Row */
         .pd-specs { display: flex; gap: 0; background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 12px; margin-bottom: 40px; overflow: hidden; }
@@ -216,6 +253,26 @@
         <svg viewBox="0 0 448 512"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l114.1-29.9c32.7 17.8 69.4 27.2 107.4 27.2h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157z"/></svg>
     </a>
 
+    <!-- Lightbox Modal -->
+    <div id="kimi-lightbox" class="lightbox-modal" style="display:none;" tabindex="-1">
+        <div class="lightbox-overlay" onclick="closeLightbox()"></div>
+        <div class="lightbox-content">
+            <div class="lightbox-header">
+                <div class="lightbox-counter"><span id="lb-current">1</span> / <span id="lb-total">1</span></div>
+                <div class="lightbox-title" id="lb-title"></div>
+                <button class="lightbox-close" onclick="closeLightbox()" title="Close (Esc)">&times;</button>
+            </div>
+            <div class="lightbox-body">
+                <button class="lightbox-nav lb-prev" onclick="navLightbox(-1)" title="Previous (Left Arrow)">&#10094;</button>
+                <div class="lightbox-img-container">
+                    <img id="lb-img" src="" alt="Property Photo">
+                </div>
+                <button class="lightbox-nav lb-next" onclick="navLightbox(1)" title="Next (Right Arrow)">&#10095;</button>
+            </div>
+            <div class="lightbox-thumbnails" id="lb-thumbnails"></div>
+        </div>
+    </div>
+
     <script>
     document.addEventListener('DOMContentLoaded', async () => {
         const urlParams = new URLSearchParams(window.location.search);
@@ -259,24 +316,120 @@
         document.getElementById('pd-address').textContent = [prop.address, prop.location].filter(Boolean).join(', ') || 'Nagpur';
         document.getElementById('pd-price').textContent = prop.price || 'Contact for Price';
 
-        // Gallery
+        // Lightbox State
+        let currentLbIndex = 0;
+        let lbImages = [];
+
+        window.openLightbox = function(index) {
+            if (!lbImages || lbImages.length === 0) return;
+            currentLbIndex = index;
+            const modal = document.getElementById('kimi-lightbox');
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+            updateLightbox();
+            document.addEventListener('keydown', handleLbKeydown);
+        };
+
+        window.closeLightbox = function() {
+            const modal = document.getElementById('kimi-lightbox');
+            modal.style.display = 'none';
+            document.body.style.overflow = '';
+            document.removeEventListener('keydown', handleLbKeydown);
+        };
+
+        window.navLightbox = function(direction) {
+            if (!lbImages || lbImages.length === 0) return;
+            currentLbIndex = (currentLbIndex + direction + lbImages.length) % lbImages.length;
+            updateLightbox();
+        };
+
+        function updateLightbox() {
+            const img = document.getElementById('lb-img');
+            img.style.opacity = '0.4';
+            img.src = lbImages[currentLbIndex];
+            img.onload = () => { img.style.opacity = '1'; };
+            
+            document.getElementById('lb-current').textContent = currentLbIndex + 1;
+            document.getElementById('lb-total').textContent = lbImages.length;
+            
+            const thumbsContainer = document.getElementById('lb-thumbnails');
+            const thumbs = thumbsContainer.querySelectorAll('.lb-thumb');
+            thumbs.forEach((t, idx) => {
+                if (idx === currentLbIndex) {
+                    t.classList.add('active');
+                    t.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+                } else {
+                    t.classList.remove('active');
+                }
+            });
+        }
+
+        function handleLbKeydown(e) {
+            if (e.key === 'ArrowRight') navLightbox(1);
+            if (e.key === 'ArrowLeft') navLightbox(-1);
+            if (e.key === 'Escape') closeLightbox();
+        }
+
+        // Gallery Rendering
         const galleryEl = document.getElementById('pd-gallery');
         const allImages = prop.images && prop.images.length > 0 ? prop.images : (prop.image ? [prop.image] : []);
+        lbImages = allImages;
+        
         if (allImages.length > 0) {
-            let html = '<div class="pd-gallery">';
-            html += `<img class="pd-main-img" src="${allImages[0]}" alt="${prop.name}" id="pd-main-photo">`;
+            let html = '<div class="pd-gallery-container">';
+            html += '<div class="pd-gallery">';
+            
+            // Main photo
+            html += `<img class="pd-main-img" src="${allImages[0]}" alt="${prop.name}" id="pd-main-photo" onclick="openLightbox(0)">`;
+            
+            // Side photos
             if (allImages.length > 1) {
                 html += '<div class="pd-side-imgs">';
-                allImages.slice(1, 3).forEach(img => {
-                    html += `<img src="${img}" alt="View" onclick="document.getElementById('pd-main-photo').src='${img}'">`;
-                });
+                
+                // Photo 2
+                html += `<div class="pd-side-item" onclick="openLightbox(1)">
+                            <img src="${allImages[1]}" alt="${prop.name}">
+                         </div>`;
+                
+                // Photo 3 (or overlay if >3)
+                if (allImages.length > 2) {
+                    if (allImages.length > 3) {
+                        html += `<div class="pd-side-item" onclick="openLightbox(2)">
+                                    <img src="${allImages[2]}" alt="${prop.name}">
+                                    <div class="pd-more-overlay">
+                                        <span style="font-size: 22px;">🖼️</span>
+                                        <span>+${allImages.length - 3} More Photos</span>
+                                    </div>
+                                 </div>`;
+                    } else {
+                        html += `<div class="pd-side-item" onclick="openLightbox(2)">
+                                    <img src="${allImages[2]}" alt="${prop.name}">
+                                 </div>`;
+                    }
+                }
                 html += '</div>';
             }
-            html += '</div>';
-            if (allImages.length > 3) {
-                html += `<p style="color:#6B7280; font-size:14px; margin-top:8px;">+${allImages.length - 3} more photos</p>`;
+            html += '</div>'; // end pd-gallery
+            
+            if (allImages.length > 1) {
+                html += `<div class="pd-view-all-bar">
+                            <button class="pd-view-all-btn" onclick="openLightbox(0)">
+                                📷 View All ${allImages.length} Photos
+                            </button>
+                         </div>`;
             }
+            html += '</div>'; // end pd-gallery-container
+            
             galleryEl.innerHTML = html;
+
+            // Build Lightbox Thumbnails
+            const thumbsContainer = document.getElementById('lb-thumbnails');
+            let thumbsHtml = '';
+            allImages.forEach((imgUrl, i) => {
+                thumbsHtml += `<img src="${imgUrl}" class="lb-thumb ${i===0?'active':''}" onclick="openLightbox(${i})" alt="Thumb ${i+1}">`;
+            });
+            thumbsContainer.innerHTML = thumbsHtml;
+            document.getElementById('lb-title').textContent = prop.name || 'Property Gallery';
         } else {
             galleryEl.innerHTML = '<div class="pd-no-gallery">No images uploaded yet</div>';
         }

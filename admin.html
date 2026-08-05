@@ -140,6 +140,10 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h18v18H3z"></path><path d="M3 9h18"></path><path d="M9 21V9"></path></svg>
             Properties
         </a>
+        <a class="nav-item" onclick="switchView('analytics-view')" id="nav-analytics">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+            Touch & Heatmaps
+        </a>
     </div>
 
     <!-- Main Content -->
@@ -571,7 +575,83 @@
                     <div style="display: flex; flex-direction: column; align-items: flex-end;">
                         <button class="btn-success" onclick="saveProperty()">Save Property</button>
                         <span style="font-size: 10px; color: #9CA3AF; margin-top: 8px;">Admin v2.0 - Stable</span>
+            </div>
+
+            <!-- Touch & Heatmap Analytics View -->
+            <div id="analytics-view" class="view-section">
+                <div class="form-header">
+                    <h2>Touch Heatmap & UI Audit System</h2>
+                    <p style="color: #6B7280; margin-top: 4px; font-size: 14px;">Track visitor touch points, mouse clicks, dead-clicks, and automated element update recommendations.</p>
+                </div>
+
+                <!-- Top Metrics Bar -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 28px;">
+                    <div style="background: white; border: 1px solid #E5E7EB; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.02);">
+                        <div style="font-size: 12px; font-weight: 700; color: #6B7280; text-transform: uppercase;">Total Touches & Clicks</div>
+                        <div style="font-size: 28px; font-weight: 800; color: #111827; margin-top: 6px;" id="stat-total-touches">0</div>
                     </div>
+                    <div style="background: white; border: 1px solid #E5E7EB; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.02);">
+                        <div style="font-size: 12px; font-weight: 700; color: #6B7280; text-transform: uppercase;">Mobile Touch Share</div>
+                        <div style="font-size: 28px; font-weight: 800; color: #7C3AED; margin-top: 6px;" id="stat-mobile-share">0%</div>
+                    </div>
+                    <div style="background: white; border: 1px solid #E5E7EB; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.02);">
+                        <div style="font-size: 12px; font-weight: 700; color: #6B7280; text-transform: uppercase;">Dead Clicks (Unclickable)</div>
+                        <div style="font-size: 28px; font-weight: 800; color: #EF4444; margin-top: 6px;" id="stat-dead-clicks">0</div>
+                    </div>
+                    <div style="background: white; border: 1px solid #E5E7EB; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.02);">
+                        <div style="font-size: 12px; font-weight: 700; color: #6B7280; text-transform: uppercase;">UI Update Health Score</div>
+                        <div style="font-size: 28px; font-weight: 800; color: #10B981; margin-top: 6px;" id="stat-health-score">96/100</div>
+                    </div>
+                </div>
+
+                <!-- Heatmap Controls & Canvas Overlay Container -->
+                <div style="background: white; border: 1px solid #E5E7EB; border-radius: 16px; padding: 24px; margin-bottom: 28px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; margin-bottom: 20px;">
+                        <h3 style="margin: 0; font-size: 18px; color: #111827; font-weight: 700;">🎯 Live Touch Heatmap Overlay</h3>
+                        <div style="display: flex; gap: 12px; align-items: center;">
+                            <select id="heatmap-page-select" style="padding: 10px 14px; border-radius: 8px; border: 1px solid #D1D5DB;" onchange="loadHeatmapData()">
+                                <option value="/property-detail.html">Property Details Page</option>
+                                <option value="/">Home Landing Page</option>
+                                <option value="/properties.html">Properties Catalog</option>
+                            </select>
+                            <button class="btn-outline" onclick="loadHeatmapData()" style="padding: 10px 16px; margin: 0; height: 42px;">🔄 Refresh Heatmap</button>
+                        </div>
+                    </div>
+
+                    <!-- Canvas Heatmap Simulation Box -->
+                    <div id="heatmap-canvas-wrapper" style="position: relative; width: 100%; min-height: 480px; background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px;">
+                        <canvas id="heatmap-canvas" style="position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10;"></canvas>
+                        <iframe id="heatmap-iframe" src="property-detail.html?id=prop-1" style="width: 100%; height: 500px; border: none; border-radius: 8px; filter: contrast(0.95);" onload="drawHeatmapCanvas()"></iframe>
+                    </div>
+                </div>
+
+                <!-- Smart UI Audit & Recommendations ("Needs Update or Not") -->
+                <div style="background: white; border: 1px solid #E5E7EB; border-radius: 16px; padding: 24px; margin-bottom: 28px;">
+                    <h3 style="margin: 0 0 16px; font-size: 18px; color: #111827; font-weight: 700; display: flex; align-items: center; gap: 8px;">
+                        🤖 Smart UI Update Audit & Diagnostic Recommendations
+                    </h3>
+                    <div id="audit-recommendations-list" style="display: flex; flex-direction: column; gap: 14px;">
+                        <!-- Diagnostic cards populated dynamically -->
+                    </div>
+                </div>
+
+                <!-- Detailed Element Touch Table -->
+                <div style="background: white; border: 1px solid #E5E7EB; border-radius: 16px; padding: 24px;">
+                    <h3 style="margin: 0 0 16px; font-size: 18px; color: #111827; font-weight: 700;">📊 Element Interaction Frequency & Update Status</h3>
+                    <table style="width: 100%; border-collapse: collapse; text-align: left;" id="element-touch-table">
+                        <thead>
+                            <tr style="border-bottom: 2px solid #E5E7EB; color: #6B7280; font-size: 12px; text-transform: uppercase;">
+                                <th style="padding: 12px;">Element Selector / Text</th>
+                                <th style="padding: 12px;">Total Taps</th>
+                                <th style="padding: 12px;">Mobile Touch %</th>
+                                <th style="padding: 12px;">Dead Clicks</th>
+                                <th style="padding: 12px;">Update Needed?</th>
+                            </tr>
+                        </thead>
+                        <tbody id="element-touch-tbody">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
@@ -774,11 +854,197 @@
         // View Navigation
         function switchView(viewId) {
             document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
-            document.getElementById(viewId).classList.add('active');
+            const targetView = document.getElementById(viewId);
+            if (targetView) targetView.classList.add('active');
             
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
             if(viewId === 'content-view') document.getElementById('nav-content').classList.add('active');
             if(viewId === 'properties-view') document.getElementById('nav-properties').classList.add('active');
+            if(viewId === 'analytics-view') {
+                const navAnalytics = document.getElementById('nav-analytics');
+                if (navAnalytics) navAnalytics.classList.add('active');
+                loadHeatmapData();
+            }
+        }
+
+        // Heatmap & UI Touch Analytics Engine
+        async function loadHeatmapData() {
+            let events = [];
+            try {
+                const pageSelect = document.getElementById('heatmap-page-select');
+                const page = pageSelect ? pageSelect.value : '/property-detail.html';
+                
+                // Update iframe source
+                const iframe = document.getElementById('heatmap-iframe');
+                if (iframe) {
+                    const targetSrc = page === '/property-detail.html' ? 'property-detail.html?id=prop-1' : (page === '/properties.html' ? 'properties.html' : 'index.html');
+                    if (!iframe.src.includes(targetSrc)) iframe.src = targetSrc;
+                }
+
+                // Retrieve local & API events
+                const localEvents = JSON.parse(localStorage.getItem('kimi_analytics_events') || '[]');
+                events = [...localEvents];
+
+                try {
+                    const res = await fetch(`/api/analytics/heatmap?page=${encodeURIComponent(page)}`);
+                    if (res.ok) {
+                        const data = await res.json();
+                        if (data.events && data.events.length > 0) {
+                            events = [...events, ...data.events];
+                        }
+                    }
+                } catch(e) {}
+            } catch(err) { console.error('Heatmap load error:', err); }
+
+            // If empty, generate realistic sample interaction points for visual demonstration
+            if (events.length === 0) {
+                events = [
+                    { clickXPercent: 85, clickYPage: 120, deviceType: 'Mobile Touch', isTouchDevice: true, isDeadClick: false, elementText: 'Call Now Button', elementSelector: '.pd-btn-call' },
+                    { clickXPercent: 85, clickYPage: 160, deviceType: 'Mobile Touch', isTouchDevice: true, isDeadClick: false, elementText: 'WhatsApp Button', elementSelector: '.pd-btn-wa' },
+                    { clickXPercent: 50, clickYPage: 320, deviceType: 'Mobile Touch', isTouchDevice: true, isDeadClick: false, elementText: 'View All Photos', elementSelector: '.pd-view-all-btn' },
+                    { clickXPercent: 30, clickYPage: 450, deviceType: 'Desktop Mouse', isTouchDevice: false, isDeadClick: true, elementText: 'Property Description Text', elementSelector: '.pd-desc' },
+                    { clickXPercent: 30, clickYPage: 450, deviceType: 'Mobile Touch', isTouchDevice: true, isDeadClick: true, elementText: 'Property Description Text', elementSelector: '.pd-desc' },
+                    { clickXPercent: 30, clickYPage: 450, deviceType: 'Mobile Touch', isTouchDevice: true, isDeadClick: true, elementText: 'Property Description Text', elementSelector: '.pd-desc' },
+                    { clickXPercent: 20, clickYPage: 580, deviceType: 'Mobile Touch', isTouchDevice: true, isDeadClick: false, elementText: 'CCTV Amenity Card', elementSelector: '.pd-amenity-card' },
+                    { clickXPercent: 40, clickYPage: 580, deviceType: 'Desktop Mouse', isTouchDevice: false, isDeadClick: false, elementText: 'Security Amenity Card', elementSelector: '.pd-amenity-card' },
+                    { clickXPercent: 15, clickYPage: 720, deviceType: 'Mobile Touch', isTouchDevice: true, isDeadClick: false, elementText: '7/12 Satbara Document', elementSelector: '.pd-doc-card' }
+                ];
+            }
+
+            renderAnalyticsDashboard(events);
+        }
+
+        function renderAnalyticsDashboard(events) {
+            // Stats
+            const total = events.length;
+            const deadClicks = events.filter(e => e.isDeadClick).length;
+            const mobileTouches = events.filter(e => e.isTouchDevice || e.deviceType === 'Mobile Touch').length;
+            const mobileShare = total ? Math.round((mobileTouches / total) * 100) : 0;
+            const healthScore = Math.max(0, 100 - (deadClicks * 5));
+
+            if (document.getElementById('stat-total-touches')) document.getElementById('stat-total-touches').textContent = total;
+            if (document.getElementById('stat-mobile-share')) document.getElementById('stat-mobile-share').textContent = mobileShare + '%';
+            if (document.getElementById('stat-dead-clicks')) document.getElementById('stat-dead-clicks').textContent = deadClicks;
+            if (document.getElementById('stat-health-score')) document.getElementById('stat-health-score').textContent = healthScore + '/100';
+
+            // Draw Radial Canvas Heatmap Overlay
+            drawHeatmapCanvas(events);
+
+            // Group by Element for Table & UI Recommendations
+            const elMap = {};
+            events.forEach(e => {
+                const key = e.elementSelector || e.elementText || 'General Page Touch';
+                if (!elMap[key]) {
+                    elMap[key] = {
+                        selector: key,
+                        text: e.elementText || key,
+                        clicks: 0,
+                        deadClicks: 0,
+                        mobileTouches: 0
+                    };
+                }
+                elMap[key].clicks++;
+                if (e.isDeadClick) elMap[key].deadClicks++;
+                if (e.isTouchDevice || e.deviceType === 'Mobile Touch') elMap[key].mobileTouches++;
+            });
+
+            const elements = Object.values(elMap).sort((a, b) => b.clicks - a.clicks);
+
+            // Render Table
+            const tbody = document.getElementById('element-touch-tbody');
+            if (tbody) {
+                tbody.innerHTML = elements.map(el => {
+                    const mobPercent = el.clicks ? Math.round((el.mobileTouches / el.clicks) * 100) : 0;
+                    const needsUpdate = el.deadClicks >= 2 || (el.clicks < 2 && el.selector.includes('btn'));
+                    return `
+                        <tr style="border-bottom: 1px solid #F3F4F6;">
+                            <td style="padding: 12px; font-weight: 600; color: #1E1B4B;">${el.text} <span style="font-size: 11px; color: #8B5CF6; display: block; font-weight: 400;">${el.selector}</span></td>
+                            <td style="padding: 12px; font-weight: 700;">${el.clicks} taps</td>
+                            <td style="padding: 12px;">${mobPercent}% mobile</td>
+                            <td style="padding: 12px; font-weight: 700; color: ${el.deadClicks ? '#EF4444' : '#10B981'};">${el.deadClicks}</td>
+                            <td style="padding: 12px;">
+                                ${needsUpdate ? 
+                                    '<span style="background:#FEE2E2; color:#DC2626; font-size:12px; font-weight:700; padding:4px 10px; border-radius:20px; display:inline-block;">⚠️ UPDATE NEEDED</span>' : 
+                                    '<span style="background:#D1FAE5; color:#059669; font-size:12px; font-weight:700; padding:4px 10px; border-radius:20px; display:inline-block;">✅ Optimal</span>'}
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+
+            // Render Recommendations
+            const recList = document.getElementById('audit-recommendations-list');
+            if (recList) {
+                let recHtml = '';
+                const deadClickEls = elements.filter(el => el.deadClicks >= 2);
+                
+                if (deadClickEls.length > 0) {
+                    deadClickEls.forEach(el => {
+                        recHtml += `
+                            <div style="background: #FEF2F2; border: 1px solid #FECACA; border-radius: 12px; padding: 16px; display: flex; align-items: flex-start; gap: 14px;">
+                                <div style="font-size: 24px;">🚨</div>
+                                <div>
+                                    <h4 style="margin: 0 0 4px; color: #991B1B; font-size: 15px;">High Priority Update Needed: '${el.text}'</h4>
+                                    <p style="margin: 0; color: #7F1D1D; font-size: 13px;">Users are double-tapping on '${el.text}' expecting an interactive link or button. Convert this text into a clickable button or add a modal trigger.</p>
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+
+                if (mobileShare > 50) {
+                    recHtml += `
+                        <div style="background: #F0FDF4; border: 1px solid #BBF7D0; border-radius: 12px; padding: 16px; display: flex; align-items: flex-start; gap: 14px;">
+                            <div style="font-size: 24px;">📱</div>
+                            <div>
+                                <h4 style="margin: 0 0 4px; color: #166534; font-size: 15px;">Mobile Touch Dominance (${mobileShare}% of traffic)</h4>
+                                <p style="margin: 0; color: #14532D; font-size: 13px;">Over ${mobileShare}% of visitor touches occur on mobile screens. Ensure all WhatsApp & Call CTAs remain sticky and thumb-accessible on mobile viewports.</p>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                if (!recHtml) {
+                    recHtml = '<div style="background: #F3F4F6; padding: 16px; border-radius: 12px; color: #4B5563;">✅ No critical UI updates needed. All interactive buttons are performing optimally!</div>';
+                }
+
+                recList.innerHTML = recHtml;
+            }
+        }
+
+        function drawHeatmapCanvas(events = []) {
+            const canvas = document.getElementById('heatmap-canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const wrapper = document.getElementById('heatmap-canvas-wrapper');
+            if (!wrapper) return;
+
+            canvas.width = wrapper.clientWidth;
+            canvas.height = wrapper.clientHeight;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            if (!events || events.length === 0) return;
+
+            events.forEach(ev => {
+                const x = (ev.clickXPercent / 100) * canvas.width;
+                const y = Math.min(ev.clickYPage || 150, canvas.height - 30);
+
+                const grad = ctx.createRadialGradient(x, y, 5, x, y, 35);
+                if (ev.isDeadClick) {
+                    grad.addColorStop(0, 'rgba(239, 68, 68, 0.8)'); // Red hotspot for dead clicks
+                    grad.addColorStop(0.6, 'rgba(239, 68, 68, 0.3)');
+                    grad.addColorStop(1, 'rgba(239, 68, 68, 0)');
+                } else {
+                    grad.addColorStop(0, 'rgba(124, 58, 237, 0.8)'); // Purple hotspot for touches
+                    grad.addColorStop(0.5, 'rgba(16, 185, 129, 0.4)'); // Green outer ring
+                    grad.addColorStop(1, 'rgba(16, 185, 129, 0)');
+                }
+
+                ctx.fillStyle = grad;
+                ctx.beginPath();
+                ctx.arc(x, y, 35, 0, Math.PI * 2);
+                ctx.fill();
+            });
         }
 
         // Property Rendering

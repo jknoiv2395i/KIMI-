@@ -524,4 +524,124 @@ document.addEventListener('DOMContentLoaded', () => {
     initScrollObserver();
 });
 
+/* ==========================================================================
+   TOUCH & CLICK ANALYTICS ENGINE + VISUAL FEEDBACK TRACKER
+   ========================================================================== */
+(function() {
+    let eventBuffer = [];
+    let lastTapTime = 0;
+    let lastTapTarget = null;
+
+    function buildSelector(el) {
+        if (!el || el === document.body) return 'body';
+        if (el.id) return '#' + el.id;
+        if (el.className && typeof el.className === 'string' && el.className.trim()) {
+            return '.' + el.className.trim().split(/\s+/).join('.');
+        }
+        return el.tagName.toLowerCase();
+    }
+
+    function isInteractive(el) {
+        if (!el) return false;
+        const tag = el.tagName.toLowerCase();
+        if (['a', 'button', 'input', 'select', 'textarea'].includes(tag)) return true;
+        if (el.onclick || el.getAttribute('onclick') || el.getAttribute('role') === 'button') return true;
+        if (el.closest('a, button, [onclick], .pd-spec, .pd-amenity-card, .pd-doc-card, .property-card, .btn-primary, .btn-outline')) return true;
+        return false;
+    }
+
+    function createTouchRipple(x, y) {
+        const ripple = document.createElement('div');
+        ripple.style.cssText = `
+            position: absolute;
+            left: ${x - 15}px;
+            top: ${y - 15}px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: rgba(124, 58, 237, 0.35);
+            border: 2px solid rgba(196, 181, 253, 0.9);
+            pointer-events: none;
+            z-index: 999999;
+            transform: scale(0.5);
+            opacity: 1;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease-out;
+        `;
+        document.body.appendChild(ripple);
+        requestAnimationFrame(() => {
+            ripple.style.transform = 'scale(2.2)';
+            ripple.style.opacity = '0';
+        });
+        setTimeout(() => ripple.remove(), 450);
+    }
+
+    function trackInteraction(e) {
+        const isTouch = e.type === 'touchstart';
+        const point = isTouch ? (e.touches[0] || e.changedTouches[0]) : e;
+        if (!point) return;
+
+        const x = point.clientX;
+        const y = point.clientY;
+        const pageY = window.scrollY + y;
+        const xPercent = Math.round((x / window.innerWidth) * 100);
+
+        const target = e.target;
+        const interactive = isInteractive(target);
+        
+        // Detect dead clicks (rapid double/triple tap on non-interactive element)
+        const now = Date.now();
+        const isDead = !interactive && (now - lastTapTime < 500) && (lastTapTarget === target);
+        lastTapTime = now;
+        lastTapTarget = target;
+
+        // Visual feedback ripple
+        createTouchRipple(x, pageY);
+
+        const eventData = {
+            pageUrl: window.location.pathname || '/',
+            elementTag: target.tagName.toLowerCase(),
+            elementId: target.id || '',
+            elementSelector: buildSelector(target),
+            elementText: (target.innerText || target.value || '').trim().substring(0, 40),
+            clickXPercent: xPercent,
+            clickYPage: Math.round(pageY),
+            screenWidth: window.innerWidth,
+            screenHeight: window.innerHeight,
+            deviceType: isTouch ? 'Mobile Touch' : 'Desktop Mouse',
+            isTouchDevice: isTouch || ('ontouchstart' in window),
+            isDeadClick: isDead,
+            timestamp: new Date().toISOString()
+        };
+
+        eventBuffer.push(eventData);
+
+        // Store locally for admin heatmap rendering
+        try {
+            const localEvents = JSON.parse(localStorage.getItem('kimi_analytics_events') || '[]');
+            localEvents.push(eventData);
+            if (localEvents.length > 500) localEvents.shift();
+            localStorage.setItem('kimi_analytics_events', JSON.stringify(localEvents));
+        } catch(err) {}
+
+        if (eventBuffer.length >= 5) flushBuffer();
+    }
+
+    async function flushBuffer() {
+        if (eventBuffer.length === 0) return;
+        const payload = [...eventBuffer];
+        eventBuffer = [];
+        try {
+            await fetch('/api/analytics/events', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ events: payload })
+            });
+        } catch(e) {}
+    }
+
+    window.addEventListener('touchstart', trackInteraction, { passive: true });
+    window.addEventListener('mousedown', trackInteraction, { passive: true });
+    setInterval(flushBuffer, 5000);
+})();
+
 

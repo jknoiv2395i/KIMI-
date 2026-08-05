@@ -156,6 +156,90 @@ app.get('/api/properties', async (req, res) => {
     }
 });
 
+// Analytics: Batch Log Touch & Click Events
+const AnalyticsEvent = require('./models/Analytics');
+
+app.post('/api/analytics/events', async (req, res) => {
+    try {
+        const events = req.body.events || [];
+        if (Array.isArray(events) && events.length > 0) {
+            await AnalyticsEvent.insertMany(events);
+        }
+        res.json({ success: true, count: events.length });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Analytics: Get Heatmap Points & Element Audit Data
+app.get('/api/analytics/heatmap', async (req, res) => {
+    try {
+        const page = req.query.page || '/';
+        const events = await AnalyticsEvent.find({ pageUrl: new RegExp(page, 'i') }).sort({ timestamp: -1 }).limit(1000);
+        res.json({ events });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Analytics: Smart UI Audit (Identifies elements needing an update)
+app.get('/api/analytics/audit', async (req, res) => {
+    try {
+        const events = await AnalyticsEvent.find().sort({ timestamp: -1 }).limit(2000);
+        
+        // Group by element selector
+        const elementStats = {};
+        let totalClicks = events.length;
+        let deadClicksCount = 0;
+        let mobileTouchesCount = 0;
+
+        events.forEach(ev => {
+            if (ev.isDeadClick) deadClicksCount++;
+            if (ev.isTouchDevice) mobileTouchesCount++;
+
+            const sel = ev.elementSelector || 'unknown';
+            if (!elementStats[sel]) {
+                elementStats[sel] = {
+                    selector: sel,
+                    text: ev.elementText || sel,
+                    tag: ev.elementTag || '',
+                    clicks: 0,
+                    deadClicks: 0,
+                    mobileTouches: 0
+                };
+            }
+            elementStats[sel].clicks++;
+            if (ev.isDeadClick) elementStats[sel].deadClicks++;
+            if (ev.isTouchDevice) elementStats[sel].mobileTouches++;
+        });
+
+        const elements = Object.values(elementStats).sort((a, b) => b.clicks - a.clicks);
+        
+        // Generate AI Recommendations
+        const recommendations = [];
+        elements.forEach(el => {
+            if (el.deadClicks >= 3) {
+                recommendations.push({
+                    type: 'UPDATE_NEEDED',
+                    severity: 'HIGH',
+                    element: el.text || el.selector,
+                    message: `Element '${el.text || el.selector}' has ${el.deadClicks} dead clicks (users tapping static text expecting a button or link). Add link or update layout.`
+                });
+            }
+        });
+
+        res.json({
+            totalEvents: totalClicks,
+            deadClicks: deadClicksCount,
+            mobileRatio: totalClicks ? Math.round((mobileTouchesCount / totalClicks) * 100) : 0,
+            elements,
+            recommendations
+        });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 // Public: Get full media for a property
 app.get('/api/properties/:id/media', async (req, res) => {
     try {

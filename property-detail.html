@@ -314,7 +314,7 @@
         document.getElementById('pd-name').innerHTML = `${prop.name || 'Untitled Property'} ${prop.isSoldOut ? `<span class="sold-tag">SOLD OUT ${prop.buyerName ? 'to ' + prop.buyerName : ''}</span>` : ''}`;
         document.title = (prop.isSoldOut ? '[SOLD] ' : '') + (prop.name || 'Property') + ' | KIMI Properties';
         document.getElementById('pd-address').textContent = [prop.address, prop.location].filter(Boolean).join(', ') || 'Nagpur';
-        document.getElementById('pd-price').textContent = prop.price || 'Contact for Price';
+        document.getElementById('pd-price').innerHTML = `${prop.price || 'Contact for Price'} ${prop.isNegotiable ? '<span style="background:#10B981; color:#fff; font-size:12px; font-weight:600; padding:3px 8px; border-radius:6px; vertical-align:middle; margin-left:6px;">Negotiable</span>' : ''}`;
 
         // Lightbox State
         let currentLbIndex = 0;
@@ -434,12 +434,23 @@
             galleryEl.innerHTML = '<div class="pd-no-gallery">No images uploaded yet</div>';
         }
 
-        // Specs — only show fields that have data
+        // Specs — render all populated property specifications
         const specsEl = document.getElementById('pd-specs');
         let specsHtml = '';
         if (prop.beds) specsHtml += `<div class="pd-spec"><div class="pd-spec-label">Bedrooms</div><div class="pd-spec-val">${prop.beds} Beds</div></div>`;
         if (prop.baths) specsHtml += `<div class="pd-spec"><div class="pd-spec-label">Bathrooms</div><div class="pd-spec-val">${prop.baths} Baths</div></div>`;
-        if (prop.area) specsHtml += `<div class="pd-spec"><div class="pd-spec-label">Area</div><div class="pd-spec-val">${prop.area}</div></div>`;
+        if (prop.livingRoom) specsHtml += `<div class="pd-spec"><div class="pd-spec-label">Living Room</div><div class="pd-spec-val">${prop.livingRoom}</div></div>`;
+        if (prop.kitchen) specsHtml += `<div class="pd-spec"><div class="pd-spec-label">Kitchen</div><div class="pd-spec-val">${prop.kitchen}</div></div>`;
+        if (prop.office) specsHtml += `<div class="pd-spec"><div class="pd-spec-label">Office Space</div><div class="pd-spec-val">${prop.office}</div></div>`;
+        if (prop.superArea) specsHtml += `<div class="pd-spec"><div class="pd-spec-label">Super Area</div><div class="pd-spec-val">${prop.superArea}</div></div>`;
+        if (prop.carpetArea) specsHtml += `<div class="pd-spec"><div class="pd-spec-label">Carpet Area</div><div class="pd-spec-val">${prop.carpetArea}</div></div>`;
+        if (prop.plotArea) specsHtml += `<div class="pd-spec"><div class="pd-spec-label">Plot Area</div><div class="pd-spec-val">${prop.plotArea}</div></div>`;
+        if (prop.builtUpArea) specsHtml += `<div class="pd-spec"><div class="pd-spec-label">Built-Up Area</div><div class="pd-spec-val">${prop.builtUpArea}</div></div>`;
+        if (!prop.superArea && !prop.carpetArea && prop.area) specsHtml += `<div class="pd-spec"><div class="pd-spec-label">Area</div><div class="pd-spec-val">${prop.area}</div></div>`;
+        if (prop.parking) specsHtml += `<div class="pd-spec"><div class="pd-spec-label">Parking</div><div class="pd-spec-val">${prop.parking}</div></div>`;
+        if (prop.hasLift) specsHtml += `<div class="pd-spec"><div class="pd-spec-label">Lift</div><div class="pd-spec-val">Available</div></div>`;
+        if (prop.hasGarden) specsHtml += `<div class="pd-spec"><div class="pd-spec-label">Garden</div><div class="pd-spec-val">Available</div></div>`;
+        if (prop.securityDeposit) specsHtml += `<div class="pd-spec"><div class="pd-spec-label">Deposit</div><div class="pd-spec-val">${prop.securityDeposit}</div></div>`;
         if (prop.category) specsHtml += `<div class="pd-spec"><div class="pd-spec-label">Type</div><div class="pd-spec-val">${prop.category}</div></div>`;
         if (prop.status) specsHtml += `<div class="pd-spec"><div class="pd-spec-label">Status</div><div class="pd-spec-val">${prop.status}</div></div>`;
         if (prop.transactionType) specsHtml += `<div class="pd-spec"><div class="pd-spec-label">Transaction</div><div class="pd-spec-val">${prop.transactionType}</div></div>`;

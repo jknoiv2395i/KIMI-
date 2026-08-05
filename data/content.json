@@ -11,7 +11,7 @@
         "address": "Nagpur, Maharashtra, India"
     },
     "locations": ["Nagpur", "Mumbai", "Pune", "Hull, UK", "Highland Lake, FL", "London, UK"],
-    "categories": ["Residential (Purchase)", "Residential Rental", "Commercial (Purchase)", "Commercial Rental", "Industrial"],
+    "categories": ["Residential (Purchase)", "Residential Rental", "Commercial (Purchase)", "Commercial Rental", "Industrial", "Agriculture"],
     "properties": [
         {
             "id": "prop-1",

@@ -11,7 +11,19 @@ const propertySchema = new mongoose.Schema({
     transactionType: String,
     beds: Number,
     baths: Number,
+    livingRoom: String,
+    kitchen: String,
+    office: String,
     area: String,
+    superArea: String,
+    carpetArea: String,
+    plotArea: String,
+    builtUpArea: String,
+    parking: String,
+    hasLift: { type: Boolean, default: false },
+    hasGarden: { type: Boolean, default: false },
+    isNegotiable: { type: Boolean, default: false },
+    securityDeposit: String,
     image: String, // Main image URL
     images: [String], // Array of image URLs
     videos: [String], // Array of video URLs

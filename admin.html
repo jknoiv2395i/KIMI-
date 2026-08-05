@@ -246,12 +246,45 @@
 
                     <div class="form-group">
                         <label>Price</label>
-                        <input type="text" id="prop-price" placeholder="e.g. Contact for Price or ₹45 L">
+                        <input type="text" id="prop-price" placeholder="e.g. ₹45 L or ₹25,000">
                     </div>
 
                     <div class="form-group">
-                        <label>Super Area / Size</label>
-                        <input type="text" id="prop-area" placeholder="e.g. 3 BHK 1550 Sqft 4 BHK 3000 Sqft">
+                        <label>Price Negotiable</label>
+                        <select id="prop-negotiable">
+                            <option value="no">No</option>
+                            <option value="yes">Yes (Negotiable)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Security Deposit</label>
+                        <input type="text" id="prop-deposit" placeholder="e.g. ₹50,000 or 2 Months">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Super Area</label>
+                        <input type="text" id="prop-super-area" placeholder="e.g. 1550 Sqft">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Carpet Area</label>
+                        <input type="text" id="prop-carpet-area" placeholder="e.g. 1200 Sqft">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Plot Area</label>
+                        <input type="text" id="prop-plot-area" placeholder="e.g. 1800 Sqft / 2 Acres">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Built-Up Area</label>
+                        <input type="text" id="prop-builtup-area" placeholder="e.g. 1400 Sqft">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Legacy Size / Display Area</label>
+                        <input type="text" id="prop-area" placeholder="e.g. 3 BHK 1550 Sqft">
                     </div>
 
                     <div class="form-group">
@@ -271,6 +304,42 @@
                     <div class="form-group">
                         <label>Bathrooms</label>
                         <input type="number" id="prop-baths" placeholder="e.g. 2">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Living Room / Hall</label>
+                        <input type="text" id="prop-living" placeholder="e.g. 1 Large Hall">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Kitchen</label>
+                        <input type="text" id="prop-kitchen" placeholder="e.g. 1 Modular Kitchen">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Office Space</label>
+                        <input type="text" id="prop-office" placeholder="e.g. 1 Study / Office Cabin">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Parking Spot(s)</label>
+                        <input type="text" id="prop-parking" placeholder="e.g. 1 Covered, 2 Open">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Lift Available</label>
+                        <select id="prop-lift">
+                            <option value="no">No</option>
+                            <option value="yes">Yes</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Garden / Lawn</label>
+                        <select id="prop-garden">
+                            <option value="no">No</option>
+                            <option value="yes">Yes</option>
+                        </select>
                     </div>
 
                     <div class="form-group">
@@ -637,6 +706,12 @@
                 document.getElementById('prop-address').value = prop.address || '';
                 document.getElementById('prop-location-select').value = prop.location || (content.locations.length ? content.locations[0] : '');
                 document.getElementById('prop-price').value = prop.price || '';
+                document.getElementById('prop-negotiable').value = prop.isNegotiable ? 'yes' : 'no';
+                document.getElementById('prop-deposit').value = prop.securityDeposit || '';
+                document.getElementById('prop-super-area').value = prop.superArea || '';
+                document.getElementById('prop-carpet-area').value = prop.carpetArea || '';
+                document.getElementById('prop-plot-area').value = prop.plotArea || '';
+                document.getElementById('prop-builtup-area').value = prop.builtUpArea || '';
                 document.getElementById('prop-area').value = prop.area || '';
                 document.getElementById('prop-status').value = prop.status || 'Ready to Move';
                 document.getElementById('prop-type').value = prop.transactionType || 'New';
@@ -645,6 +720,12 @@
                 document.getElementById('prop-map').value = prop.googleMapsLink || '';
                 document.getElementById('prop-beds').value = prop.beds || '';
                 document.getElementById('prop-baths').value = prop.baths || '';
+                document.getElementById('prop-living').value = prop.livingRoom || '';
+                document.getElementById('prop-kitchen').value = prop.kitchen || '';
+                document.getElementById('prop-office').value = prop.office || '';
+                document.getElementById('prop-parking').value = prop.parking || '';
+                document.getElementById('prop-lift').value = prop.hasLift ? 'yes' : 'no';
+                document.getElementById('prop-garden').value = prop.hasGarden ? 'yes' : 'no';
                 document.getElementById('prop-featured').checked = prop.isFeatured || false;
                 document.getElementById('prop-sold').checked = prop.isSoldOut || false;
                 document.getElementById('prop-buyer').value = prop.buyerName || '';
@@ -660,6 +741,12 @@
                 document.getElementById('prop-address').value = '';
                 document.getElementById('prop-location-select').value = content.locations.length ? content.locations[0] : '';
                 document.getElementById('prop-price').value = '';
+                document.getElementById('prop-negotiable').value = 'no';
+                document.getElementById('prop-deposit').value = '';
+                document.getElementById('prop-super-area').value = '';
+                document.getElementById('prop-carpet-area').value = '';
+                document.getElementById('prop-plot-area').value = '';
+                document.getElementById('prop-builtup-area').value = '';
                 document.getElementById('prop-area').value = '';
                 document.getElementById('prop-status').value = 'Ready to Move';
                 document.getElementById('prop-type').value = 'New';
@@ -668,6 +755,12 @@
                 document.getElementById('prop-map').value = '';
                 document.getElementById('prop-beds').value = '';
                 document.getElementById('prop-baths').value = '';
+                document.getElementById('prop-living').value = '';
+                document.getElementById('prop-kitchen').value = '';
+                document.getElementById('prop-office').value = '';
+                document.getElementById('prop-parking').value = '';
+                document.getElementById('prop-lift').value = 'no';
+                document.getElementById('prop-garden').value = 'no';
                 document.getElementById('prop-featured').checked = false;
                 document.getElementById('prop-sold').checked = false;
                 document.getElementById('prop-buyer').value = '';
@@ -926,6 +1019,12 @@
                 address: document.getElementById('prop-address').value,
                 location: document.getElementById('prop-location-select').value,
                 price: document.getElementById('prop-price').value,
+                isNegotiable: document.getElementById('prop-negotiable').value === 'yes',
+                securityDeposit: document.getElementById('prop-deposit').value,
+                superArea: document.getElementById('prop-super-area').value,
+                carpetArea: document.getElementById('prop-carpet-area').value,
+                plotArea: document.getElementById('prop-plot-area').value,
+                builtUpArea: document.getElementById('prop-builtup-area').value,
                 area: document.getElementById('prop-area').value,
                 status: document.getElementById('prop-status').value,
                 transactionType: document.getElementById('prop-type').value,
@@ -934,6 +1033,12 @@
                 googleMapsLink: document.getElementById('prop-map').value,
                 beds: document.getElementById('prop-beds').value,
                 baths: document.getElementById('prop-baths').value,
+                livingRoom: document.getElementById('prop-living').value,
+                kitchen: document.getElementById('prop-kitchen').value,
+                office: document.getElementById('prop-office').value,
+                parking: document.getElementById('prop-parking').value,
+                hasLift: document.getElementById('prop-lift').value === 'yes',
+                hasGarden: document.getElementById('prop-garden').value === 'yes',
                 isFeatured: document.getElementById('prop-featured').checked,
                 isSoldOut: document.getElementById('prop-sold').checked,
                 buyerName: document.getElementById('prop-buyer').value,

@@ -74,11 +74,25 @@
         }
 
         /* Specs Row */
-        .pd-specs { display: flex; gap: 0; background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 12px; margin-bottom: 40px; overflow: hidden; }
-        .pd-spec { flex: 1; padding: 20px 24px; text-align: center; border-right: 1px solid #E5E7EB; }
-        .pd-spec:last-child { border-right: none; }
+        .pd-specs { display: flex; flex-wrap: wrap; gap: 0; background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 12px; margin-bottom: 30px; overflow: hidden; }
+        .pd-spec { flex: 1 1 180px; padding: 16px 20px; text-align: center; border-right: 1px solid #E5E7EB; border-bottom: 1px solid #E5E7EB; }
         .pd-spec-label { font-size: 11px; color: #9CA3AF; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
-        .pd-spec-val { font-size: 16px; font-weight: 600; color: #111; }
+        .pd-spec-val { font-size: 15px; font-weight: 600; color: #111; }
+
+        /* Highlights Row */
+        .pd-highlights-row { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 32px; }
+        .pd-highlight-pill { background: #ECFDF5; color: #047857; border: 1px solid #A7F3D0; padding: 8px 16px; border-radius: 20px; font-weight: 600; font-size: 13px; display: inline-flex; align-items: center; gap: 6px; }
+
+        /* Amenities Grid */
+        .pd-amenities-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 14px; margin-top: 12px; }
+        .pd-amenity-card { background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 10px; padding: 12px 16px; display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 14px; color: #1F2937; }
+
+        /* Documents Grid */
+        .pd-docs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; margin-top: 12px; }
+        .pd-doc-card { background: #EEF2FF; border: 1px solid #C7D2FE; border-radius: 10px; padding: 14px 18px; display: flex; flex-direction: column; gap: 4px; text-decoration: none; color: #3730A3; transition: all 0.2s; }
+        .pd-doc-card:hover { background: #E0E7FF; transform: translateY(-2px); }
+        .pd-doc-name { font-weight: 700; font-size: 14px; display: flex; align-items: center; gap: 6px; }
+        .pd-doc-status { font-size: 12px; color: #4338CA; }
 
         /* Content Grid */
         .pd-grid { display: grid; grid-template-columns: 1fr 360px; gap: 40px; }
@@ -163,6 +177,9 @@
                 </div>
             </div>
 
+            <!-- Highlights Badges -->
+            <div class="pd-highlights-row" id="pd-highlights"></div>
+
             <!-- Gallery -->
             <div id="pd-gallery"></div>
 
@@ -178,7 +195,25 @@
                         <p class="pd-desc" id="pd-desc"></p>
                     </div>
 
-                    <!-- Video -->
+                    <!-- Amenities Checklist -->
+                    <div class="pd-section" id="pd-amenities-section" style="display:none;">
+                        <h3>Amenities & Facilities</h3>
+                        <div class="pd-amenities-grid" id="pd-amenities"></div>
+                    </div>
+
+                    <!-- Verified Legal Documents -->
+                    <div class="pd-section" id="pd-docs-section" style="display:none;">
+                        <h3>Verified Legal Documents</h3>
+                        <div class="pd-docs-grid" id="pd-docs"></div>
+                    </div>
+
+                    <!-- Drone Video -->
+                    <div class="pd-section" id="pd-drone-section" style="display:none;">
+                        <h3>Drone Aerial View</h3>
+                        <div class="pd-video" id="pd-drone"></div>
+                    </div>
+
+                    <!-- Property Walkthrough Video -->
                     <div class="pd-section" id="pd-video-section" style="display:none;">
                         <h3>Property Walkthrough</h3>
                         <div class="pd-video" id="pd-video"></div>
@@ -191,23 +226,23 @@
                     </div>
                 </div>
 
-                <!-- Agent Sidebar -->
-                <div>
-                    <div class="pd-agent">
+                <!-- Agent / Owner Sidebar -->
+                <div id="pd-sidebar">
+                    <div class="pd-agent" id="pd-agent-card">
                         <div class="pd-agent-head">
-                            <img src="https://ui-avatars.com/api/?name=KIMI+Properties&background=C1A5FF&color=fff" alt="Agent">
+                            <img id="pd-owner-avatar" src="https://ui-avatars.com/api/?name=KIMI+Properties&background=C1A5FF&color=fff" alt="Agent">
                             <div>
-                                <h4>KIMI Properties</h4>
+                                <h4 id="pd-owner-name">KIMI Properties</h4>
                                 <p>Real Estate Consultant</p>
                             </div>
                         </div>
                         <div class="pd-agent-btns">
-                            <a href="tel:+919696976950" class="pd-btn-call">📞 Call Now</a>
-                            <a href="https://wa.me/919696976950" class="pd-btn-wa" target="_blank">💬 WhatsApp</a>
+                            <a id="pd-btn-call" href="tel:+919696976950" class="pd-btn-call">📞 Call Now</a>
+                            <a id="pd-btn-wa" href="https://wa.me/919696976950" class="pd-btn-wa" target="_blank">💬 WhatsApp</a>
                         </div>
                         <div class="pd-agent-info">
-                            <p>📱 +91 96969 76950</p>
-                            <p>📧 hello@kimiproperties.in</p>
+                            <p id="pd-owner-phone">📱 +91 96969 76950</p>
+                            <p id="pd-owner-email">📧 hello@kimiproperties.in</p>
                         </div>
                     </div>
                 </div>
@@ -434,26 +469,51 @@
             galleryEl.innerHTML = '<div class="pd-no-gallery">No images uploaded yet</div>';
         }
 
-        // Specs — render all populated property specifications
+        // Dynamic SEO Metadata
+        if (prop.seoTitle) document.title = prop.seoTitle;
+        if (prop.seoDescription) {
+            let metaDesc = document.querySelector('meta[name="description"]');
+            if (!metaDesc) { metaDesc = document.createElement('meta'); metaDesc.name = "description"; document.head.appendChild(metaDesc); }
+            metaDesc.content = prop.seoDescription;
+        }
+        if (prop.seoKeywords) {
+            let metaKw = document.querySelector('meta[name="keywords"]');
+            if (!metaKw) { metaKw = document.createElement('meta'); metaKw.name = "keywords"; document.head.appendChild(metaKw); }
+            metaKw.content = prop.seoKeywords;
+        }
+
+        // Render Property Highlights Badges
+        const hlEl = document.getElementById('pd-highlights');
+        if (prop.highlights && prop.highlights.length > 0) {
+            hlEl.innerHTML = prop.highlights.map(h => `<div class="pd-highlight-pill">✔️ ${h}</div>`).join('');
+        } else {
+            hlEl.style.display = 'none';
+        }
+
+        // Render Comprehensive Specifications Grid
         const specsEl = document.getElementById('pd-specs');
         let specsHtml = '';
+        const unit = prop.areaUnit || 'Sq.Ft.';
+        if (prop.plotArea) specsHtml += `<div class="pd-spec"><div class="pd-spec-label">Plot Area</div><div class="pd-spec-val">${prop.plotArea} ${prop.plotArea.toLowerCase().includes('sq') || prop.plotArea.toLowerCase().includes('acre') ? '' : unit}</div></div>`;
+        if (prop.builtUpArea) specsHtml += `<div class="pd-spec"><div class="pd-spec-label">Built-Up Area</div><div class="pd-spec-val">${prop.builtUpArea} ${prop.builtUpArea.toLowerCase().includes('sq') ? '' : unit}</div></div>`;
+        if (prop.carpetArea) specsHtml += `<div class="pd-spec"><div class="pd-spec-label">Carpet Area</div><div class="pd-spec-val">${prop.carpetArea} ${prop.carpetArea.toLowerCase().includes('sq') ? '' : unit}</div></div>`;
+        if (prop.superArea) specsHtml += `<div class="pd-spec"><div class="pd-spec-label">Super Area</div><div class="pd-spec-val">${prop.superArea} ${prop.superArea.toLowerCase().includes('sq') ? '' : unit}</div></div>`;
+        if (prop.facing) specsHtml += `<div class="pd-spec"><div class="pd-spec-label">Facing</div><div class="pd-spec-val">${prop.facing}</div></div>`;
+        if (prop.roadWidth) specsHtml += `<div class="pd-spec"><div class="pd-spec-label">Road Width</div><div class="pd-spec-val">${prop.roadWidth}</div></div>`;
+        if (prop.isCornerPlot) specsHtml += `<div class="pd-spec"><div class="pd-spec-label">Corner Plot</div><div class="pd-spec-val">Yes</div></div>`;
+        if (prop.floor) specsHtml += `<div class="pd-spec"><div class="pd-spec-label">Floor</div><div class="pd-spec-val">${prop.floor} ${prop.totalFloors ? 'of ' + prop.totalFloors : ''}</div></div>`;
+        if (prop.powerLoad) specsHtml += `<div class="pd-spec"><div class="pd-spec-label">Power Load</div><div class="pd-spec-val">${prop.powerLoad}</div></div>`;
+        if (prop.waterSupply) specsHtml += `<div class="pd-spec"><div class="pd-spec-label">Water Supply</div><div class="pd-spec-val">${prop.waterSupply}</div></div>`;
+        if (prop.furnishing) specsHtml += `<div class="pd-spec"><div class="pd-spec-label">Furnishing</div><div class="pd-spec-val">${prop.furnishing}</div></div>`;
         if (prop.beds) specsHtml += `<div class="pd-spec"><div class="pd-spec-label">Bedrooms</div><div class="pd-spec-val">${prop.beds} Beds</div></div>`;
         if (prop.baths) specsHtml += `<div class="pd-spec"><div class="pd-spec-label">Bathrooms</div><div class="pd-spec-val">${prop.baths} Baths</div></div>`;
         if (prop.livingRoom) specsHtml += `<div class="pd-spec"><div class="pd-spec-label">Living Room</div><div class="pd-spec-val">${prop.livingRoom}</div></div>`;
         if (prop.kitchen) specsHtml += `<div class="pd-spec"><div class="pd-spec-label">Kitchen</div><div class="pd-spec-val">${prop.kitchen}</div></div>`;
         if (prop.office) specsHtml += `<div class="pd-spec"><div class="pd-spec-label">Office Space</div><div class="pd-spec-val">${prop.office}</div></div>`;
-        if (prop.superArea) specsHtml += `<div class="pd-spec"><div class="pd-spec-label">Super Area</div><div class="pd-spec-val">${prop.superArea}</div></div>`;
-        if (prop.carpetArea) specsHtml += `<div class="pd-spec"><div class="pd-spec-label">Carpet Area</div><div class="pd-spec-val">${prop.carpetArea}</div></div>`;
-        if (prop.plotArea) specsHtml += `<div class="pd-spec"><div class="pd-spec-label">Plot Area</div><div class="pd-spec-val">${prop.plotArea}</div></div>`;
-        if (prop.builtUpArea) specsHtml += `<div class="pd-spec"><div class="pd-spec-label">Built-Up Area</div><div class="pd-spec-val">${prop.builtUpArea}</div></div>`;
-        if (!prop.superArea && !prop.carpetArea && prop.area) specsHtml += `<div class="pd-spec"><div class="pd-spec-label">Area</div><div class="pd-spec-val">${prop.area}</div></div>`;
         if (prop.parking) specsHtml += `<div class="pd-spec"><div class="pd-spec-label">Parking</div><div class="pd-spec-val">${prop.parking}</div></div>`;
-        if (prop.hasLift) specsHtml += `<div class="pd-spec"><div class="pd-spec-label">Lift</div><div class="pd-spec-val">Available</div></div>`;
-        if (prop.hasGarden) specsHtml += `<div class="pd-spec"><div class="pd-spec-label">Garden</div><div class="pd-spec-val">Available</div></div>`;
         if (prop.securityDeposit) specsHtml += `<div class="pd-spec"><div class="pd-spec-label">Deposit</div><div class="pd-spec-val">${prop.securityDeposit}</div></div>`;
         if (prop.category) specsHtml += `<div class="pd-spec"><div class="pd-spec-label">Type</div><div class="pd-spec-val">${prop.category}</div></div>`;
         if (prop.status) specsHtml += `<div class="pd-spec"><div class="pd-spec-label">Status</div><div class="pd-spec-val">${prop.status}</div></div>`;
-        if (prop.transactionType) specsHtml += `<div class="pd-spec"><div class="pd-spec-label">Transaction</div><div class="pd-spec-val">${prop.transactionType}</div></div>`;
         specsEl.innerHTML = specsHtml || '';
         if (!specsHtml) specsEl.style.display = 'none';
 
@@ -463,22 +523,81 @@
             document.getElementById('pd-desc-section').style.display = 'block';
         }
 
-        // Video
+        // Amenities Checklist Grid
+        if (prop.amenities && prop.amenities.length > 0) {
+            const amenityIcons = {
+                'CCTV': '📹', 'Security': '🛡️', 'Garden': '🌳', 'Lift': '🛗',
+                'Power Backup': '⚡', 'Borewell': '🚰', 'Compound Wall': '🧱',
+                'Fire NOC': '🔥', 'Loading Area': '🚛'
+            };
+            const amenitiesHtml = prop.amenities.map(a => `<div class="pd-amenity-card"><span>${amenityIcons[a] || '✔️'}</span> <span>${a}</span></div>`).join('');
+            document.getElementById('pd-amenities').innerHTML = amenitiesHtml;
+            document.getElementById('pd-amenities-section').style.display = 'block';
+        }
+
+        // Verified Legal Documents
+        if (prop.documents) {
+            const docs = prop.documents;
+            const docItems = [
+                { name: '7/12 (Satbara)', val: docs.satbara },
+                { name: 'Sale Deed', val: docs.saleDeed },
+                { name: 'RERA Certificate', val: docs.reraCert },
+                { name: 'Sanctioned Layout Plan', val: docs.layoutPlan },
+                { name: 'NA Order', val: docs.naOrder }
+            ].filter(d => d.val && d.val.trim() !== '');
+
+            if (docItems.length > 0) {
+                const docsHtml = docItems.map(d => `
+                    <div class="pd-doc-card">
+                        <div class="pd-doc-name">📜 ${d.name}</div>
+                        <div class="pd-doc-status">${d.val.startsWith('http') ? `<a href="${d.val}" target="_blank" style="color:inherit; text-decoration:underline;">View Document ↗</a>` : `Status: ${d.val}`}</div>
+                    </div>
+                `).join('');
+                document.getElementById('pd-docs').innerHTML = docsHtml;
+                document.getElementById('pd-docs-section').style.display = 'block';
+            }
+        }
+
+        // Drone Video Embed
+        if (prop.droneVideo) {
+            const droneEl = document.getElementById('pd-drone');
+            if (prop.droneVideo.includes('youtube.com') || prop.droneVideo.includes('youtu.be')) {
+                const embedUrl = prop.droneVideo.replace('watch?v=', 'embed/').replace('youtu.be/', 'youtube.com/embed/');
+                droneEl.innerHTML = `<iframe width="100%" height="400" src="${embedUrl}" frameborder="0" allowfullscreen style="border-radius:12px;"></iframe>`;
+            } else {
+                droneEl.innerHTML = `<video controls style="width:100%; border-radius:12px;"><source src="${prop.droneVideo}" type="video/mp4"></video>`;
+            }
+            document.getElementById('pd-drone-section').style.display = 'block';
+        }
+
+        // Walkthrough Video
         if (prop.videos && prop.videos.length > 0) {
-            document.getElementById('pd-video').innerHTML = `<video controls><source src="${prop.videos[0]}" type="video/mp4"></video>`;
+            document.getElementById('pd-video').innerHTML = `<video controls style="width:100%; border-radius:12px;"><source src="${prop.videos[0]}" type="video/mp4"></video>`;
             document.getElementById('pd-video-section').style.display = 'block';
         }
 
-        // Map
+        // Google Map Location
         if (prop.googleMapsLink) {
             const mapEl = document.getElementById('pd-map');
             if (prop.googleMapsLink.includes('/embed')) {
-                mapEl.innerHTML = `<div class="pd-map"><iframe src="${prop.googleMapsLink}" allowfullscreen loading="lazy"></iframe></div>`;
+                mapEl.innerHTML = `<div class="pd-map"><iframe src="${prop.googleMapsLink}" width="100%" height="300" style="border:0; border-radius:12px;" allowfullscreen loading="lazy"></iframe></div>`;
             } else {
-                mapEl.innerHTML = `<a href="${prop.googleMapsLink}" target="_blank" class="pd-map-link">📍 View on Google Maps</a>`;
+                mapEl.innerHTML = `<a href="${prop.googleMapsLink}" target="_blank" class="pd-map-link" style="display:inline-block; padding:12px 20px; background:#EEF2FF; color:#4F46E5; border-radius:8px; font-weight:600; text-decoration:none;">📍 View Location on Google Maps ↗</a>`;
             }
             document.getElementById('pd-map-section').style.display = 'block';
         }
+
+        // Owner / Agent Contact Card Update
+        if (prop.ownerName) document.getElementById('pd-owner-name').textContent = prop.ownerName;
+        if (prop.ownerPhone) {
+            document.getElementById('pd-owner-phone').textContent = `📱 ${prop.ownerPhone}`;
+            document.getElementById('pd-btn-call').href = `tel:${prop.ownerPhone.replace(/\s+/g, '')}`;
+        }
+        if (prop.ownerWhatsapp || prop.ownerPhone) {
+            const waNum = (prop.ownerWhatsapp || prop.ownerPhone).replace(/[^0-9]/g, '');
+            document.getElementById('pd-btn-wa').href = `https://wa.me/${waNum}?text=${encodeURIComponent('Hello, I am interested in ' + prop.name)}`;
+        }
+        if (prop.ownerEmail) document.getElementById('pd-owner-email').textContent = `📧 ${prop.ownerEmail}`;
     });
     </script>
     <script src="script.js"></script>

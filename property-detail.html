@@ -74,51 +74,59 @@
         }
 
         /* Specs Row */
-        .pd-specs { display: flex; flex-wrap: wrap; gap: 0; background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 12px; margin-bottom: 30px; overflow: hidden; }
-        .pd-spec { flex: 1 1 180px; padding: 16px 20px; text-align: center; border-right: 1px solid #E5E7EB; border-bottom: 1px solid #E5E7EB; }
-        .pd-spec-label { font-size: 11px; color: #9CA3AF; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
-        .pd-spec-val { font-size: 15px; font-weight: 600; color: #111; }
+        .pd-specs { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; margin-bottom: 36px; background: transparent; border: none; border-radius: 0; overflow: visible; }
+        .pd-spec { background: #FFFFFF; border: 1px solid #ECE7FE; border-radius: 16px; padding: 16px; text-align: left; display: flex; align-items: flex-start; gap: 12px; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: 0 2px 10px rgba(109, 40, 217, 0.02); }
+        .pd-spec:hover { border-color: #C4B5FD; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(109, 40, 217, 0.06); }
+        .pd-spec-icon { width: 40px; height: 40px; border-radius: 12px; background: #F3EFFF; color: #7C3AED; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .pd-spec-info { display: flex; flex-direction: column; flex: 1; min-width: 0; }
+        .pd-spec-label { font-size: 11px; color: #8B5CF6; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 2px; }
+        .pd-spec-val { font-size: 15px; font-weight: 700; color: #1E1B4B; font-family: 'Outfit', sans-serif; word-break: break-word; line-height: 1.3; }
 
         /* Highlights Row */
         .pd-highlights-row { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 32px; }
-        .pd-highlight-pill { background: #ECFDF5; color: #047857; border: 1px solid #A7F3D0; padding: 8px 16px; border-radius: 20px; font-weight: 600; font-size: 13px; display: inline-flex; align-items: center; gap: 6px; }
+        .pd-highlight-pill { background: #F0FDF4; color: #166534; border: 1px solid #BBF7D0; padding: 8px 18px; border-radius: 50px; font-weight: 600; font-size: 13px; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 2px 6px rgba(22, 101, 52, 0.04); }
 
         /* Amenities Grid */
-        .pd-amenities-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 14px; margin-top: 12px; }
-        .pd-amenity-card { background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 10px; padding: 12px 16px; display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 14px; color: #1F2937; }
+        .pd-amenities-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 14px; margin-top: 14px; }
+        .pd-amenity-card { background: #FFFFFF; border: 1px solid #ECE7FE; border-radius: 14px; padding: 14px 18px; display: flex; align-items: center; gap: 12px; font-weight: 600; font-size: 14px; color: #1E1B4B; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: 0 2px 8px rgba(109, 40, 217, 0.02); }
+        .pd-amenity-card:hover { border-color: #C4B5FD; background: #FAF8FE; transform: translateY(-2px); box-shadow: 0 6px 18px rgba(109, 40, 217, 0.08); }
+        .pd-amenity-icon { width: 34px; height: 34px; border-radius: 10px; background: #F3EFFF; color: #7C3AED; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 
         /* Documents Grid */
-        .pd-docs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; margin-top: 12px; }
-        .pd-doc-card { background: #EEF2FF; border: 1px solid #C7D2FE; border-radius: 10px; padding: 14px 18px; display: flex; flex-direction: column; gap: 4px; text-decoration: none; color: #3730A3; transition: all 0.2s; }
-        .pd-doc-card:hover { background: #E0E7FF; transform: translateY(-2px); }
-        .pd-doc-name { font-weight: 700; font-size: 14px; display: flex; align-items: center; gap: 6px; }
-        .pd-doc-status { font-size: 12px; color: #4338CA; }
+        .pd-docs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; margin-top: 14px; }
+        .pd-doc-card { background: #FFFFFF; border: 1px solid #ECE7FE; border-radius: 16px; padding: 18px 20px; display: flex; flex-direction: column; gap: 8px; text-decoration: none; color: #1E1B4B; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: 0 2px 10px rgba(109, 40, 217, 0.02); position: relative; overflow: hidden; }
+        .pd-doc-card::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: #7C3AED; border-radius: 4px 0 0 4px; }
+        .pd-doc-card:hover { border-color: #C4B5FD; transform: translateY(-3px); box-shadow: 0 10px 25px rgba(109, 40, 217, 0.08); background: #FAF8FE; }
+        .pd-doc-head { display: flex; align-items: center; gap: 10px; }
+        .pd-doc-icon { width: 36px; height: 36px; border-radius: 10px; background: #F3EFFF; color: #7C3AED; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .pd-doc-name { font-weight: 700; font-size: 15px; color: #1E1B4B; font-family: 'Outfit', sans-serif; }
+        .pd-doc-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 600; color: #047857; background: #ECFDF5; border: 1px solid #A7F3D0; padding: 4px 10px; border-radius: 20px; width: fit-content; margin-top: 2px; }
 
         /* Content Grid */
         .pd-grid { display: grid; grid-template-columns: 1fr 360px; gap: 40px; }
         .pd-section { margin-bottom: 36px; }
-        .pd-section h3 { font-size: 18px; font-weight: 600; color: #111; margin: 0 0 16px; padding-bottom: 12px; border-bottom: 1px solid #F3F4F6; }
+        .pd-section h3 { font-size: 18px; font-weight: 700; color: #1E1B4B; font-family: 'Syne', sans-serif; margin: 0 0 16px; padding-bottom: 12px; border-bottom: 2px solid #F3EFFF; display: flex; align-items: center; gap: 8px; }
         .pd-desc { color: #4B5563; line-height: 1.8; font-size: 15px; }
 
         /* Video */
-        .pd-video video { width: 100%; border-radius: 12px; background: #000; }
+        .pd-video video { width: 100%; border-radius: 16px; background: #000; }
 
         /* Map */
-        .pd-map iframe { width: 100%; height: 350px; border: 0; border-radius: 12px; }
-        .pd-map-link { display: inline-flex; align-items: center; gap: 8px; background: #111; color: #fff; padding: 14px 28px; border-radius: 10px; text-decoration: none; font-weight: 600; font-size: 15px; }
-        .pd-map-link:hover { background: #333; }
+        .pd-map iframe { width: 100%; height: 350px; border: 0; border-radius: 16px; }
+        .pd-map-link { display: inline-flex; align-items: center; gap: 8px; background: #7C3AED; color: #fff; padding: 14px 28px; border-radius: 12px; text-decoration: none; font-weight: 600; font-size: 15px; transition: all 0.2s; }
+        .pd-map-link:hover { background: #6D28D9; transform: translateY(-2px); }
 
         /* Agent Card */
-        .pd-agent { background: #fff; border: 1px solid #E5E7EB; border-radius: 16px; padding: 28px; position: sticky; top: 100px; }
+        .pd-agent { background: #fff; border: 1px solid #ECE7FE; border-radius: 20px; padding: 28px; position: sticky; top: 100px; box-shadow: 0 10px 30px rgba(109, 40, 217, 0.04); }
         .pd-agent-head { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; }
-        .pd-agent-head img { width: 50px; height: 50px; border-radius: 50%; }
-        .pd-agent-head h4 { margin: 0; font-size: 16px; color: #111; }
-        .pd-agent-head p { margin: 2px 0 0; font-size: 13px; color: #9CA3AF; }
+        .pd-agent-head img { width: 52px; height: 52px; border-radius: 50%; border: 2px solid #EDE9FE; }
+        .pd-agent-head h4 { margin: 0; font-size: 17px; color: #1E1B4B; font-family: 'Syne', sans-serif; }
+        .pd-agent-head p { margin: 2px 0 0; font-size: 13px; color: #8B5CF6; font-weight: 500; }
         .pd-agent-btns { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
-        .pd-btn-call { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 14px; background: #111; color: #fff; border-radius: 10px; text-decoration: none; font-weight: 600; font-size: 15px; }
-        .pd-btn-call:hover { background: #333; }
-        .pd-btn-wa { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 14px; background: #25D366; color: #fff; border-radius: 10px; text-decoration: none; font-weight: 600; font-size: 15px; }
-        .pd-btn-wa:hover { background: #1da851; }
+        .pd-btn-call { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 14px; background: #1E1B4B; color: #fff; border-radius: 12px; text-decoration: none; font-weight: 600; font-size: 15px; transition: all 0.2s; }
+        .pd-btn-call:hover { background: #7C3AED; transform: translateY(-1px); }
+        .pd-btn-wa { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 14px; background: #25D366; color: #fff; border-radius: 12px; text-decoration: none; font-weight: 600; font-size: 15px; transition: all 0.2s; }
+        .pd-btn-wa:hover { background: #1da851; transform: translateY(-1px); }
         .pd-agent-info p { color: #6B7280; font-size: 14px; margin: 8px 0; display: flex; align-items: center; gap: 8px; }
 
         @media (max-width: 900px) {
@@ -128,8 +136,7 @@
             .pd-main-img { height: 280px; }
             .pd-side-imgs { grid-template-columns: 1fr 1fr; }
             .pd-side-imgs img { height: 160px; }
-            .pd-specs { flex-wrap: wrap; }
-            .pd-spec { flex: 1 1 45%; }
+            .pd-specs { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
             .pd-title { font-size: 24px; }
             .pd-price { font-size: 22px; }
         }
@@ -485,35 +492,71 @@
         // Render Property Highlights Badges
         const hlEl = document.getElementById('pd-highlights');
         if (prop.highlights && prop.highlights.length > 0) {
-            hlEl.innerHTML = prop.highlights.map(h => `<div class="pd-highlight-pill">✔️ ${h}</div>`).join('');
+            hlEl.innerHTML = prop.highlights.map(h => `<div class="pd-highlight-pill"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> ${h}</div>`).join('');
         } else {
             hlEl.style.display = 'none';
         }
+
+        // Vector SVG map for specifications
+        const specSvgMap = {
+            plotArea: '<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/>',
+            builtUpArea: '<path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>',
+            carpetArea: '<rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 4v16"/><path d="M15 4v16"/><path d="M4 9h16"/><path d="M4 15h16"/>',
+            superArea: '<path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>',
+            facing: '<circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>',
+            roadWidth: '<path d="M4 19L10 5"/><path d="M14 5l6 14"/><path d="M12 8v2"/><path d="M12 14v2"/>',
+            cornerPlot: '<path d="M21 21H3V3h18v18z"/><path d="M9 21V9h12"/>',
+            floor: '<rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 6h8"/><path d="M8 10h8"/><path d="M8 14h8"/><path d="M8 18h8"/>',
+            powerLoad: '<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>',
+            waterSupply: '<path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>',
+            furnishing: '<path d="M20 9V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v3"/><path d="M2 11v5a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-5a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2z"/><path d="M4 18v2"/><path d="M20 18v2"/>',
+            beds: '<path d="M2 4v16"/><path d="M2 8h18a2 2 0 0 1 2 2v10"/><path d="M2 17h20"/><path d="M6 8v9"/>',
+            baths: '<path d="M9 6 6.5 3.5a1.5 1.5 0 0 0-2.12 0 1.5 1.5 0 0 0 0 2.12L7 8"/><path d="M4 12h16a1 1 0 0 1 1 1v3a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4v-3a1 1 0 0 1 1-1z"/><path d="M6 12v-2a2 2 0 0 1 2-2h3"/>',
+            livingRoom: '<path d="M20 9V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v3"/><rect x="2" y="11" width="20" height="7" rx="2"/><path d="M4 18v3"/><path d="M20 18v3"/>',
+            kitchen: '<path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/>',
+            office: '<rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>',
+            parking: '<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 17V7h4a3 3 0 0 1 0 6H9"/>',
+            deposit: '<rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/>',
+            category: '<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',
+            status: '<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>'
+        };
+
+        const renderSpecCard = (label, val, key) => `
+            <div class="pd-spec">
+                <div class="pd-spec-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${specSvgMap[key] || specSvgMap.category}</svg>
+                </div>
+                <div class="pd-spec-info">
+                    <div class="pd-spec-label">${label}</div>
+                    <div class="pd-spec-val">${val}</div>
+                </div>
+            </div>
+        `;
 
         // Render Comprehensive Specifications Grid
         const specsEl = document.getElementById('pd-specs');
         let specsHtml = '';
         const unit = prop.areaUnit || 'Sq.Ft.';
-        if (prop.plotArea) specsHtml += `<div class="pd-spec"><div class="pd-spec-label">Plot Area</div><div class="pd-spec-val">${prop.plotArea} ${prop.plotArea.toLowerCase().includes('sq') || prop.plotArea.toLowerCase().includes('acre') ? '' : unit}</div></div>`;
-        if (prop.builtUpArea) specsHtml += `<div class="pd-spec"><div class="pd-spec-label">Built-Up Area</div><div class="pd-spec-val">${prop.builtUpArea} ${prop.builtUpArea.toLowerCase().includes('sq') ? '' : unit}</div></div>`;
-        if (prop.carpetArea) specsHtml += `<div class="pd-spec"><div class="pd-spec-label">Carpet Area</div><div class="pd-spec-val">${prop.carpetArea} ${prop.carpetArea.toLowerCase().includes('sq') ? '' : unit}</div></div>`;
-        if (prop.superArea) specsHtml += `<div class="pd-spec"><div class="pd-spec-label">Super Area</div><div class="pd-spec-val">${prop.superArea} ${prop.superArea.toLowerCase().includes('sq') ? '' : unit}</div></div>`;
-        if (prop.facing) specsHtml += `<div class="pd-spec"><div class="pd-spec-label">Facing</div><div class="pd-spec-val">${prop.facing}</div></div>`;
-        if (prop.roadWidth) specsHtml += `<div class="pd-spec"><div class="pd-spec-label">Road Width</div><div class="pd-spec-val">${prop.roadWidth}</div></div>`;
-        if (prop.isCornerPlot) specsHtml += `<div class="pd-spec"><div class="pd-spec-label">Corner Plot</div><div class="pd-spec-val">Yes</div></div>`;
-        if (prop.floor) specsHtml += `<div class="pd-spec"><div class="pd-spec-label">Floor</div><div class="pd-spec-val">${prop.floor} ${prop.totalFloors ? 'of ' + prop.totalFloors : ''}</div></div>`;
-        if (prop.powerLoad) specsHtml += `<div class="pd-spec"><div class="pd-spec-label">Power Load</div><div class="pd-spec-val">${prop.powerLoad}</div></div>`;
-        if (prop.waterSupply) specsHtml += `<div class="pd-spec"><div class="pd-spec-label">Water Supply</div><div class="pd-spec-val">${prop.waterSupply}</div></div>`;
-        if (prop.furnishing) specsHtml += `<div class="pd-spec"><div class="pd-spec-label">Furnishing</div><div class="pd-spec-val">${prop.furnishing}</div></div>`;
-        if (prop.beds) specsHtml += `<div class="pd-spec"><div class="pd-spec-label">Bedrooms</div><div class="pd-spec-val">${prop.beds} Beds</div></div>`;
-        if (prop.baths) specsHtml += `<div class="pd-spec"><div class="pd-spec-label">Bathrooms</div><div class="pd-spec-val">${prop.baths} Baths</div></div>`;
-        if (prop.livingRoom) specsHtml += `<div class="pd-spec"><div class="pd-spec-label">Living Room</div><div class="pd-spec-val">${prop.livingRoom}</div></div>`;
-        if (prop.kitchen) specsHtml += `<div class="pd-spec"><div class="pd-spec-label">Kitchen</div><div class="pd-spec-val">${prop.kitchen}</div></div>`;
-        if (prop.office) specsHtml += `<div class="pd-spec"><div class="pd-spec-label">Office Space</div><div class="pd-spec-val">${prop.office}</div></div>`;
-        if (prop.parking) specsHtml += `<div class="pd-spec"><div class="pd-spec-label">Parking</div><div class="pd-spec-val">${prop.parking}</div></div>`;
-        if (prop.securityDeposit) specsHtml += `<div class="pd-spec"><div class="pd-spec-label">Deposit</div><div class="pd-spec-val">${prop.securityDeposit}</div></div>`;
-        if (prop.category) specsHtml += `<div class="pd-spec"><div class="pd-spec-label">Type</div><div class="pd-spec-val">${prop.category}</div></div>`;
-        if (prop.status) specsHtml += `<div class="pd-spec"><div class="pd-spec-label">Status</div><div class="pd-spec-val">${prop.status}</div></div>`;
+        if (prop.plotArea) specsHtml += renderSpecCard('Plot Area', `${prop.plotArea} ${prop.plotArea.toLowerCase().includes('sq') || prop.plotArea.toLowerCase().includes('acre') ? '' : unit}`, 'plotArea');
+        if (prop.builtUpArea) specsHtml += renderSpecCard('Built-Up Area', `${prop.builtUpArea} ${prop.builtUpArea.toLowerCase().includes('sq') ? '' : unit}`, 'builtUpArea');
+        if (prop.carpetArea) specsHtml += renderSpecCard('Carpet Area', `${prop.carpetArea} ${prop.carpetArea.toLowerCase().includes('sq') ? '' : unit}`, 'carpetArea');
+        if (prop.superArea) specsHtml += renderSpecCard('Super Area', `${prop.superArea} ${prop.superArea.toLowerCase().includes('sq') ? '' : unit}`, 'superArea');
+        if (prop.facing) specsHtml += renderSpecCard('Facing', prop.facing, 'facing');
+        if (prop.roadWidth) specsHtml += renderSpecCard('Road Width', prop.roadWidth, 'roadWidth');
+        if (prop.isCornerPlot) specsHtml += renderSpecCard('Corner Plot', 'Yes', 'cornerPlot');
+        if (prop.floor) specsHtml += renderSpecCard('Floor', `${prop.floor} ${prop.totalFloors ? 'of ' + prop.totalFloors : ''}`, 'floor');
+        if (prop.powerLoad) specsHtml += renderSpecCard('Power Load', prop.powerLoad, 'powerLoad');
+        if (prop.waterSupply) specsHtml += renderSpecCard('Water Supply', prop.waterSupply, 'waterSupply');
+        if (prop.furnishing) specsHtml += renderSpecCard('Furnishing', prop.furnishing, 'furnishing');
+        if (prop.beds) specsHtml += renderSpecCard('Bedrooms', `${prop.beds} Beds`, 'beds');
+        if (prop.baths) specsHtml += renderSpecCard('Bathrooms', `${prop.baths} Baths`, 'baths');
+        if (prop.livingRoom) specsHtml += renderSpecCard('Living Room', prop.livingRoom, 'livingRoom');
+        if (prop.kitchen) specsHtml += renderSpecCard('Kitchen', prop.kitchen, 'kitchen');
+        if (prop.office) specsHtml += renderSpecCard('Office Space', prop.office, 'office');
+        if (prop.parking) specsHtml += renderSpecCard('Parking', prop.parking, 'parking');
+        if (prop.securityDeposit) specsHtml += renderSpecCard('Deposit', prop.securityDeposit, 'deposit');
+        if (prop.category) specsHtml += renderSpecCard('Type', prop.category, 'category');
+        if (prop.status) specsHtml += renderSpecCard('Status', prop.status, 'status');
         specsEl.innerHTML = specsHtml || '';
         if (!specsHtml) specsEl.style.display = 'none';
 
@@ -523,14 +566,28 @@
             document.getElementById('pd-desc-section').style.display = 'block';
         }
 
+        // Vector SVG map for amenities
+        const amenitySvgMap = {
+            'CCTV': '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>',
+            'Security': '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>',
+            'Garden': '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>',
+            'Lift': '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="m8 10 4-4 4 4"/><path d="m8 14 4 4 4-4"/></svg>',
+            'Power Backup': '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>',
+            'Borewell': '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>',
+            'Compound Wall': '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 10h20"/><path d="M2 15h20"/><path d="M7 4v6"/><path d="M17 4v6"/><path d="M12 10v5"/><path d="M7 15v5"/><path d="M17 15v5"/></svg>',
+            'Fire NOC': '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 3.5z"/></svg>',
+            'Loading Area': '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13" rx="2"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>'
+        };
+
         // Amenities Checklist Grid
         if (prop.amenities && prop.amenities.length > 0) {
-            const amenityIcons = {
-                'CCTV': '📹', 'Security': '🛡️', 'Garden': '🌳', 'Lift': '🛗',
-                'Power Backup': '⚡', 'Borewell': '🚰', 'Compound Wall': '🧱',
-                'Fire NOC': '🔥', 'Loading Area': '🚛'
-            };
-            const amenitiesHtml = prop.amenities.map(a => `<div class="pd-amenity-card"><span>${amenityIcons[a] || '✔️'}</span> <span>${a}</span></div>`).join('');
+            const defaultSvg = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>';
+            const amenitiesHtml = prop.amenities.map(a => `
+                <div class="pd-amenity-card">
+                    <div class="pd-amenity-icon">${amenitySvgMap[a] || defaultSvg}</div>
+                    <span>${a}</span>
+                </div>
+            `).join('');
             document.getElementById('pd-amenities').innerHTML = amenitiesHtml;
             document.getElementById('pd-amenities-section').style.display = 'block';
         }
@@ -549,8 +606,16 @@
             if (docItems.length > 0) {
                 const docsHtml = docItems.map(d => `
                     <div class="pd-doc-card">
-                        <div class="pd-doc-name">📜 ${d.name}</div>
-                        <div class="pd-doc-status">${d.val.startsWith('http') ? `<a href="${d.val}" target="_blank" style="color:inherit; text-decoration:underline;">View Document ↗</a>` : `Status: ${d.val}`}</div>
+                        <div class="pd-doc-head">
+                            <div class="pd-doc-icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="m9 15 2 2 4-4"/></svg>
+                            </div>
+                            <div class="pd-doc-name">${d.name}</div>
+                        </div>
+                        <div class="pd-doc-badge">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                            ${d.val.startsWith('http') ? `<a href="${d.val}" target="_blank" style="color:inherit; text-decoration:underline;">View Document ↗</a>` : d.val}
+                        </div>
                     </div>
                 `).join('');
                 document.getElementById('pd-docs').innerHTML = docsHtml;
@@ -563,16 +628,16 @@
             const droneEl = document.getElementById('pd-drone');
             if (prop.droneVideo.includes('youtube.com') || prop.droneVideo.includes('youtu.be')) {
                 const embedUrl = prop.droneVideo.replace('watch?v=', 'embed/').replace('youtu.be/', 'youtube.com/embed/');
-                droneEl.innerHTML = `<iframe width="100%" height="400" src="${embedUrl}" frameborder="0" allowfullscreen style="border-radius:12px;"></iframe>`;
+                droneEl.innerHTML = `<iframe width="100%" height="400" src="${embedUrl}" frameborder="0" allowfullscreen style="border-radius:16px;"></iframe>`;
             } else {
-                droneEl.innerHTML = `<video controls style="width:100%; border-radius:12px;"><source src="${prop.droneVideo}" type="video/mp4"></video>`;
+                droneEl.innerHTML = `<video controls style="width:100%; border-radius:16px;"><source src="${prop.droneVideo}" type="video/mp4"></video>`;
             }
             document.getElementById('pd-drone-section').style.display = 'block';
         }
 
         // Walkthrough Video
         if (prop.videos && prop.videos.length > 0) {
-            document.getElementById('pd-video').innerHTML = `<video controls style="width:100%; border-radius:12px;"><source src="${prop.videos[0]}" type="video/mp4"></video>`;
+            document.getElementById('pd-video').innerHTML = `<video controls style="width:100%; border-radius:16px;"><source src="${prop.videos[0]}" type="video/mp4"></video>`;
             document.getElementById('pd-video-section').style.display = 'block';
         }
 
@@ -580,9 +645,9 @@
         if (prop.googleMapsLink) {
             const mapEl = document.getElementById('pd-map');
             if (prop.googleMapsLink.includes('/embed')) {
-                mapEl.innerHTML = `<div class="pd-map"><iframe src="${prop.googleMapsLink}" width="100%" height="300" style="border:0; border-radius:12px;" allowfullscreen loading="lazy"></iframe></div>`;
+                mapEl.innerHTML = `<div class="pd-map"><iframe src="${prop.googleMapsLink}" width="100%" height="300" style="border:0; border-radius:16px;" allowfullscreen loading="lazy"></iframe></div>`;
             } else {
-                mapEl.innerHTML = `<a href="${prop.googleMapsLink}" target="_blank" class="pd-map-link" style="display:inline-block; padding:12px 20px; background:#EEF2FF; color:#4F46E5; border-radius:8px; font-weight:600; text-decoration:none;">📍 View Location on Google Maps ↗</a>`;
+                mapEl.innerHTML = `<a href="${prop.googleMapsLink}" target="_blank" class="pd-map-link">📍 View Location on Google Maps ↗</a>`;
             }
             document.getElementById('pd-map-section').style.display = 'block';
         }

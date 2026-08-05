@@ -623,7 +623,14 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.setItem('kimi_analytics_events', JSON.stringify(localEvents));
         } catch(err) {}
 
-        if (eventBuffer.length >= 5) flushBuffer();
+        // Real-time parent window communication (if running inside admin heatmap iframe)
+        try {
+            if (window.parent && window.parent !== window) {
+                window.parent.postMessage({ type: 'KIMI_TOUCH_EVENT', eventData }, '*');
+            }
+        } catch(err) {}
+
+        flushBuffer();
     }
 
     async function flushBuffer() {
@@ -641,7 +648,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.addEventListener('touchstart', trackInteraction, { passive: true });
     window.addEventListener('mousedown', trackInteraction, { passive: true });
-    setInterval(flushBuffer, 5000);
+    setInterval(flushBuffer, 3000);
 })();
 
 

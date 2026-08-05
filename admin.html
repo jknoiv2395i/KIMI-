@@ -608,22 +608,46 @@
 
                 <!-- Heatmap Controls & Canvas Overlay Container -->
                 <div style="background: white; border: 1px solid #E5E7EB; border-radius: 16px; padding: 24px; margin-bottom: 28px;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; margin-bottom: 20px;">
-                        <h3 style="margin: 0; font-size: 18px; color: #111827; font-weight: 700;">🎯 Live Touch Heatmap Overlay</h3>
-                        <div style="display: flex; gap: 12px; align-items: center;">
-                            <select id="heatmap-page-select" style="padding: 10px 14px; border-radius: 8px; border: 1px solid #D1D5DB;" onchange="loadHeatmapData()">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; margin-bottom: 16px;">
+                        <div>
+                            <h3 style="margin: 0; font-size: 18px; color: #111827; font-weight: 700;">🎯 Live Touch Heatmap Overlay</h3>
+                            <p style="margin: 4px 0 0; font-size: 13px; color: #6B7280;">Click anywhere inside the live iframe below to test touch spots in real-time.</p>
+                        </div>
+                        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                            <select id="heatmap-page-select" style="padding: 10px 14px; border-radius: 8px; border: 1px solid #D1D5DB; font-family:'Outfit';" onchange="loadHeatmapData()">
                                 <option value="/property-detail.html">Property Details Page</option>
                                 <option value="/">Home Landing Page</option>
                                 <option value="/properties.html">Properties Catalog</option>
                             </select>
-                            <button class="btn-outline" onclick="loadHeatmapData()" style="padding: 10px 16px; margin: 0; height: 42px;">🔄 Refresh Heatmap</button>
+
+                            <select id="heatmap-filter-select" style="padding: 10px 14px; border-radius: 8px; border: 1px solid #D1D5DB; font-family:'Outfit';" onchange="drawHeatmapCanvas()">
+                                <option value="ALL">🔥 All Touches</option>
+                                <option value="DEAD">🚨 Dead Clicks Only (Needs Update)</option>
+                                <option value="MOBILE">📱 Mobile Touches</option>
+                                <option value="DESKTOP">💻 Desktop Clicks</option>
+                            </select>
+
+                            <button class="btn-primary" onclick="simulateVisitorTraffic()" style="width: auto; padding: 10px 16px; margin: 0; height: 42px; background: #7C3AED; border-radius: 8px; font-size: 13px;">
+                                ⚡ Simulate 50 Visitor Touches
+                            </button>
+                            <button class="btn-outline" onclick="clearHeatmapEvents()" style="padding: 10px 14px; margin: 0; height: 42px;">
+                                🗑️ Clear
+                            </button>
                         </div>
                     </div>
 
+                    <!-- Legend Bar -->
+                    <div style="display: flex; gap: 20px; align-items: center; background: #FAF5FF; border: 1px solid #F3EFFF; padding: 10px 16px; border-radius: 8px; margin-bottom: 16px; font-size: 13px;">
+                        <span style="font-weight: 700; color: #5B21B6;">Color Legend:</span>
+                        <span style="display: flex; align-items: center; gap: 6px; color: #374151;"><span style="width: 12px; height: 12px; border-radius: 50%; background: #EF4444; display: inline-block;"></span> 🚨 Dead Click (Static text tapped - Update Needed)</span>
+                        <span style="display: flex; align-items: center; gap: 6px; color: #374151;"><span style="width: 12px; height: 12px; border-radius: 50%; background: #7C3AED; display: inline-block;"></span> 🟣 High Touch Hotspot</span>
+                        <span style="display: flex; align-items: center; gap: 6px; color: #374151;"><span style="width: 12px; height: 12px; border-radius: 50%; background: #10B981; display: inline-block;"></span> 🟢 Optimal Button / CTA</span>
+                    </div>
+
                     <!-- Canvas Heatmap Simulation Box -->
-                    <div id="heatmap-canvas-wrapper" style="position: relative; width: 100%; min-height: 480px; background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px;">
+                    <div id="heatmap-canvas-wrapper" style="position: relative; width: 100%; min-height: 520px; background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0;">
                         <canvas id="heatmap-canvas" style="position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10;"></canvas>
-                        <iframe id="heatmap-iframe" src="property-detail.html?id=prop-1" style="width: 100%; height: 500px; border: none; border-radius: 8px; filter: contrast(0.95);" onload="drawHeatmapCanvas()"></iframe>
+                        <iframe id="heatmap-iframe" src="property-detail.html?id=prop-1" style="width: 100%; height: 520px; border: none; border-radius: 8px; filter: contrast(0.98);" onload="drawHeatmapCanvas()"></iframe>
                     </div>
                 </div>
 
@@ -870,6 +894,16 @@
         }
 
         // Heatmap & UI Touch Analytics Engine
+        let activeHeatmapEvents = [];
+
+        // Real-time listener for touches captured inside the live iframe preview
+        window.addEventListener('message', (e) => {
+            if (e.data && e.data.type === 'KIMI_TOUCH_EVENT' && e.data.eventData) {
+                activeHeatmapEvents.push(e.data.eventData);
+                renderAnalyticsDashboard(activeHeatmapEvents);
+            }
+        });
+
         async function loadHeatmapData() {
             let events = [];
             try {
@@ -898,25 +932,86 @@
                 } catch(e) {}
             } catch(err) { console.error('Heatmap load error:', err); }
 
-            // If empty, generate realistic sample interaction points for visual demonstration
+            // If empty, generate realistic initial sample points for visual demonstration
             if (events.length === 0) {
-                events = [
-                    { clickXPercent: 85, clickYPage: 120, deviceType: 'Mobile Touch', isTouchDevice: true, isDeadClick: false, elementText: 'Call Now Button', elementSelector: '.pd-btn-call' },
-                    { clickXPercent: 85, clickYPage: 160, deviceType: 'Mobile Touch', isTouchDevice: true, isDeadClick: false, elementText: 'WhatsApp Button', elementSelector: '.pd-btn-wa' },
-                    { clickXPercent: 50, clickYPage: 320, deviceType: 'Mobile Touch', isTouchDevice: true, isDeadClick: false, elementText: 'View All Photos', elementSelector: '.pd-view-all-btn' },
-                    { clickXPercent: 30, clickYPage: 450, deviceType: 'Desktop Mouse', isTouchDevice: false, isDeadClick: true, elementText: 'Property Description Text', elementSelector: '.pd-desc' },
-                    { clickXPercent: 30, clickYPage: 450, deviceType: 'Mobile Touch', isTouchDevice: true, isDeadClick: true, elementText: 'Property Description Text', elementSelector: '.pd-desc' },
-                    { clickXPercent: 30, clickYPage: 450, deviceType: 'Mobile Touch', isTouchDevice: true, isDeadClick: true, elementText: 'Property Description Text', elementSelector: '.pd-desc' },
-                    { clickXPercent: 20, clickYPage: 580, deviceType: 'Mobile Touch', isTouchDevice: true, isDeadClick: false, elementText: 'CCTV Amenity Card', elementSelector: '.pd-amenity-card' },
-                    { clickXPercent: 40, clickYPage: 580, deviceType: 'Desktop Mouse', isTouchDevice: false, isDeadClick: false, elementText: 'Security Amenity Card', elementSelector: '.pd-amenity-card' },
-                    { clickXPercent: 15, clickYPage: 720, deviceType: 'Mobile Touch', isTouchDevice: true, isDeadClick: false, elementText: '7/12 Satbara Document', elementSelector: '.pd-doc-card' }
-                ];
+                events = generateSampleEvents();
             }
 
-            renderAnalyticsDashboard(events);
+            activeHeatmapEvents = events;
+            renderAnalyticsDashboard(activeHeatmapEvents);
         }
 
-        function renderAnalyticsDashboard(events) {
+        function generateSampleEvents() {
+            return [
+                { clickXPercent: 84, clickYPage: 120, deviceType: 'Mobile Touch', isTouchDevice: true, isDeadClick: false, elementText: 'Call Now Button', elementSelector: '.pd-btn-call' },
+                { clickXPercent: 84, clickYPage: 125, deviceType: 'Mobile Touch', isTouchDevice: true, isDeadClick: false, elementText: 'Call Now Button', elementSelector: '.pd-btn-call' },
+                { clickXPercent: 84, clickYPage: 165, deviceType: 'Mobile Touch', isTouchDevice: true, isDeadClick: false, elementText: 'WhatsApp Button', elementSelector: '.pd-btn-wa' },
+                { clickXPercent: 84, clickYPage: 170, deviceType: 'Mobile Touch', isTouchDevice: true, isDeadClick: false, elementText: 'WhatsApp Button', elementSelector: '.pd-btn-wa' },
+                { clickXPercent: 50, clickYPage: 310, deviceType: 'Mobile Touch', isTouchDevice: true, isDeadClick: false, elementText: 'View All Photos Gallery', elementSelector: '.pd-view-all-btn' },
+                { clickXPercent: 30, clickYPage: 440, deviceType: 'Desktop Mouse', isTouchDevice: false, isDeadClick: true, elementText: 'Property Specs Heading', elementSelector: 'h3.pd-section-title' },
+                { clickXPercent: 30, clickYPage: 440, deviceType: 'Mobile Touch', isTouchDevice: true, isDeadClick: true, elementText: 'Property Specs Heading', elementSelector: 'h3.pd-section-title' },
+                { clickXPercent: 30, clickYPage: 445, deviceType: 'Mobile Touch', isTouchDevice: true, isDeadClick: true, elementText: 'Property Specs Heading', elementSelector: 'h3.pd-section-title' },
+                { clickXPercent: 20, clickYPage: 580, deviceType: 'Mobile Touch', isTouchDevice: true, isDeadClick: false, elementText: 'CCTV Amenity Card', elementSelector: '.pd-amenity-card' },
+                { clickXPercent: 40, clickYPage: 580, deviceType: 'Desktop Mouse', isTouchDevice: false, isDeadClick: false, elementText: 'Security Amenity Card', elementSelector: '.pd-amenity-card' },
+                { clickXPercent: 18, clickYPage: 710, deviceType: 'Mobile Touch', isTouchDevice: true, isDeadClick: false, elementText: '7/12 Satbara Document', elementSelector: '.pd-doc-card' }
+            ];
+        }
+
+        function simulateVisitorTraffic() {
+            const simulated = [];
+            const pageSelect = document.getElementById('heatmap-page-select');
+            const page = pageSelect ? pageSelect.value : '/property-detail.html';
+
+            const targets = [
+                { text: 'Call Now Button', selector: '.pd-btn-call', x: 84, y: 120, dead: false },
+                { text: 'WhatsApp Direct', selector: '.pd-btn-wa', x: 84, y: 165, dead: false },
+                { text: 'Full Screen Gallery', selector: '.pd-view-all-btn', x: 50, y: 310, dead: false },
+                { text: 'Property Specifications Header', selector: 'h3.pd-section-title', x: 25, y: 440, dead: true }, // Dead click!
+                { text: 'Elevator/Lift Card', selector: '.pd-amenity-card', x: 35, y: 580, dead: false },
+                { text: 'Borewell Water Card', selector: '.pd-amenity-card', x: 55, y: 580, dead: false },
+                { text: 'Legal 7/12 Title Doc', selector: '.pd-doc-card', x: 18, y: 710, dead: false },
+                { text: 'Legal RERA Certificate', selector: '.pd-doc-card', x: 45, y: 710, dead: false },
+            ];
+
+            for (let i = 0; i < 50; i++) {
+                const t = targets[Math.floor(Math.random() * targets.length)];
+                const jitterX = (Math.random() - 0.5) * 4;
+                const jitterY = (Math.random() - 0.5) * 15;
+                const isTouch = Math.random() > 0.35; // 65% mobile touch
+                simulated.push({
+                    pageUrl: page,
+                    elementTag: t.selector.split('.')[0] || 'div',
+                    elementId: '',
+                    elementSelector: t.selector,
+                    elementText: t.text,
+                    clickXPercent: Math.round(t.x + jitterX),
+                    clickYPage: Math.round(t.y + jitterY),
+                    screenWidth: isTouch ? 390 : 1440,
+                    screenHeight: isTouch ? 844 : 900,
+                    deviceType: isTouch ? 'Mobile Touch' : 'Desktop Mouse',
+                    isTouchDevice: isTouch,
+                    isDeadClick: t.dead,
+                    timestamp: new Date().toISOString()
+                });
+            }
+
+            activeHeatmapEvents = [...activeHeatmapEvents, ...simulated];
+            try {
+                localStorage.setItem('kimi_analytics_events', JSON.stringify(activeHeatmapEvents));
+            } catch(e) {}
+
+            renderAnalyticsDashboard(activeHeatmapEvents);
+            showToast('⚡ Simulated 50 visitor touches & updated heatmap visualizer!');
+        }
+
+        function clearHeatmapEvents() {
+            activeHeatmapEvents = [];
+            localStorage.removeItem('kimi_analytics_events');
+            renderAnalyticsDashboard([]);
+            showToast('🗑️ Heatmap analytics reset.');
+        }
+
+        function renderAnalyticsDashboard(events = []) {
             // Stats
             const total = events.length;
             const deadClicks = events.filter(e => e.isDeadClick).length;
@@ -987,7 +1082,7 @@
                                 <div style="font-size: 24px;">🚨</div>
                                 <div>
                                     <h4 style="margin: 0 0 4px; color: #991B1B; font-size: 15px;">High Priority Update Needed: '${el.text}'</h4>
-                                    <p style="margin: 0; color: #7F1D1D; font-size: 13px;">Users are double-tapping on '${el.text}' expecting an interactive link or button. Convert this text into a clickable button or add a modal trigger.</p>
+                                    <p style="margin: 0; color: #7F1D1D; font-size: 13px;">Users are double-tapping on static text '${el.text}' expecting an interactive button or link. Convert this text into a clickable action button.</p>
                                 </div>
                             </div>
                         `;
@@ -1000,7 +1095,7 @@
                             <div style="font-size: 24px;">📱</div>
                             <div>
                                 <h4 style="margin: 0 0 4px; color: #166534; font-size: 15px;">Mobile Touch Dominance (${mobileShare}% of traffic)</h4>
-                                <p style="margin: 0; color: #14532D; font-size: 13px;">Over ${mobileShare}% of visitor touches occur on mobile screens. Ensure all WhatsApp & Call CTAs remain sticky and thumb-accessible on mobile viewports.</p>
+                                <p style="margin: 0; color: #14532D; font-size: 13px;">Over ${mobileShare}% of visitor touches occur on mobile viewports. Ensure Call & WhatsApp CTAs remain sticky and thumb-friendly on mobile screens.</p>
                             </div>
                         </div>
                     `;
@@ -1014,7 +1109,7 @@
             }
         }
 
-        function drawHeatmapCanvas(events = []) {
+        function drawHeatmapCanvas(events = activeHeatmapEvents) {
             const canvas = document.getElementById('heatmap-canvas');
             if (!canvas) return;
             const ctx = canvas.getContext('2d');
@@ -1027,19 +1122,33 @@
 
             if (!events || events.length === 0) return;
 
-            events.forEach(ev => {
-                const x = (ev.clickXPercent / 100) * canvas.width;
-                const y = Math.min(ev.clickYPage || 150, canvas.height - 30);
+            const filterSelect = document.getElementById('heatmap-filter-select');
+            const filterMode = filterSelect ? filterSelect.value : 'ALL';
 
-                const grad = ctx.createRadialGradient(x, y, 5, x, y, 35);
+            const filtered = events.filter(ev => {
+                if (filterMode === 'DEAD') return ev.isDeadClick;
+                if (filterMode === 'MOBILE') return ev.isTouchDevice || ev.deviceType === 'Mobile Touch';
+                if (filterMode === 'DESKTOP') return !ev.isTouchDevice && ev.deviceType !== 'Mobile Touch';
+                return true;
+            });
+
+            filtered.forEach(ev => {
+                const x = (ev.clickXPercent / 100) * canvas.width;
+                const y = Math.min(ev.clickYPage || 150, canvas.height - 20);
+
+                const grad = ctx.createRadialGradient(x, y, 4, x, y, 35);
                 if (ev.isDeadClick) {
-                    grad.addColorStop(0, 'rgba(239, 68, 68, 0.8)'); // Red hotspot for dead clicks
-                    grad.addColorStop(0.6, 'rgba(239, 68, 68, 0.3)');
+                    grad.addColorStop(0, 'rgba(239, 68, 68, 0.85)'); // Red hotspot for dead clicks
+                    grad.addColorStop(0.5, 'rgba(239, 68, 68, 0.4)');
                     grad.addColorStop(1, 'rgba(239, 68, 68, 0)');
-                } else {
-                    grad.addColorStop(0, 'rgba(124, 58, 237, 0.8)'); // Purple hotspot for touches
-                    grad.addColorStop(0.5, 'rgba(16, 185, 129, 0.4)'); // Green outer ring
+                } else if (ev.elementSelector && (ev.elementSelector.includes('btn') || ev.elementSelector.includes('wa') || ev.elementSelector.includes('call'))) {
+                    grad.addColorStop(0, 'rgba(16, 185, 129, 0.85)'); // Green for optimal CTA
+                    grad.addColorStop(0.5, 'rgba(16, 185, 129, 0.35)');
                     grad.addColorStop(1, 'rgba(16, 185, 129, 0)');
+                } else {
+                    grad.addColorStop(0, 'rgba(124, 58, 237, 0.85)'); // Purple hotspot for touches
+                    grad.addColorStop(0.5, 'rgba(167, 139, 250, 0.4)');
+                    grad.addColorStop(1, 'rgba(167, 139, 250, 0)');
                 }
 
                 ctx.fillStyle = grad;

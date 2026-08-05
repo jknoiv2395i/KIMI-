@@ -421,14 +421,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 const cardLocation = card.getAttribute('data-location');
                 const cardType = card.getAttribute('data-type');
 
-                let matchLocation = (locationValue === 'all' || locationValue === cardLocation);
-                let matchType = (typeValue === 'all' || typeValue === cardType);
+                let matchLocation = (!locationValue || locationValue === 'all' || cardLocation === 'all' || locationValue === cardLocation || (cardLocation && cardLocation.includes(locationValue)));
+                let matchType = (!typeValue || typeValue === 'all' || cardType === 'all' || typeValue === cardType || (cardType && typeValue && (cardType.includes(typeValue) || typeValue.includes(cardType))));
 
                 if (matchLocation && matchType) {
-                    card.style.display = 'flex'; // Use flex for the cards as per CSS (or row for mobile)
-                    if(window.innerWidth > 768) {
-                        card.style.display = 'flex';
-                    }
+                    card.style.display = 'flex';
                     visibleCount++;
                 } else {
                     card.style.display = 'none';

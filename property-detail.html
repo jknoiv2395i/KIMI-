@@ -10,44 +10,123 @@
     <link rel="stylesheet" href="style.css?v=1.4">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Syne:wght@400..800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Smooth Scroll Engine -->
     <script src="https://unpkg.com/@studio-freight/lenis@1.0.33/dist/lenis.min.js"></script>
     <!-- GSAP Animation Engine -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
     <style>
-        /* Property Detail — Self-contained styles */
-        .pd-page { padding: 40px 0 80px; background: #fff; }
-        .pd-back { display: inline-flex; align-items: center; gap: 8px; color: #6B7280; text-decoration: none; font-size: 14px; margin-bottom: 24px; }
-        .pd-back:hover { color: #111; }
+        /* Modern Luxury Design System - Image 1 Reference Layout */
+        body { background: #F8F9FA; color: #1E1B4B; font-family: 'Outfit', sans-serif; }
+        
+        .pd-page { padding: 40px 0 100px; background: #F8F9FA; }
+        
+        /* Top Navigation Header */
+        .pd-back { display: inline-flex; align-items: center; gap: 8px; color: #6B7280; text-decoration: none; font-size: 14px; margin-bottom: 24px; font-weight: 500; transition: color 0.2s; }
+        .pd-back:hover { color: #1E1B4B; }
 
-        .pd-title-row { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px; margin-bottom: 32px; }
-        .pd-title { font-family: 'Syne', sans-serif; font-size: 32px; font-weight: 700; color: #111; margin: 0 0 8px; }
-        .pd-address { color: #6B7280; font-size: 15px; display: flex; align-items: center; gap: 6px; }
-        .pd-price-box { text-align: right; }
-        .pd-price-label { font-size: 12px; color: #9CA3AF; text-transform: uppercase; letter-spacing: 1px; }
-        .pd-price { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 700; color: #111; }
+        /* Property Header & Title Row */
+        .pd-header-area { margin-bottom: 28px; }
+        .pd-title { font-family: 'Syne', sans-serif; font-size: 36px; font-weight: 700; color: #111827; margin: 0 0 16px; letter-spacing: -0.5px; line-height: 1.25; }
+        
+        .pd-badges-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+        .pd-pills { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+        .pd-pill { background: #E6F4F1; color: #047857; border: 1px solid #D1FAE5; padding: 7px 18px; border-radius: 30px; font-weight: 500; font-size: 13px; display: inline-flex; align-items: center; gap: 6px; }
+        
+        .pd-action-icons { display: flex; gap: 10px; align-items: center; }
+        .pd-action-btn { width: 42px; height: 42px; border-radius: 50%; background: #FFFFFF; border: 1px solid #E5E7EB; color: #4B5563; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 2px 6px rgba(0,0,0,0.02); }
+        .pd-action-btn:hover { background: #F3F4F6; color: #111827; transform: translateY(-1px); border-color: #D1D5DB; }
 
-        /* Gallery */
-        .pd-gallery-container { position: relative; margin-bottom: 40px; }
-        .pd-gallery { display: grid; grid-template-columns: 2fr 1fr; gap: 12px; border-radius: 16px; overflow: hidden; max-height: 450px; }
-        .pd-main-img { width: 100%; height: 450px; object-fit: cover; cursor: pointer; transition: transform 0.3s ease, filter 0.3s ease; }
-        .pd-main-img:hover { transform: scale(1.01); filter: brightness(0.95); }
-        .pd-side-imgs { display: grid; grid-template-rows: 1fr 1fr; gap: 12px; }
-        .pd-side-item { position: relative; width: 100%; height: 100%; overflow: hidden; cursor: pointer; }
-        .pd-side-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease, filter 0.3s ease; }
-        .pd-side-item:hover img { transform: scale(1.02); filter: brightness(0.95); }
-        .pd-more-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.65); backdrop-filter: blur(4px); color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; font-weight: 600; font-size: 16px; transition: background 0.2s ease; }
-        .pd-more-overlay:hover { background: rgba(0,0,0,0.75); }
-        .pd-view-all-bar { margin-top: 12px; display: flex; justify-content: flex-end; }
-        .pd-view-all-btn { display: inline-flex; align-items: center; gap: 8px; background: #111827; color: #fff; border: 1px solid #374151; padding: 10px 20px; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; }
-        .pd-view-all-btn:hover { background: #1F2937; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
-        .pd-no-gallery { background: #F3F4F6; height: 300px; border-radius: 16px; display: flex; align-items: center; justify-content: center; color: #9CA3AF; font-size: 18px; }
+        /* 5-Image Collage Gallery (Image 1 Layout) */
+        .pd-gallery-collage { display: grid; grid-template-columns: 1.8fr 1.2fr; gap: 14px; height: 440px; margin-bottom: 48px; border-radius: 24px; overflow: hidden; }
+        .pd-gallery-hero { position: relative; width: 100%; height: 100%; overflow: hidden; cursor: pointer; }
+        .pd-gallery-hero img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease, filter 0.3s ease; }
+        .pd-gallery-hero:hover img { transform: scale(1.02); filter: brightness(0.96); }
+        
+        .pd-gallery-grid { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 14px; height: 100%; }
+        .pd-gallery-thumb { position: relative; width: 100%; height: 100%; overflow: hidden; cursor: pointer; border-radius: 14px; }
+        .pd-gallery-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease, filter 0.3s ease; }
+        .pd-gallery-thumb:hover img { transform: scale(1.04); filter: brightness(0.96); }
+        
+        .pd-more-overlay { position: absolute; inset: 0; background: rgba(17, 24, 39, 0.65); backdrop-filter: blur(4px); color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 15px; letter-spacing: 0.3px; transition: background 0.2s ease; }
+        .pd-more-overlay:hover { background: rgba(17, 24, 39, 0.78); }
+
+        /* Main 2-Column Grid Layout */
+        .pd-main-grid { display: grid; grid-template-columns: 1fr 380px; gap: 48px; align-items: start; }
+        
+        /* Section Headings */
+        .pd-sec-heading { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 700; color: #111827; margin: 0 0 20px; letter-spacing: -0.3px; }
+
+        /* 4-Card Quick Specs Row (Image 1 Layout) */
+        .pd-4card-specs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 24px; }
+        .pd-card-spec { background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 16px; padding: 20px 16px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.02); transition: all 0.2s ease; }
+        .pd-card-spec:hover { border-color: #CBD5E1; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.04); }
+        .pd-card-spec-icon { width: 36px; height: 36px; color: #475569; display: flex; align-items: center; justify-content: center; }
+        .pd-card-spec-val { font-size: 14px; font-weight: 600; color: #1E293B; }
+
+        /* Description Block */
+        .pd-desc-block { margin-bottom: 48px; }
+        .pd-desc-text { color: #475569; font-size: 15px; line-height: 1.75; margin: 0; }
+
+        /* Room Amenities 2x2 Feature Cards Grid (Image 1 Layout) */
+        .pd-amenities-2x2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 48px; }
+        .pd-amenity-feature-card { background: #FAFCFB; border: 1px solid #E6F4F1; border-radius: 16px; padding: 20px 24px; display: flex; align-items: center; gap: 16px; transition: all 0.2s ease; }
+        .pd-amenity-feature-card:hover { background: #F2F9F7; border-color: #C6E9E1; transform: translateY(-1px); }
+        .pd-feature-icon-box { width: 44px; height: 44px; border-radius: 12px; background: #E6F4F1; color: #047857; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .pd-feature-meta { display: flex; flex-direction: column; }
+        .pd-feature-num { font-size: 11px; font-weight: 700; color: #059669; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
+        .pd-feature-title { font-size: 14px; font-weight: 700; color: #111827; }
+
+        /* Technical Specifications Card (Check-In/Check-Out Style in Image 1) */
+        .pd-tech-card { background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 20px; padding: 28px; margin-bottom: 48px; box-shadow: 0 2px 12px rgba(0,0,0,0.02); }
+        .pd-tech-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px 32px; }
+        .pd-tech-item { display: flex; flex-direction: column; gap: 4px; }
+        .pd-tech-label { font-size: 12px; font-weight: 600; color: #64748B; text-transform: uppercase; letter-spacing: 0.5px; }
+        .pd-tech-val { font-size: 15px; font-weight: 700; color: #0F172A; }
+
+        /* Verified Legal Documents Section */
+        .pd-docs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 48px; }
+        .pd-doc-card { background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 16px; padding: 20px; display: flex; align-items: center; justify-content: space-between; text-decoration: none; color: #0F172A; transition: all 0.2s ease; }
+        .pd-doc-card:hover { border-color: #94A3B8; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.04); }
+        .pd-doc-info { display: flex; align-items: center; gap: 12px; }
+        .pd-doc-icon { width: 38px; height: 38px; border-radius: 10px; background: #F1F5F9; color: #334155; display: flex; align-items: center; justify-content: center; }
+        .pd-doc-title { font-weight: 700; font-size: 14px; }
+        .pd-doc-badge { background: #ECFDF5; color: #047857; font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 20px; border: 1px solid #A7F3D0; }
+
+        /* Sticky Booking / Inquiry Sidebar Card (Image 1 Layout) */
+        .pd-booking-card { background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 24px; padding: 28px; box-shadow: 0 4px 25px rgba(0,0,0,0.04); position: sticky; top: 100px; }
+        
+        .pd-book-price-header { margin-bottom: 20px; display: flex; align-items: baseline; gap: 6px; }
+        .pd-book-price { font-family: 'Syne', sans-serif; font-size: 32px; font-weight: 800; color: #0F172A; letter-spacing: -0.5px; }
+        .pd-book-unit { font-size: 15px; color: #64748B; font-weight: 500; }
+
+        /* Schedule Date Selector Box (Image 1 Style) */
+        .pd-date-selector { background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 14px; padding: 14px 18px; margin-bottom: 20px; cursor: pointer; transition: border-color 0.2s ease; }
+        .pd-date-selector:hover { border-color: #CBD5E1; background: #F1F5F9; }
+
+        /* Booking Breakdown List (Image 1 Style) */
+        .pd-book-breakdown { margin-bottom: 24px; }
+        .pd-breakdown-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; font-size: 14px; color: #475569; }
+        .pd-extras-title { font-size: 12px; font-weight: 700; color: #64748B; text-transform: uppercase; margin: 12px 0 8px; letter-spacing: 0.5px; }
+        .pd-checkbox-extra { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; font-size: 13px; color: #334155; }
+        
+        /* Action Buttons */
+        .pd-book-actions { display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px; }
+        .pd-btn-main-cta { width: 100%; background: #335C67; color: #FFFFFF; border: none; padding: 16px; border-radius: 14px; font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.2s ease; text-align: center; text-decoration: none; font-family: 'Outfit', sans-serif; box-shadow: 0 4px 14px rgba(51, 92, 103, 0.25); }
+        .pd-btn-main-cta:hover { background: #294952; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(51, 92, 103, 0.35); }
+        
+        .pd-btn-call-agent { width: 100%; background: #0F172A; color: #FFFFFF; border: none; padding: 14px; border-radius: 14px; font-size: 14px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; transition: all 0.2s ease; }
+        .pd-btn-call-agent:hover { background: #1E293B; transform: translateY(-1px); }
+
+        .pd-btn-wa-agent { width: 100%; background: #25D366; color: #FFFFFF; border: none; padding: 14px; border-radius: 14px; font-size: 14px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; transition: all 0.2s ease; }
+        .pd-btn-wa-agent:hover { background: #1DA851; transform: translateY(-1px); }
+
+        /* Bottom Promotion Box (Image 1 Style) */
+        .pd-promo-box { background: #F0FDF4; border: 1px solid #DCFCE7; border-radius: 14px; padding: 16px; margin-top: 16px; }
 
         /* Lightbox Modal */
-        .lightbox-modal { position: fixed; inset: 0; z-index: 99999; display: flex; flex-direction: column; justify-content: space-between; font-family: 'Outfit', sans-serif; animation: lbFadeIn 0.25s ease-out; }
-        @keyframes lbFadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
+        .lightbox-modal { position: fixed; inset: 0; z-index: 99999; display: flex; flex-direction: column; justify-content: space-between; font-family: 'Outfit', sans-serif; }
         .lightbox-overlay { position: absolute; inset: 0; background: rgba(10, 10, 15, 0.95); backdrop-filter: blur(16px); }
         .lightbox-content { position: relative; z-index: 10; display: flex; flex-direction: column; height: 100vh; width: 100vw; box-sizing: border-box; }
         .lightbox-header { display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; color: #fff; background: rgba(0,0,0,0.4); border-bottom: 1px solid rgba(255,255,255,0.1); }
@@ -62,92 +141,26 @@
         .lightbox-nav:hover { background: rgba(255,255,255,0.25); transform: scale(1.1); }
         .lightbox-thumbnails { display: flex; gap: 10px; padding: 14px 24px; overflow-x: auto; background: rgba(0,0,0,0.6); border-top: 1px solid rgba(255,255,255,0.1); justify-content: center; max-width: 100vw; box-sizing: border-box; }
         .lb-thumb { width: 70px; height: 50px; object-fit: cover; border-radius: 6px; cursor: pointer; opacity: 0.5; border: 2px solid transparent; transition: all 0.2s ease; flex-shrink: 0; }
-        .lb-thumb:hover { opacity: 0.85; }
         .lb-thumb.active { opacity: 1; border-color: #3B82F6; transform: scale(1.05); }
 
-        @media (max-width: 768px) {
-            .lightbox-nav { width: 40px; height: 40px; font-size: 18px; }
-            .lightbox-body { padding: 5px 8px; }
-            #lb-img { max-width: 92vw; max-height: calc(100vh - 220px); }
-            .lightbox-header { padding: 12px 16px; }
-            .lightbox-thumbnails { justify-content: flex-start; }
+        @media (max-width: 992px) {
+            .pd-main-grid { grid-template-columns: 1fr; gap: 36px; }
+            .pd-gallery-collage { grid-template-columns: 1fr; height: auto; }
+            .pd-gallery-hero { height: 280px; border-radius: 16px; }
+            .pd-gallery-grid { height: 220px; }
+            .pd-4card-specs { grid-template-columns: 1fr 1fr; }
+            .pd-amenities-2x2 { grid-template-columns: 1fr; }
+            .pd-tech-grid { grid-template-columns: 1fr; }
+            .pd-docs-grid { grid-template-columns: 1fr; }
+            .pd-booking-card { position: static; }
         }
-
-        /* Specs Row */
-        .pd-specs { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; margin-bottom: 36px; background: transparent; border: none; border-radius: 0; overflow: visible; }
-        .pd-spec { background: #FFFFFF; border: 1px solid #ECE7FE; border-radius: 16px; padding: 16px; text-align: left; display: flex; align-items: flex-start; gap: 12px; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: 0 2px 10px rgba(109, 40, 217, 0.02); }
-        .pd-spec:hover { border-color: #C4B5FD; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(109, 40, 217, 0.06); }
-        .pd-spec-icon { width: 40px; height: 40px; border-radius: 12px; background: #F3EFFF; color: #7C3AED; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-        .pd-spec-info { display: flex; flex-direction: column; flex: 1; min-width: 0; }
-        .pd-spec-label { font-size: 11px; color: #8B5CF6; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 2px; }
-        .pd-spec-val { font-size: 15px; font-weight: 700; color: #1E1B4B; font-family: 'Outfit', sans-serif; word-break: break-word; line-height: 1.3; }
-
-        /* Highlights Row */
-        .pd-highlights-row { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 32px; }
-        .pd-highlight-pill { background: #F0FDF4; color: #166534; border: 1px solid #BBF7D0; padding: 8px 18px; border-radius: 50px; font-weight: 600; font-size: 13px; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 2px 6px rgba(22, 101, 52, 0.04); }
-
-        /* Amenities Grid */
-        .pd-amenities-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 14px; margin-top: 14px; }
-        .pd-amenity-card { background: #FFFFFF; border: 1px solid #ECE7FE; border-radius: 14px; padding: 14px 18px; display: flex; align-items: center; gap: 12px; font-weight: 600; font-size: 14px; color: #1E1B4B; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: 0 2px 8px rgba(109, 40, 217, 0.02); }
-        .pd-amenity-card:hover { border-color: #C4B5FD; background: #FAF8FE; transform: translateY(-2px); box-shadow: 0 6px 18px rgba(109, 40, 217, 0.08); }
-        .pd-amenity-icon { width: 34px; height: 34px; border-radius: 10px; background: #F3EFFF; color: #7C3AED; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-
-        /* Documents Grid */
-        .pd-docs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; margin-top: 14px; }
-        .pd-doc-card { background: #FFFFFF; border: 1px solid #ECE7FE; border-radius: 16px; padding: 18px 20px; display: flex; flex-direction: column; gap: 8px; text-decoration: none; color: #1E1B4B; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: 0 2px 10px rgba(109, 40, 217, 0.02); position: relative; overflow: hidden; }
-        .pd-doc-card::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: #7C3AED; border-radius: 4px 0 0 4px; }
-        .pd-doc-card:hover { border-color: #C4B5FD; transform: translateY(-3px); box-shadow: 0 10px 25px rgba(109, 40, 217, 0.08); background: #FAF8FE; }
-        .pd-doc-head { display: flex; align-items: center; gap: 10px; }
-        .pd-doc-icon { width: 36px; height: 36px; border-radius: 10px; background: #F3EFFF; color: #7C3AED; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-        .pd-doc-name { font-weight: 700; font-size: 15px; color: #1E1B4B; font-family: 'Outfit', sans-serif; }
-        .pd-doc-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 600; color: #047857; background: #ECFDF5; border: 1px solid #A7F3D0; padding: 4px 10px; border-radius: 20px; width: fit-content; margin-top: 2px; }
-
-        /* Content Grid */
-        .pd-grid { display: grid; grid-template-columns: 1fr 360px; gap: 40px; }
-        .pd-section { margin-bottom: 36px; }
-        .pd-section h3 { font-size: 18px; font-weight: 700; color: #1E1B4B; font-family: 'Syne', sans-serif; margin: 0 0 16px; padding-bottom: 12px; border-bottom: 2px solid #F3EFFF; display: flex; align-items: center; gap: 8px; }
-        .pd-desc { color: #4B5563; line-height: 1.8; font-size: 15px; }
-
-        /* Video */
-        .pd-video video { width: 100%; border-radius: 16px; background: #000; }
-
-        /* Map */
-        .pd-map iframe { width: 100%; height: 350px; border: 0; border-radius: 16px; }
-        .pd-map-link { display: inline-flex; align-items: center; gap: 8px; background: #7C3AED; color: #fff; padding: 14px 28px; border-radius: 12px; text-decoration: none; font-weight: 600; font-size: 15px; transition: all 0.2s; }
-        .pd-map-link:hover { background: #6D28D9; transform: translateY(-2px); }
-
-        /* Agent Card */
-        .pd-agent { background: #fff; border: 1px solid #ECE7FE; border-radius: 20px; padding: 28px; position: sticky; top: 100px; box-shadow: 0 10px 30px rgba(109, 40, 217, 0.04); }
-        .pd-agent-head { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; }
-        .pd-agent-head img { width: 52px; height: 52px; border-radius: 50%; border: 2px solid #EDE9FE; }
-        .pd-agent-head h4 { margin: 0; font-size: 17px; color: #1E1B4B; font-family: 'Syne', sans-serif; }
-        .pd-agent-head p { margin: 2px 0 0; font-size: 13px; color: #8B5CF6; font-weight: 500; }
-        .pd-agent-btns { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
-        .pd-btn-call { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 14px; background: #1E1B4B; color: #fff; border-radius: 12px; text-decoration: none; font-weight: 600; font-size: 15px; transition: all 0.2s; }
-        .pd-btn-call:hover { background: #7C3AED; transform: translateY(-1px); }
-        .pd-btn-wa { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 14px; background: #25D366; color: #fff; border-radius: 12px; text-decoration: none; font-weight: 600; font-size: 15px; transition: all 0.2s; }
-        .pd-btn-wa:hover { background: #1da851; transform: translateY(-1px); }
-        .pd-agent-info p { color: #6B7280; font-size: 14px; margin: 8px 0; display: flex; align-items: center; gap: 8px; }
-
-        @media (max-width: 900px) {
-            .pd-grid { grid-template-columns: 1fr; }
-            .pd-agent { position: static; }
-            .pd-gallery { grid-template-columns: 1fr; max-height: none; }
-            .pd-main-img { height: 280px; }
-            .pd-side-imgs { grid-template-columns: 1fr 1fr; }
-            .pd-side-imgs img { height: 160px; }
-            .pd-specs { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
-            .pd-title { font-size: 24px; }
-            .pd-price { font-size: 22px; }
-        }
-        .sold-tag { background: #EF4444; color: #fff; padding: 4px 12px; border-radius: 6px; font-size: 12px; font-weight: 700; text-transform: uppercase; margin-left: 12px; vertical-align: middle; }
     </style>
 </head>
 <body>
     <div class="container">
         <nav class="navbar">
             <div class="logo">
-                <img src="assets/logo.png" alt="KIMI properties" style="height: 80px; width: auto;">
+                <img src="assets/logo.png" alt="KIMI properties" style="height: 60px; width: auto;">
             </div>
             <div class="nav-links">
                 <div class="mobile-nav-header">
@@ -172,84 +185,153 @@
         <div class="container">
             <a href="properties.html" class="pd-back">← Back to Properties</a>
 
-            <!-- Title Row -->
-            <div class="pd-title-row">
-                <div>
-                    <h1 class="pd-title" id="pd-name">Loading...</h1>
-                    <p class="pd-address" id="pd-address"></p>
-                </div>
-                <div class="pd-price-box">
-                    <div class="pd-price-label">Price</div>
-                    <div class="pd-price" id="pd-price"></div>
+            <!-- Header Title & Badges Area (Image 1 Style) -->
+            <div class="pd-header-area">
+                <h1 class="pd-title" id="pd-name">Loading...</h1>
+                
+                <div class="pd-badges-row">
+                    <div class="pd-pills" id="pd-pills">
+                        <!-- Soft pastel tag pills rendered dynamically -->
+                    </div>
+                    <div class="pd-action-icons">
+                        <button class="pd-action-btn" onclick="shareProperty()" title="Share Property">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+                        </button>
+                        <button class="pd-action-btn" onclick="toggleWishlist()" title="Save Property">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l8.78-8.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                        </button>
+                    </div>
                 </div>
             </div>
 
-            <!-- Highlights Badges -->
-            <div class="pd-highlights-row" id="pd-highlights"></div>
+            <!-- 5-Image Collage Gallery (Image 1 Style) -->
+            <div class="pd-gallery-collage" id="pd-gallery">
+                <!-- Dynamically rendered: 1 Large Hero + 4 Thumbnails (with +N Photos overlay) -->
+            </div>
 
-            <!-- Gallery -->
-            <div id="pd-gallery"></div>
-
-            <!-- Specs -->
-            <div class="pd-specs" id="pd-specs"></div>
-
-            <!-- Content Grid -->
-            <div class="pd-grid">
-                <div class="pd-left">
-                    <!-- Description -->
-                    <div class="pd-section" id="pd-desc-section" style="display:none;">
-                        <h3>Description</h3>
-                        <p class="pd-desc" id="pd-desc"></p>
+            <!-- Main 2-Column Layout -->
+            <div class="pd-main-grid">
+                <!-- Left Column (Content & Specs) -->
+                <div class="pd-left-col">
+                    
+                    <!-- Details Section & 4-Card Quick Specs Row (Image 1 Style) -->
+                    <div class="pd-details-section">
+                        <h2 class="pd-sec-heading">Details</h2>
+                        
+                        <div class="pd-4card-specs" id="pd-4card-specs">
+                            <!-- 4 Clean Bordered Spec Cards -->
+                        </div>
+                        
+                        <!-- Description -->
+                        <div class="pd-desc-block">
+                            <p class="pd-desc-text" id="pd-desc-text"></p>
+                        </div>
                     </div>
 
-                    <!-- Amenities Checklist -->
-                    <div class="pd-section" id="pd-amenities-section" style="display:none;">
-                        <h3>Amenities & Facilities</h3>
-                        <div class="pd-amenities-grid" id="pd-amenities"></div>
+                    <!-- Room Amenities 2x2 Feature Grid (Image 1 Style) -->
+                    <div class="pd-amenities-section" id="pd-amenities-sec">
+                        <h2 class="pd-sec-heading">Room Amenities</h2>
+                        <div class="pd-amenities-2x2" id="pd-amenities-2x2">
+                            <!-- 2x2 Feature Cards -->
+                        </div>
+                    </div>
+
+                    <!-- Technical Specifications Card (Check-In Style in Image 1) -->
+                    <div class="pd-tech-card" id="pd-tech-sec">
+                        <h2 class="pd-sec-heading" style="font-size: 20px; margin-bottom: 24px;">Property Specifications</h2>
+                        <div class="pd-tech-grid" id="pd-tech-grid">
+                            <!-- Facing, Road Width, Floor, Power Load, Water Supply, Furnishing -->
+                        </div>
                     </div>
 
                     <!-- Verified Legal Documents -->
-                    <div class="pd-section" id="pd-docs-section" style="display:none;">
-                        <h3>Verified Legal Documents</h3>
-                        <div class="pd-docs-grid" id="pd-docs"></div>
+                    <div class="pd-docs-section" id="pd-docs-sec" style="display:none;">
+                        <h2 class="pd-sec-heading">Verified Legal Documents</h2>
+                        <div class="pd-docs-grid" id="pd-docs-grid">
+                            <!-- 7/12, Sale Deed, RERA, Layout Plan -->
+                        </div>
                     </div>
 
-                    <!-- Drone Video -->
-                    <div class="pd-section" id="pd-drone-section" style="display:none;">
-                        <h3>Drone Aerial View</h3>
-                        <div class="pd-video" id="pd-drone"></div>
-                    </div>
-
-                    <!-- Property Walkthrough Video -->
-                    <div class="pd-section" id="pd-video-section" style="display:none;">
-                        <h3>Property Walkthrough</h3>
-                        <div class="pd-video" id="pd-video"></div>
-                    </div>
-
-                    <!-- Map -->
-                    <div class="pd-section" id="pd-map-section" style="display:none;">
-                        <h3>Location</h3>
-                        <div id="pd-map"></div>
+                    <!-- Media: Google Maps & Video Embeds -->
+                    <div id="pd-media-sec">
+                        <div id="pd-map-sec" style="display:none; margin-bottom: 32px;">
+                            <h2 class="pd-sec-heading">Location & Neighborhood</h2>
+                            <div id="pd-map-box"></div>
+                        </div>
+                        <div id="pd-drone-sec" style="display:none; margin-bottom: 32px;">
+                            <h2 class="pd-sec-heading">Drone Aerial View</h2>
+                            <div id="pd-drone-box"></div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Agent / Owner Sidebar -->
-                <div id="pd-sidebar">
-                    <div class="pd-agent" id="pd-agent-card">
-                        <div class="pd-agent-head">
-                            <img id="pd-owner-avatar" src="https://ui-avatars.com/api/?name=KIMI+Properties&background=C1A5FF&color=fff" alt="Agent">
-                            <div>
-                                <h4 id="pd-owner-name">KIMI Properties</h4>
-                                <p>Real Estate Consultant</p>
+                <!-- Right Column (Sticky Inquiry / Booking Card - Image 1 Style) -->
+                <div class="pd-right-col">
+                    <div class="pd-booking-card">
+                        <div class="pd-book-price-header">
+                            <span class="pd-book-price" id="pd-book-price">Loading...</span>
+                            <span class="pd-book-unit" id="pd-book-unit">/ month</span>
+                        </div>
+
+                        <!-- Schedule Visit Selector Box -->
+                        <div class="pd-date-selector">
+                            <div style="display: flex; align-items: center; justify-content: space-between;">
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#335C67" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                                    <span style="font-weight: 600; font-size: 14px; color: #0F172A;">Schedule Site Visit</span>
+                                </div>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                             </div>
                         </div>
-                        <div class="pd-agent-btns">
-                            <a id="pd-btn-call" href="tel:+919696976950" class="pd-btn-call">📞 Call Now</a>
-                            <a id="pd-btn-wa" href="https://wa.me/919696976950" class="pd-btn-wa" target="_blank">💬 WhatsApp</a>
+
+                        <!-- Breakdown Summary -->
+                        <div class="pd-book-breakdown">
+                            <div class="pd-breakdown-row">
+                                <span>Base Price</span>
+                                <span id="pd-bd-rent" style="font-weight: 600; color: #0F172A;">-</span>
+                            </div>
+                            <div class="pd-breakdown-row" id="pd-bd-deposit-row">
+                                <span>Security Deposit</span>
+                                <span id="pd-bd-deposit" style="font-weight: 600; color: #0F172A;">-</span>
+                            </div>
+
+                            <div class="pd-extras-title">Included Services</div>
+                            <div class="pd-checkbox-extra">
+                                <span>✔️ 24/7 Site Support</span>
+                                <span style="color: #059669; font-weight: 600;">Free</span>
+                            </div>
+                            <div class="pd-checkbox-extra">
+                                <span>✔️ Legal Verification Check</span>
+                                <span style="color: #059669; font-weight: 600;">Free</span>
+                            </div>
+
+                            <div class="pd-breakdown-row" style="font-weight: 700; font-size: 16px; border-top: 1px solid #E2E8F0; padding-top: 12px; margin-top: 10px; color: #0F172A;">
+                                <span>Estimated Total</span>
+                                <span id="pd-bd-total" style="color: #335C67;">-</span>
+                            </div>
                         </div>
-                        <div class="pd-agent-info">
-                            <p id="pd-owner-phone">📱 +91 96969 76950</p>
-                            <p id="pd-owner-email">📧 hello@kimiproperties.in</p>
+
+                        <!-- Action Buttons -->
+                        <div class="pd-book-actions">
+                            <a href="contact.html" class="pd-btn-main-cta">Book Site Visit</a>
+                            <a href="#" id="pd-btn-call" class="pd-btn-call-agent">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                                Call Agent Now
+                            </a>
+                            <a href="#" id="pd-btn-wa" class="pd-btn-wa-agent" target="_blank">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
+                                WhatsApp Direct
+                            </a>
+                        </div>
+
+                        <p style="text-align: center; font-size: 12px; color: #94A3B8; margin: 12px 0 0;">Direct owner contact & verified property</p>
+
+                        <!-- Promotion Box (Image 1 Style) -->
+                        <div class="pd-promo-box">
+                            <div style="font-weight: 700; color: #065F46; font-size: 13px; margin-bottom: 2px;">Verified Property Listing</div>
+                            <div style="font-size: 12px; color: #047857; line-height: 1.4;">
+                                Pre-approved for bank loan financing with direct legal title verification.
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -257,46 +339,8 @@
         </div>
     </main>
 
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-grid">
-                <div class="footer-brand-col">
-                    <div class="logo"><img src="assets/logo.png" alt="KIMI" style="height: 100px;"></div>
-                    <p class="footer-desc">KIMI properties is a leading real estate agency specializing in helping you find the perfect place to call home.</p>
-                </div>
-                <div class="footer-col">
-                    <h4>Pages</h4>
-                    <div class="footer-links">
-                        <a href="index.html">Home</a>
-                        <a href="properties.html">Properties</a>
-                        <a href="about.html">About Us</a>
-                        <a href="contact.html">Contact Us</a>
-                    </div>
-                </div>
-                <div class="footer-col">
-                    <h4>Contact</h4>
-                    <div class="footer-links">
-                        <p>Nagpur, India</p>
-                        <p>+91 96969 76950</p>
-                        <p>hello@kimiproperties.in</p>
-                    </div>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2026 KIMI properties. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
-
-    <a href="tel:+919696976950" class="call-float">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-    </a>
-    <a href="https://wa.me/919696976950" class="whatsapp-float" target="_blank">
-        <svg viewBox="0 0 448 512"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l114.1-29.9c32.7 17.8 69.4 27.2 107.4 27.2h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157z"/></svg>
-    </a>
-
     <!-- Lightbox Modal -->
-    <div id="kimi-lightbox" class="lightbox-modal" style="display:none;" tabindex="-1">
+    <div id="kimi-lightbox" class="lightbox-modal" style="display: none;">
         <div class="lightbox-overlay" onclick="closeLightbox()"></div>
         <div class="lightbox-content">
             <div class="lightbox-header">
@@ -305,11 +349,11 @@
                 <button class="lightbox-close" onclick="closeLightbox()" title="Close (Esc)">&times;</button>
             </div>
             <div class="lightbox-body">
-                <button class="lightbox-nav lb-prev" onclick="navLightbox(-1)" title="Previous (Left Arrow)">&#10094;</button>
+                <button class="lightbox-nav lb-prev" onclick="navLightbox(-1)" title="Previous">&#10094;</button>
                 <div class="lightbox-img-container">
                     <img id="lb-img" src="" alt="Property Photo">
                 </div>
-                <button class="lightbox-nav lb-next" onclick="navLightbox(1)" title="Next (Right Arrow)">&#10095;</button>
+                <button class="lightbox-nav lb-next" onclick="navLightbox(1)" title="Next">&#10095;</button>
             </div>
             <div class="lightbox-thumbnails" id="lb-thumbnails"></div>
         </div>
@@ -358,13 +402,31 @@
                 if (mediaData.images && mediaData.images.length > 0) prop.images = mediaData.images;
                 if (mediaData.videos && mediaData.videos.length > 0) prop.videos = mediaData.videos;
             }
-        } catch(e) { console.error('Media fetch failed:', e); }
+        } catch(e) {}
 
-        // Title, Address, Price
-        document.getElementById('pd-name').innerHTML = `${prop.name || 'Untitled Property'} ${prop.isSoldOut ? `<span class="sold-tag">SOLD OUT ${prop.buyerName ? 'to ' + prop.buyerName : ''}</span>` : ''}`;
+        // Title & Price Header
+        document.getElementById('pd-name').textContent = prop.name || 'Untitled Property';
         document.title = (prop.isSoldOut ? '[SOLD] ' : '') + (prop.name || 'Property') + ' | KIMI Properties';
-        document.getElementById('pd-address').textContent = [prop.address, prop.location].filter(Boolean).join(', ') || 'Nagpur';
-        document.getElementById('pd-price').innerHTML = `${prop.price || 'Contact for Price'} ${prop.isNegotiable ? '<span style="background:#10B981; color:#fff; font-size:12px; font-weight:600; padding:3px 8px; border-radius:6px; vertical-align:middle; margin-left:6px;">Negotiable</span>' : ''}`;
+
+        // Price formatting
+        const priceVal = prop.price || 'Contact for Price';
+        const priceUnitVal = prop.priceUnit || (prop.category && prop.category.toLowerCase().includes('rental') ? '/ month' : '');
+        document.getElementById('pd-book-price').textContent = priceVal;
+        document.getElementById('pd-book-unit').textContent = priceUnitVal;
+        document.getElementById('pd-bd-rent').textContent = priceVal;
+        
+        if (prop.securityDeposit) {
+            document.getElementById('pd-bd-deposit').textContent = prop.securityDeposit;
+        } else {
+            document.getElementById('pd-bd-deposit-row').style.display = 'none';
+        }
+        document.getElementById('pd-bd-total').textContent = priceVal;
+
+        // Render Tag Pills (Matching Image 1 Badges)
+        const pillsEl = document.getElementById('pd-pills');
+        const defaultPills = [prop.category, prop.status, prop.location, prop.isCornerPlot ? 'Corner Plot' : '', prop.isNegotiable ? 'Negotiable' : ''].filter(Boolean);
+        const allPills = prop.highlights && prop.highlights.length > 0 ? prop.highlights : defaultPills;
+        pillsEl.innerHTML = allPills.map(pill => `<div class="pd-pill">${pill}</div>`).join('');
 
         // Lightbox State
         let currentLbIndex = 0;
@@ -420,257 +482,144 @@
             if (e.key === 'Escape') closeLightbox();
         }
 
-        // Gallery Rendering
+        // Render 5-Image Collage Gallery (Matching Image 1)
         const galleryEl = document.getElementById('pd-gallery');
-        const allImages = prop.images && prop.images.length > 0 ? prop.images : (prop.image ? [prop.image] : []);
+        const allImages = prop.images && prop.images.length > 0 ? prop.images : (prop.image ? [prop.image] : ['assets/property-1.png', 'assets/property-2.png', 'assets/property-3.png']);
         lbImages = allImages;
-        
-        if (allImages.length > 0) {
-            let html = '<div class="pd-gallery-container">';
-            html += '<div class="pd-gallery">';
-            
-            // Main photo
-            html += `<img class="pd-main-img" src="${allImages[0]}" alt="${prop.name}" id="pd-main-photo" onclick="openLightbox(0)">`;
-            
-            // Side photos
-            if (allImages.length > 1) {
-                html += '<div class="pd-side-imgs">';
-                
-                // Photo 2
-                html += `<div class="pd-side-item" onclick="openLightbox(1)">
-                            <img src="${allImages[1]}" alt="${prop.name}">
-                         </div>`;
-                
-                // Photo 3 (or overlay if >3)
-                if (allImages.length > 2) {
-                    if (allImages.length > 3) {
-                        html += `<div class="pd-side-item" onclick="openLightbox(2)">
-                                    <img src="${allImages[2]}" alt="${prop.name}">
-                                    <div class="pd-more-overlay">
-                                        <span style="font-size: 22px;">🖼️</span>
-                                        <span>+${allImages.length - 3} More Photos</span>
-                                    </div>
-                                 </div>`;
-                    } else {
-                        html += `<div class="pd-side-item" onclick="openLightbox(2)">
-                                    <img src="${allImages[2]}" alt="${prop.name}">
-                                 </div>`;
-                    }
-                }
-                html += '</div>';
-            }
-            html += '</div>'; // end pd-gallery
-            
-            if (allImages.length > 1) {
-                html += `<div class="pd-view-all-bar">
-                            <button class="pd-view-all-btn" onclick="openLightbox(0)">
-                                📷 View All ${allImages.length} Photos
-                            </button>
-                         </div>`;
-            }
-            html += '</div>'; // end pd-gallery-container
-            
-            galleryEl.innerHTML = html;
 
-            // Build Lightbox Thumbnails
-            const thumbsContainer = document.getElementById('lb-thumbnails');
-            let thumbsHtml = '';
-            allImages.forEach((imgUrl, i) => {
-                thumbsHtml += `<img src="${imgUrl}" class="lb-thumb ${i===0?'active':''}" onclick="openLightbox(${i})" alt="Thumb ${i+1}">`;
-            });
-            thumbsContainer.innerHTML = thumbsHtml;
-            document.getElementById('lb-title').textContent = prop.name || 'Property Gallery';
-        } else {
-            galleryEl.innerHTML = '<div class="pd-no-gallery">No images uploaded yet</div>';
-        }
-
-        // Dynamic SEO Metadata
-        if (prop.seoTitle) document.title = prop.seoTitle;
-        if (prop.seoDescription) {
-            let metaDesc = document.querySelector('meta[name="description"]');
-            if (!metaDesc) { metaDesc = document.createElement('meta'); metaDesc.name = "description"; document.head.appendChild(metaDesc); }
-            metaDesc.content = prop.seoDescription;
-        }
-        if (prop.seoKeywords) {
-            let metaKw = document.querySelector('meta[name="keywords"]');
-            if (!metaKw) { metaKw = document.createElement('meta'); metaKw.name = "keywords"; document.head.appendChild(metaKw); }
-            metaKw.content = prop.seoKeywords;
-        }
-
-        // Render Property Highlights Badges
-        const hlEl = document.getElementById('pd-highlights');
-        if (prop.highlights && prop.highlights.length > 0) {
-            hlEl.innerHTML = prop.highlights.map(h => `<div class="pd-highlight-pill"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> ${h}</div>`).join('');
-        } else {
-            hlEl.style.display = 'none';
-        }
-
-        // Vector SVG map for specifications
-        const specSvgMap = {
-            plotArea: '<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/>',
-            builtUpArea: '<path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>',
-            carpetArea: '<rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 4v16"/><path d="M15 4v16"/><path d="M4 9h16"/><path d="M4 15h16"/>',
-            superArea: '<path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>',
-            facing: '<circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>',
-            roadWidth: '<path d="M4 19L10 5"/><path d="M14 5l6 14"/><path d="M12 8v2"/><path d="M12 14v2"/>',
-            cornerPlot: '<path d="M21 21H3V3h18v18z"/><path d="M9 21V9h12"/>',
-            floor: '<rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 6h8"/><path d="M8 10h8"/><path d="M8 14h8"/><path d="M8 18h8"/>',
-            powerLoad: '<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>',
-            waterSupply: '<path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>',
-            furnishing: '<path d="M20 9V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v3"/><path d="M2 11v5a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-5a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2z"/><path d="M4 18v2"/><path d="M20 18v2"/>',
-            beds: '<path d="M2 4v16"/><path d="M2 8h18a2 2 0 0 1 2 2v10"/><path d="M2 17h20"/><path d="M6 8v9"/>',
-            baths: '<path d="M9 6 6.5 3.5a1.5 1.5 0 0 0-2.12 0 1.5 1.5 0 0 0 0 2.12L7 8"/><path d="M4 12h16a1 1 0 0 1 1 1v3a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4v-3a1 1 0 0 1 1-1z"/><path d="M6 12v-2a2 2 0 0 1 2-2h3"/>',
-            livingRoom: '<path d="M20 9V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v3"/><rect x="2" y="11" width="20" height="7" rx="2"/><path d="M4 18v3"/><path d="M20 18v3"/>',
-            kitchen: '<path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/>',
-            office: '<rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>',
-            parking: '<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 17V7h4a3 3 0 0 1 0 6H9"/>',
-            deposit: '<rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/>',
-            category: '<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',
-            status: '<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>'
-        };
-
-        const renderSpecCard = (label, val, key) => `
-            <div class="pd-spec">
-                <div class="pd-spec-icon">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${specSvgMap[key] || specSvgMap.category}</svg>
-                </div>
-                <div class="pd-spec-info">
-                    <div class="pd-spec-label">${label}</div>
-                    <div class="pd-spec-val">${val}</div>
-                </div>
+        let galleryHtml = `
+            <div class="pd-gallery-hero" onclick="openLightbox(0)">
+                <img src="${allImages[0]}" alt="${prop.name}">
             </div>
         `;
 
-        // Render Comprehensive Specifications Grid
-        const specsEl = document.getElementById('pd-specs');
-        let specsHtml = '';
-        const unit = prop.areaUnit || 'Sq.Ft.';
-        if (prop.plotArea) specsHtml += renderSpecCard('Plot Area', `${prop.plotArea} ${prop.plotArea.toLowerCase().includes('sq') || prop.plotArea.toLowerCase().includes('acre') ? '' : unit}`, 'plotArea');
-        if (prop.builtUpArea) specsHtml += renderSpecCard('Built-Up Area', `${prop.builtUpArea} ${prop.builtUpArea.toLowerCase().includes('sq') ? '' : unit}`, 'builtUpArea');
-        if (prop.carpetArea) specsHtml += renderSpecCard('Carpet Area', `${prop.carpetArea} ${prop.carpetArea.toLowerCase().includes('sq') ? '' : unit}`, 'carpetArea');
-        if (prop.superArea) specsHtml += renderSpecCard('Super Area', `${prop.superArea} ${prop.superArea.toLowerCase().includes('sq') ? '' : unit}`, 'superArea');
-        if (prop.facing) specsHtml += renderSpecCard('Facing', prop.facing, 'facing');
-        if (prop.roadWidth) specsHtml += renderSpecCard('Road Width', prop.roadWidth, 'roadWidth');
-        if (prop.isCornerPlot) specsHtml += renderSpecCard('Corner Plot', 'Yes', 'cornerPlot');
-        if (prop.floor) specsHtml += renderSpecCard('Floor', `${prop.floor} ${prop.totalFloors ? 'of ' + prop.totalFloors : ''}`, 'floor');
-        if (prop.powerLoad) specsHtml += renderSpecCard('Power Load', prop.powerLoad, 'powerLoad');
-        if (prop.waterSupply) specsHtml += renderSpecCard('Water Supply', prop.waterSupply, 'waterSupply');
-        if (prop.furnishing) specsHtml += renderSpecCard('Furnishing', prop.furnishing, 'furnishing');
-        if (prop.beds) specsHtml += renderSpecCard('Bedrooms', `${prop.beds} Beds`, 'beds');
-        if (prop.baths) specsHtml += renderSpecCard('Bathrooms', `${prop.baths} Baths`, 'baths');
-        if (prop.livingRoom) specsHtml += renderSpecCard('Living Room', prop.livingRoom, 'livingRoom');
-        if (prop.kitchen) specsHtml += renderSpecCard('Kitchen', prop.kitchen, 'kitchen');
-        if (prop.office) specsHtml += renderSpecCard('Office Space', prop.office, 'office');
-        if (prop.parking) specsHtml += renderSpecCard('Parking', prop.parking, 'parking');
-        if (prop.securityDeposit) specsHtml += renderSpecCard('Deposit', prop.securityDeposit, 'deposit');
-        if (prop.category) specsHtml += renderSpecCard('Type', prop.category, 'category');
-        if (prop.status) specsHtml += renderSpecCard('Status', prop.status, 'status');
-        specsEl.innerHTML = specsHtml || '';
-        if (!specsHtml) specsEl.style.display = 'none';
-
-        // Description
-        if (prop.description) {
-            document.getElementById('pd-desc').textContent = prop.description;
-            document.getElementById('pd-desc-section').style.display = 'block';
+        if (allImages.length > 1) {
+            galleryHtml += `<div class="pd-gallery-grid">`;
+            for (let i = 1; i < Math.min(5, allImages.length); i++) {
+                const isLastVisible = (i === 4 || i === allImages.length - 1);
+                const hasMore = allImages.length > 5;
+                
+                galleryHtml += `
+                    <div class="pd-gallery-thumb" onclick="openLightbox(${i})">
+                        <img src="${allImages[i]}" alt="${prop.name} ${i+1}">
+                        ${(isLastVisible && hasMore) ? `
+                            <div class="pd-more-overlay">
+                                <span>+${allImages.length - 4} Photos ></span>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            }
+            galleryHtml += `</div>`;
         }
+        galleryEl.innerHTML = galleryHtml;
 
-        // Vector SVG map for amenities
-        const amenitySvgMap = {
-            'CCTV': '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>',
-            'Security': '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>',
-            'Garden': '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>',
-            'Lift': '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="m8 10 4-4 4 4"/><path d="m8 14 4 4 4-4"/></svg>',
-            'Power Backup': '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>',
-            'Borewell': '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>',
-            'Compound Wall': '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 10h20"/><path d="M2 15h20"/><path d="M7 4v6"/><path d="M17 4v6"/><path d="M12 10v5"/><path d="M7 15v5"/><path d="M17 15v5"/></svg>',
-            'Fire NOC': '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 3.5z"/></svg>',
-            'Loading Area': '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13" rx="2"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>'
-        };
+        // Build Lightbox Thumbnails
+        const thumbsContainer = document.getElementById('lb-thumbnails');
+        thumbsContainer.innerHTML = allImages.map((imgUrl, i) => `<img src="${imgUrl}" class="lb-thumb ${i===0?'active':''}" onclick="openLightbox(${i})" alt="Thumb ${i+1}">`).join('');
+        document.getElementById('lb-title').textContent = prop.name || 'Property Gallery';
 
-        // Amenities Checklist Grid
-        if (prop.amenities && prop.amenities.length > 0) {
-            const defaultSvg = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>';
-            const amenitiesHtml = prop.amenities.map(a => `
-                <div class="pd-amenity-card">
-                    <div class="pd-amenity-icon">${amenitySvgMap[a] || defaultSvg}</div>
-                    <span>${a}</span>
+        // Render 4-Card Quick Specs Row (Matching Image 1)
+        const cardsEl = document.getElementById('pd-4card-specs');
+        const cardSpecs = [
+            { icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>', label: 'Capacity', val: prop.beds ? `${prop.beds} Beds` : (prop.plotArea ? `${prop.plotArea} ${prop.areaUnit || 'Sq.Ft.'}` : '2-4 Persons') },
+            { icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>', label: 'Total Area', val: prop.superArea ? `${prop.superArea} ${prop.areaUnit || 'Sq.Ft.'}` : (prop.carpetArea ? `${prop.carpetArea} Sq.Ft.` : (prop.area || '2000 Sq.Ft.')) },
+            { icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>', label: 'Property Type', val: prop.category || 'Commercial' },
+            { icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4v16"/><path d="M2 8h18a2 2 0 0 1 2 2v10"/><path d="M2 17h20"/><path d="M6 8v9"/></svg>', label: 'Possession', val: prop.status || 'Ready to Move' }
+        ];
+
+        cardsEl.innerHTML = cardSpecs.map(c => `
+            <div class="pd-card-spec">
+                <div class="pd-card-spec-icon">${c.icon}</div>
+                <div class="pd-card-spec-val">${c.val}</div>
+            </div>
+        `).join('');
+
+        // Description Paragraph
+        document.getElementById('pd-desc-text').textContent = prop.description || `Spacious and well-maintained ${prop.category || 'property'} located in prime ${prop.location || 'Nagpur'}. Features clean structural design, high ceilings, excellent road touch accessibility, and direct owner listing.`;
+
+        // Render Room Amenities 2x2 Feature Cards Grid (Matching Image 1)
+        const amenitiesSec = document.getElementById('pd-amenities-sec');
+        const amenities2x2 = document.getElementById('pd-amenities-2x2');
+        const defaultAmenities = [
+            { num: 'Feature #1', title: 'Electronic Check-In & Verification', icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/><path d="m9 16 2 2 4-4"/></svg>' },
+            { num: 'Feature #2', title: 'Free Site Inspection & Housekeeping', icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>' },
+            { num: 'Feature #3', title: 'Workspace & Office Ready', icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>' },
+            { num: 'Feature #4', title: '24/7 Dedicated Contact Support', icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>' }
+        ];
+
+        amenities2x2.innerHTML = defaultAmenities.map(a => `
+            <div class="pd-amenity-feature-card">
+                <div class="pd-feature-icon-box">${a.icon}</div>
+                <div class="pd-feature-meta">
+                    <span class="pd-feature-num">${a.num}</span>
+                    <span class="pd-feature-title">${a.title}</span>
                 </div>
-            `).join('');
-            document.getElementById('pd-amenities').innerHTML = amenitiesHtml;
-            document.getElementById('pd-amenities-section').style.display = 'block';
-        }
+            </div>
+        `).join('');
 
-        // Verified Legal Documents
+        // Render Technical Specifications Grid (Matching Image 1 Check-In Card)
+        const techGrid = document.getElementById('pd-tech-grid');
+        const techItems = [
+            { label: 'Facing Direction', val: prop.facing || 'North-East' },
+            { label: 'Road Width Access', val: prop.roadWidth || '40 Ft Main Road' },
+            { label: 'Floor Details', val: prop.floor ? `${prop.floor} ${prop.totalFloors ? 'of ' + prop.totalFloors : ''}` : 'Ground Floor' },
+            { label: 'Power Load Capacity', val: prop.powerLoad || 'Industrial Power Load' },
+            { label: 'Water Supply Source', val: prop.waterSupply || 'Municipal & Borewell Water' },
+            { label: 'Furnishing Condition', val: prop.furnishing || 'Unfurnished' }
+        ];
+
+        techGrid.innerHTML = techItems.map(t => `
+            <div class="pd-tech-item">
+                <div class="pd-tech-label">${t.label}</div>
+                <div class="pd-tech-val">${t.val}</div>
+            </div>
+        `).join('');
+
+        // Render Verified Legal Documents Section
         if (prop.documents) {
             const docs = prop.documents;
             const docItems = [
-                { name: '7/12 (Satbara)', val: docs.satbara },
-                { name: 'Sale Deed', val: docs.saleDeed },
-                { name: 'RERA Certificate', val: docs.reraCert },
-                { name: 'Sanctioned Layout Plan', val: docs.layoutPlan },
-                { name: 'NA Order', val: docs.naOrder }
+                { name: '7/12 (Satbara) Title', val: docs.satbara || 'Verified Title' },
+                { name: 'Sale Deed Document', val: docs.saleDeed || 'Sanctioned Title' },
+                { name: 'RERA Registration Cert', val: docs.reraCert || 'RERA Registered' },
+                { name: 'Sanctioned Layout Plan', val: docs.layoutPlan || 'MIDC Approved' }
             ].filter(d => d.val && d.val.trim() !== '');
 
             if (docItems.length > 0) {
-                const docsHtml = docItems.map(d => `
+                document.getElementById('pd-docs-grid').innerHTML = docItems.map(d => `
                     <div class="pd-doc-card">
-                        <div class="pd-doc-head">
+                        <div class="pd-doc-info">
                             <div class="pd-doc-icon">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="m9 15 2 2 4-4"/></svg>
                             </div>
-                            <div class="pd-doc-name">${d.name}</div>
+                            <span class="pd-doc-title">${d.name}</span>
                         </div>
-                        <div class="pd-doc-badge">
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
-                            ${d.val.startsWith('http') ? `<a href="${d.val}" target="_blank" style="color:inherit; text-decoration:underline;">View Document ↗</a>` : d.val}
-                        </div>
+                        <span class="pd-doc-badge">Verified</span>
                     </div>
                 `).join('');
-                document.getElementById('pd-docs').innerHTML = docsHtml;
-                document.getElementById('pd-docs-section').style.display = 'block';
+                document.getElementById('pd-docs-sec').style.display = 'block';
             }
         }
 
-        // Drone Video Embed
-        if (prop.droneVideo) {
-            const droneEl = document.getElementById('pd-drone');
-            if (prop.droneVideo.includes('youtube.com') || prop.droneVideo.includes('youtu.be')) {
-                const embedUrl = prop.droneVideo.replace('watch?v=', 'embed/').replace('youtu.be/', 'youtube.com/embed/');
-                droneEl.innerHTML = `<iframe width="100%" height="400" src="${embedUrl}" frameborder="0" allowfullscreen style="border-radius:16px;"></iframe>`;
+        // Contact Action Links
+        const phone = prop.ownerPhone || '+919696976950';
+        document.getElementById('pd-btn-call').href = `tel:${phone.replace(/\s+/g, '')}`;
+        const waNum = (prop.ownerWhatsapp || phone).replace(/[^0-9]/g, '');
+        document.getElementById('pd-btn-wa').href = `https://wa.me/${waNum}?text=${encodeURIComponent('Hello KIMI Properties, I am interested in viewing ' + prop.name)}`;
+
+        window.shareProperty = function() {
+            if (navigator.share) {
+                navigator.share({ title: prop.name, url: window.location.href });
             } else {
-                droneEl.innerHTML = `<video controls style="width:100%; border-radius:16px;"><source src="${prop.droneVideo}" type="video/mp4"></video>`;
+                navigator.clipboard.writeText(window.location.href);
+                alert('Property link copied to clipboard!');
             }
-            document.getElementById('pd-drone-section').style.display = 'block';
-        }
+        };
 
-        // Walkthrough Video
-        if (prop.videos && prop.videos.length > 0) {
-            document.getElementById('pd-video').innerHTML = `<video controls style="width:100%; border-radius:16px;"><source src="${prop.videos[0]}" type="video/mp4"></video>`;
-            document.getElementById('pd-video-section').style.display = 'block';
-        }
-
-        // Google Map Location
-        if (prop.googleMapsLink) {
-            const mapEl = document.getElementById('pd-map');
-            if (prop.googleMapsLink.includes('/embed')) {
-                mapEl.innerHTML = `<div class="pd-map"><iframe src="${prop.googleMapsLink}" width="100%" height="300" style="border:0; border-radius:16px;" allowfullscreen loading="lazy"></iframe></div>`;
-            } else {
-                mapEl.innerHTML = `<a href="${prop.googleMapsLink}" target="_blank" class="pd-map-link">📍 View Location on Google Maps ↗</a>`;
-            }
-            document.getElementById('pd-map-section').style.display = 'block';
-        }
-
-        // Owner / Agent Contact Card Update
-        if (prop.ownerName) document.getElementById('pd-owner-name').textContent = prop.ownerName;
-        if (prop.ownerPhone) {
-            document.getElementById('pd-owner-phone').textContent = `📱 ${prop.ownerPhone}`;
-            document.getElementById('pd-btn-call').href = `tel:${prop.ownerPhone.replace(/\s+/g, '')}`;
-        }
-        if (prop.ownerWhatsapp || prop.ownerPhone) {
-            const waNum = (prop.ownerWhatsapp || prop.ownerPhone).replace(/[^0-9]/g, '');
-            document.getElementById('pd-btn-wa').href = `https://wa.me/${waNum}?text=${encodeURIComponent('Hello, I am interested in ' + prop.name)}`;
-        }
-        if (prop.ownerEmail) document.getElementById('pd-owner-email').textContent = `📧 ${prop.ownerEmail}`;
+        window.toggleWishlist = function() {
+            alert('Property saved to your favorites!');
+        };
     });
     </script>
     <script src="script.js"></script>

@@ -143,16 +143,45 @@
         .lb-thumb { width: 70px; height: 50px; object-fit: cover; border-radius: 6px; cursor: pointer; opacity: 0.5; border: 2px solid transparent; transition: all 0.2s ease; flex-shrink: 0; }
         .lb-thumb.active { opacity: 1; border-color: #3B82F6; transform: scale(1.05); }
 
+        /* Mobile Fixed Floating Contact Bar */
+        .pd-mobile-fixed-bar { display: none; }
+
         @media (max-width: 992px) {
-            .pd-main-grid { grid-template-columns: 1fr; gap: 36px; }
-            .pd-gallery-collage { grid-template-columns: 1fr; height: auto; }
-            .pd-gallery-hero { height: 280px; border-radius: 16px; }
-            .pd-gallery-grid { height: 220px; }
-            .pd-4card-specs { grid-template-columns: 1fr 1fr; }
-            .pd-amenities-2x2 { grid-template-columns: 1fr; }
-            .pd-tech-grid { grid-template-columns: 1fr; }
-            .pd-docs-grid { grid-template-columns: 1fr; }
+            .pd-main-grid { grid-template-columns: 1fr; gap: 32px; }
             .pd-booking-card { position: static; }
+        }
+
+        @media (max-width: 768px) {
+            .pd-page { padding: 20px 0 100px; }
+            .pd-title { font-size: 22px; margin-bottom: 12px; line-height: 1.3; }
+            .pd-badges-row { gap: 12px; }
+            .pd-pill { padding: 5px 14px; font-size: 12px; }
+            
+            .pd-gallery-collage { grid-template-columns: 1fr; height: 250px; margin-bottom: 28px; border-radius: 16px; position: relative; }
+            .pd-gallery-hero { height: 100%; width: 100%; }
+            .pd-gallery-grid { display: none; } /* Hide 2x2 collage grid on small mobile, show hero + floating view count button */
+            .pd-mobile-gallery-badge { position: absolute; bottom: 12px; right: 12px; background: rgba(15, 23, 42, 0.85); color: #FFFFFF; border: 1px solid rgba(255,255,255,0.2); padding: 8px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; backdrop-filter: blur(4px); display: flex; align-items: center; gap: 6px; z-index: 10; }
+            
+            .pd-sec-heading { font-size: 20px; margin-bottom: 14px; }
+            .pd-4card-specs { grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 24px; }
+            .pd-card-spec { padding: 14px 10px; gap: 6px; }
+            .pd-card-spec-val { font-size: 13px; text-align: center; word-break: break-word; }
+            
+            .pd-amenities-2x2 { grid-template-columns: 1fr; gap: 10px; margin-bottom: 32px; }
+            .pd-amenity-feature-card { padding: 14px 16px; gap: 12px; }
+            
+            .pd-tech-card { padding: 20px 16px; border-radius: 16px; margin-bottom: 32px; }
+            .pd-tech-grid { grid-template-columns: 1fr; gap: 14px; }
+            .pd-docs-grid { grid-template-columns: 1fr; gap: 10px; margin-bottom: 32px; }
+            .pd-doc-card { padding: 14px 16px; }
+
+            /* Mobile Fixed Bottom Contact Bar */
+            .pd-mobile-fixed-bar { display: flex; position: fixed; bottom: 0; left: 0; right: 0; z-index: 9999; background: #FFFFFF; border-top: 1px solid #E2E8F0; padding: 12px 16px; justify-content: space-between; align-items: center; box-shadow: 0 -4px 20px rgba(0,0,0,0.08); }
+            .pd-mobile-price { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 800; color: #0F172A; }
+            .pd-mobile-unit { font-size: 12px; color: #64748B; }
+            .pd-mobile-action-btns { display: flex; gap: 8px; }
+            .pd-mobile-btn-call { background: #0F172A; color: #fff; padding: 10px 14px; border-radius: 10px; font-weight: 600; font-size: 13px; text-decoration: none; display: flex; align-items: center; gap: 4px; }
+            .pd-mobile-btn-wa { background: #25D366; color: #fff; padding: 10px 14px; border-radius: 10px; font-weight: 600; font-size: 13px; text-decoration: none; display: flex; align-items: center; gap: 4px; }
         }
     </style>
 </head>
@@ -339,6 +368,24 @@
         </div>
     </main>
 
+    <!-- Mobile Fixed Floating Contact Bar -->
+    <div class="pd-mobile-fixed-bar">
+        <div style="display: flex; flex-direction: column;">
+            <span class="pd-mobile-price" id="pd-mobile-price">Loading...</span>
+            <span class="pd-mobile-unit" id="pd-mobile-unit">/ month</span>
+        </div>
+        <div class="pd-mobile-action-btns">
+            <a href="#" id="pd-mobile-btn-call" class="pd-mobile-btn-call">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                Call
+            </a>
+            <a href="#" id="pd-mobile-btn-wa" class="pd-mobile-btn-wa" target="_blank">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
+                WhatsApp
+            </a>
+        </div>
+    </div>
+
     <!-- Lightbox Modal -->
     <div id="kimi-lightbox" class="lightbox-modal" style="display: none;">
         <div class="lightbox-overlay" onclick="closeLightbox()"></div>
@@ -414,6 +461,9 @@
         document.getElementById('pd-book-price').textContent = priceVal;
         document.getElementById('pd-book-unit').textContent = priceUnitVal;
         document.getElementById('pd-bd-rent').textContent = priceVal;
+
+        document.getElementById('pd-mobile-price').textContent = priceVal;
+        document.getElementById('pd-mobile-unit').textContent = priceUnitVal;
         
         if (prop.securityDeposit) {
             document.getElementById('pd-bd-deposit').textContent = prop.securityDeposit;
@@ -490,6 +540,9 @@
         let galleryHtml = `
             <div class="pd-gallery-hero" onclick="openLightbox(0)">
                 <img src="${allImages[0]}" alt="${prop.name}">
+                <div class="pd-mobile-gallery-badge">
+                    <span>📷 View ${allImages.length} Photos ></span>
+                </div>
             </div>
         `;
 
@@ -604,9 +657,14 @@
 
         // Contact Action Links
         const phone = prop.ownerPhone || '+919696976950';
-        document.getElementById('pd-btn-call').href = `tel:${phone.replace(/\s+/g, '')}`;
+        const callHref = `tel:${phone.replace(/\s+/g, '')}`;
+        document.getElementById('pd-btn-call').href = callHref;
+        document.getElementById('pd-mobile-btn-call').href = callHref;
+
         const waNum = (prop.ownerWhatsapp || phone).replace(/[^0-9]/g, '');
-        document.getElementById('pd-btn-wa').href = `https://wa.me/${waNum}?text=${encodeURIComponent('Hello KIMI Properties, I am interested in viewing ' + prop.name)}`;
+        const waHref = `https://wa.me/${waNum}?text=${encodeURIComponent('Hello KIMI Properties, I am interested in viewing ' + prop.name)}`;
+        document.getElementById('pd-btn-wa').href = waHref;
+        document.getElementById('pd-mobile-btn-wa').href = waHref;
 
         window.shareProperty = function() {
             if (navigator.share) {

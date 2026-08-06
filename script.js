@@ -290,30 +290,56 @@ document.addEventListener('DOMContentLoaded', () => {
                     return String(price).includes('₹') ? price : '₹' + price;
                 };
 
-                const gridHTML = propsToShow.map(prop => `
-                    <div class="property-card" onclick="window.location.href='property-detail.html?id=${prop._id || prop.id}'" style="cursor: pointer;" data-location="${prop.location || 'all'}" data-type="${prop.category}">
-                        <div class="card-image">
+                const gridHTML = propsToShow.map(prop => {
+                    const phone = (prop.ownerPhone || '+919696976950').replace(/\s+/g, '');
+                    const waNum = (prop.ownerWhatsapp || prop.ownerPhone || '+919696976950').replace(/[^0-9]/g, '');
+                    const waMsg = encodeURIComponent('Hello KIMI Properties, I am interested in ' + prop.name);
+
+                    return `
+                    <div class="property-card" onclick="window.location.href='property-detail.html?id=${prop._id || prop.id}'" data-location="${prop.location || 'all'}" data-type="${prop.category}">
+                        <div class="card-image-box">
                             <img src="${(prop.images && prop.images[0]) || prop.image || 'assets/hero-illustration.png'}" alt="${prop.name}" loading="lazy">
-                            <div class="card-overlay">
-                                <span class="view-btn-hover">View Property <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 4px; display: inline-block; vertical-align: middle;"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg></span>
-                            </div>
+                            <div class="card-price-badge">${formatPrice(prop.price)}<span class="price-unit">${prop.priceUnit || ''}</span></div>
+                            ${prop.isSoldOut ? '<span class="card-status-badge status-sold">SOLD OUT</span>' : (prop.isFeatured ? '<span class="card-status-badge status-featured">FEATURED</span>' : '')}
                         </div>
-                        <div class="card-content">
-                            ${prop.isSoldOut ? '<span class="sold-tag">SOLD OUT</span>' : (prop.isFeatured ? '<span class="featured-tag"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z"/></svg> FEATURED</span>' : '')}
-                            <p class="price">${formatPrice(prop.price)}<span>${prop.priceUnit || ''}</span></p>
-                            <h3 class="property-name">${prop.name}</h3>
-                            <p class="address">${prop.address} ${prop.location ? '(' + prop.location + ')' : ''}</p>
-                            <div class="specs">
-                                ${prop.beds ? `<span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-6l-2 2H5a2 2 0 0 0-2 2z"/></svg>${prop.beds} Beds</span>` : ''}
-                                ${prop.baths ? `<span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12h20"/><path d="M4 12v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4"/><path d="M10 8h4"/><path d="M12 4v4"/></svg>${prop.baths} Baths</span>` : ''}
-                                ${prop.area ? `<span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>${prop.area}</span>` : ''}
+                        <div class="card-body">
+                            <h3 class="card-title">${prop.name}</h3>
+                            <p class="card-location">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                                ${prop.address || (prop.location || 'Nagpur')}
+                            </p>
+                            <div class="card-specs-row">
+                                ${prop.beds ? `
+                                    <div class="card-spec-item">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4v16"/><path d="M2 8h18a2 2 0 0 1 2 2v10"/><path d="M2 17h20"/><path d="M6 8v9"/></svg>
+                                        <span>${prop.beds} Beds</span>
+                                    </div>` : ''}
+                                ${prop.baths ? `
+                                    <div class="card-spec-item">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6 6.5 3.5a1.5 1.5 0 0 0-2.12 0 1.5 1.5 0 0 0 0 2.12L7 8"/><path d="M4 12h16a1 1 0 0 1 1 1v3a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4v-3a1 1 0 0 1 1-1z"/><path d="M6 12v-2a2 2 0 0 1 2-2h3"/></svg>
+                                        <span>${prop.baths} Baths</span>
+                                    </div>` : ''}
+                                ${prop.area ? `
+                                    <div class="card-spec-item">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+                                        <span>${prop.area}</span>
+                                    </div>` : ''}
                             </div>
-                            <div class="card-action">
-                                <button class="btn-view-dream">View Dream <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 6px; display: inline-block; vertical-align: middle;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></button>
+                            <div class="card-footer-row">
+                                <span class="card-btn-view">View Details →</span>
+                                <div class="card-contact-quick" onclick="event.stopPropagation()">
+                                    <a href="tel:${phone}" class="card-action-icon" title="Call Agent">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                                    </a>
+                                    <a href="https://wa.me/${waNum}?text=${waMsg}" target="_blank" class="card-action-icon wa-icon" title="WhatsApp Agent">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
-                `).join('');
+                `;
+                }).join('');
 
                 grids.forEach(grid => {
                     grid.innerHTML = gridHTML;

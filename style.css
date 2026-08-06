@@ -412,191 +412,196 @@ h1, h2, h3, h4, h5, h6 {
     flex-direction: column;
     height: 100%;
     transition: transform 0.3s ease;
-    border: none;
-    box-shadow: none;
-    will-change: transform, opacity;
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 20px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+    position: relative;
+    cursor: pointer;
 }
 
 .property-card:hover {
-    transform: translateY(-10px);
+    border-color: #CBD5E1;
+    transform: translateY(-6px);
+    box-shadow: 0 16px 36px rgba(15, 23, 42, 0.08);
 }
 
-.card-image {
+.card-image-box {
     position: relative;
-    height: 320px;
     width: 100%;
+    height: 220px;
     overflow: hidden;
-    border-radius: 20px;
+    background: #F1F5F9;
 }
 
-.card-image img {
+.card-image-box img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     transition: transform 0.5s ease;
 }
 
-.property-card:hover .card-image img {
-    transform: scale(1.1);
+.property-card:hover .card-image-box img {
+    transform: scale(1.05);
 }
 
-.card-overlay {
+/* Glassmorphic Price Badge on Photo Top-Left */
+.card-price-badge {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(26, 26, 26, 0.4);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    transition: opacity 0.3s ease;
+    top: 14px;
+    left: 14px;
+    background: rgba(15, 23, 42, 0.85);
+    color: #FFFFFF;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     z-index: 2;
 }
 
-.property-card:hover .card-overlay {
-    opacity: 1;
-}
-
-.view-btn-hover {
-    background: white;
-    color: #1A1A1A;
-    padding: 12px 24px;
-    border-radius: 50px;
-    font-weight: 600;
-    font-size: 14px;
-    transform: translateY(20px);
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.property-card:hover .view-btn-hover {
-    transform: translateY(0);
-}
-
-.featured-tag {
-    position: absolute;
-    top: -16px;
-    right: 20px;
-    background: #1A1A1A;
-    color: white;
-    padding: 8px 16px;
-    border-radius: 8px;
+.card-price-badge .price-unit {
     font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 1px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    z-index: 3;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    font-weight: 400;
+    color: #CBD5E1;
+    margin-left: 3px;
 }
 
-.card-content {
-    background: white;
-    padding: 24px;
+/* Status Badges Top-Right */
+.card-status-badge {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    padding: 5px 12px;
+    border-radius: 14px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    z-index: 2;
+}
+
+.card-status-badge.status-featured {
+    background: #335C67;
+    color: #FFFFFF;
+    box-shadow: 0 2px 8px rgba(51, 92, 103, 0.3);
+}
+
+.card-status-badge.status-sold {
+    background: #EF4444;
+    color: #FFFFFF;
+}
+
+/* Card Body Section */
+.card-body {
+    padding: 20px;
     display: flex;
     flex-direction: column;
     flex-grow: 1;
-    margin: -60px 16px 16px 16px;
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-    position: relative;
-    z-index: 2;
+    background: #FFFFFF;
 }
 
-.price {
-    font-size: 26px;
-    font-weight: 700;
-    color: #1A1A1A;
-    margin-bottom: 6px;
-}
-
-.price span {
-    font-size: 14px;
-    color: #666;
-    font-weight: 400;
-    margin-left: 2px;
-}
-
-.property-name {
-    margin-bottom: 8px;
+.card-title {
     font-family: 'Outfit', sans-serif;
-    font-size: 19px;
-    font-weight: 600;
-    color: #1A1A1A;
-    text-transform: capitalize;
-    line-height: 1.3;
-}
-
-.property-name a {
-    font-family: 'Syne', sans-serif;
-    font-size: 22px;
+    font-size: 18px;
     font-weight: 700;
-    color: #1A1A1A;
-    text-decoration: none;
-    transition: color 0.2s ease;
+    color: #0F172A;
+    margin: 0 0 6px;
+    line-height: 1.3;
+    letter-spacing: -0.2px;
 }
 
-.property-name a:hover {
-    color: #A855F7;
-}
-
-.address {
+.card-location {
     font-size: 13px;
-    color: #888;
-    margin-bottom: 24px;
-    line-height: 1.4;
-}
-
-.specs {
-    margin-top: auto;
+    color: #64748B;
     display: flex;
-    justify-content: flex-start;
-    gap: 24px;
-    padding-top: 20px;
-    border-top: 1px solid #F0F0F0;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 16px;
 }
 
-.specs span {
+.card-specs-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding-top: 14px;
+    border-top: 1px solid #F1F5F9;
+    margin-bottom: 18px;
+    margin-top: auto;
+}
+
+.card-spec-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #475569;
+}
+
+.card-footer-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.card-btn-view {
+    background: #0F172A;
+    color: #FFFFFF;
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+}
+
+.property-card:hover .card-btn-view {
+    background: #1E293B;
+    transform: translateX(2px);
+}
+
+.card-contact-quick {
     display: flex;
     align-items: center;
     gap: 8px;
-    font-size: 13px;
-    color: #666;
-    font-weight: 500;
 }
 
-.specs img {
-    width: 18px;
-    height: 18px;
-    opacity: 0.8;
-}
-
-.card-action {
-    margin-top: 24px;
-}
-
-.btn-view-dream {
-    width: 100%;
-    background: #1A1A1A;
-    color: white;
-    border: none;
-    padding: 14px 24px;
-    border-radius: 12px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: transform 0.2s ease, background 0.3s ease, box-shadow 0.2s ease;
+.card-action-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #F1F5F9;
+    color: #0F172A;
     display: flex;
     align-items: center;
     justify-content: center;
+    text-decoration: none;
+    transition: all 0.2s ease;
 }
 
-.btn-view-dream:hover {
-    background: #333333;
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+.card-action-icon:hover {
+    background: #0F172A;
+    color: #FFFFFF;
+}
+
+.card-action-icon.wa-icon {
+    background: #ECFDF5;
+    color: #059669;
+}
+
+.card-action-icon.wa-icon:hover {
+    background: #25D366;
+    color: #FFFFFF;
 }
 
 .priority-section {
@@ -2644,55 +2649,71 @@ h1, h2, h3, h4, h5, h6 {
         padding: 10px 0 !important;
     }
 
-    /* Property cards stay vertical on mobile */
+    /* Clean Mobile Property Cards */
     .property-card {
         flex-direction: column !important;
-        border-radius: 20px !important;
+        border-radius: 18px !important;
         height: auto !important;
+        margin: 0 !important;
+        overflow: hidden !important;
     }
 
-    .property-card .card-image {
-        width: 100% !important;
-        height: 240px !important;
-        border-radius: 20px !important;
+    .card-image-box {
+        height: 190px !important;
     }
 
-    .property-card .card-content {
-        padding: 16px !important;
-        margin: -50px 12px 12px 12px !important;
-    }
-
-    .property-card .price {
-        font-size: 22px !important;
-        margin-bottom: 4px !important;
-    }
-
-    .property-card .property-name {
-        font-size: 17px !important;
-        margin-bottom: 4px !important;
-    }
-
-    .property-card .address {
+    .card-price-badge {
+        top: 10px !important;
+        left: 10px !important;
+        padding: 4px 10px !important;
         font-size: 13px !important;
+    }
+
+    .card-status-badge {
+        top: 10px !important;
+        right: 10px !important;
+        padding: 4px 8px !important;
+        font-size: 10px !important;
+    }
+
+    .card-body {
+        padding: 14px !important;
+        margin: 0 !important;
+    }
+
+    .card-title {
+        font-size: 16px !important;
+        margin-bottom: 4px !important;
+    }
+
+    .card-location {
+        font-size: 12px !important;
         margin-bottom: 12px !important;
     }
 
-    .property-card .specs {
+    .card-specs-row {
+        gap: 10px !important;
         padding-top: 10px !important;
+        margin-bottom: 14px !important;
+    }
+
+    .card-spec-item {
+        font-size: 11px !important;
+    }
+
+    .card-footer-row {
         gap: 8px !important;
     }
 
-    .property-card .specs span {
+    .card-btn-view {
+        padding: 8px 14px !important;
         font-size: 12px !important;
+        border-radius: 8px !important;
     }
 
-    .property-card .featured-tag {
-        top: -12px !important;
-        right: 12px !important;
-        left: auto !important;
-        padding: 6px 12px !important;
-        font-size: 10px !important;
-        border-radius: 6px !important;
+    .card-action-icon {
+        width: 32px !important;
+        height: 32px !important;
     }
 
     /* Priority Section */

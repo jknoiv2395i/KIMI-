@@ -377,10 +377,18 @@ document.addEventListener('DOMContentLoaded', () => {
             populatePageContent(defaultContent);
         }
 
+        function getApiUrl(path) {
+            if (!path.startsWith('/')) path = '/' + path;
+            if (window.location.protocol === 'file:' || (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1' && !window.location.port)) {
+                return 'http://localhost:3001' + path;
+            }
+            return path;
+        }
+
         // Step B: Background Fetch & Update
         try {
             console.log("fetchFrontendData: fetching fresh content from API");
-            const res = await fetch('/api/content');
+            const res = await fetch(getApiUrl('/api/content'));
             if (res.ok) {
                 const liveContent = await res.json();
                 console.log("fetchFrontendData: fresh content loaded, properties count:", liveContent.properties ? liveContent.properties.length : 0);

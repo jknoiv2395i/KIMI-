@@ -317,13 +317,21 @@
 
     <script>
     document.addEventListener('DOMContentLoaded', async () => {
+        function getApiUrl(path) {
+            if (!path.startsWith('/')) path = '/' + path;
+            if (window.location.protocol === 'file:' || (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1' && !window.location.port)) {
+                return 'http://localhost:3001' + path;
+            }
+            return path;
+        }
+
         const urlParams = new URLSearchParams(window.location.search);
         const propId = urlParams.get('id');
         if (!propId) { document.getElementById('pd-name').textContent = 'Property not found'; return; }
 
         let prop = null;
         try {
-            const res = await fetch('/api/content');
+            const res = await fetch(getApiUrl('/api/content'));
             if (res.ok) {
                 const content = await res.json();
                 if (content.properties) {
@@ -344,11 +352,11 @@
 
         // Fetch full media separately for detail view
         try {
-            const mediaRes = await fetch(`/api/properties/${propId}/media`);
+            const mediaRes = await fetch(getApiUrl(`/api/properties/${propId}/media`));
             if (mediaRes.ok) {
                 const mediaData = await mediaRes.json();
-                prop.images = mediaData.images || [];
-                prop.videos = mediaData.videos || [];
+                if (mediaData.images && mediaData.images.length > 0) prop.images = mediaData.images;
+                if (mediaData.videos && mediaData.videos.length > 0) prop.videos = mediaData.videos;
             }
         } catch(e) { console.error('Media fetch failed:', e); }
 

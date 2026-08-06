@@ -7,8 +7,10 @@
     },
     "contact": {
         "phone": "+91 96969 76950",
-        "email": "hello@kimiproperties.co",
-        "address": "Nagpur, Maharashtra, India"
+        "email": "hello@kimiproperties.in",
+        "address": "Nagpur, Maharashtra, India",
+        "facebook": "https://www.facebook.com/kimiproperties.in",
+        "instagram": "https://www.instagram.com/_kimiproperties.in?igsh=MW41ZnJrcGRwdHQycA=="
     },
     "locations": ["Nagpur", "Mumbai", "Pune", "Hull, UK", "Highland Lake, FL", "London, UK"],
     "categories": ["Residential (Purchase)", "Residential Rental", "Commercial (Purchase)", "Commercial Rental", "Industrial", "Agriculture"],

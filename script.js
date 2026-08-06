@@ -227,7 +227,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 1. DATA INFRASTRUCTURE
     const defaultContent = {
         hero: { title: "We help people to realize their dream property", subtitle: "We are creative people who provide the best way to you who want to have a new comfortable and suitable place to live" },
-        contact: { phone: "+91 96969 76950", email: "hello@kimiproperties.in", address: "Nagpur, Maharashtra, India" },
+        contact: { phone: "+91 96969 76950", email: "hello@kimiproperties.in", address: "Nagpur, Maharashtra, India", facebook: "https://www.facebook.com/kimiproperties.in", instagram: "https://www.instagram.com/_kimiproperties.in?igsh=MW41ZnJrcGRwdHQycA==" },
         locations: ["Nagpur", "Mumbai", "Pune"],
         categories: ["Residential (Purchase)", "Residential Rental", "Commercial (Purchase)", "Commercial Rental", "Industrial", "Agriculture"],
         properties: [

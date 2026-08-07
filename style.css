@@ -487,6 +487,17 @@ h1, h2, h3, h4, h5, h6 {
     z-index: 2;
 }
 
+.card-status-badge.status-negotiable {
+    background: #059669;
+    color: #FFFFFF;
+    box-shadow: 0 2px 8px rgba(5, 150, 105, 0.3);
+}
+
+.card-status-badge.status-fixed {
+    background: #64748B;
+    color: #FFFFFF;
+}
+
 .card-status-badge.status-featured {
     background: #335C67;
     color: #FFFFFF;

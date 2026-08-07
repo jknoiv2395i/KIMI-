@@ -300,7 +300,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="card-image-box">
                             <img src="${(prop.images && prop.images[0]) || prop.image || 'assets/hero-illustration.png'}" alt="${prop.name}" loading="lazy">
                             <div class="card-price-badge">${formatPrice(prop.price)}<span class="price-unit">${prop.priceUnit || ''}</span></div>
-                            ${prop.isSoldOut ? '<span class="card-status-badge status-sold">SOLD OUT</span>' : (prop.isFeatured ? '<span class="card-status-badge status-featured">FEATURED</span>' : '')}
+                            ${prop.isSoldOut ? '<span class="card-status-badge status-sold">SOLD OUT</span>' : (prop.isNegotiable !== false ? '<span class="card-status-badge status-negotiable">NEGOTIABLE</span>' : '<span class="card-status-badge status-fixed">FIXED PRICE</span>')}
                         </div>
                         <div class="card-body">
                             <h3 class="card-title">${prop.name}</h3>

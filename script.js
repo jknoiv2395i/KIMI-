@@ -723,4 +723,21 @@ window.handleValuationSubmit = function(event) {
     if (successMsg) successMsg.style.display = 'block';
 };
 
+// Hero Section Actionable Search Navigation Handler
+window.handleHeroSearch = function(event) {
+    if (event) event.preventDefault();
+    const loc = document.getElementById('hero-location')?.value || 'all';
+    const type = document.getElementById('hero-type')?.value || 'all';
+    const budget = document.getElementById('hero-budget')?.value || 'all';
+    
+    const params = new URLSearchParams();
+    if (loc && loc !== 'all') params.append('location', loc);
+    if (type && type !== 'all') params.append('type', type);
+    if (budget && budget !== 'all') params.append('budget', budget);
+
+    const queryString = params.toString();
+    const targetUrl = queryString ? `properties.html?${queryString}` : 'properties.html';
+    window.location.href = targetUrl;
+};
+
 

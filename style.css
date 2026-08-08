@@ -168,6 +168,13 @@ h1, h2, h3, h4, h5, h6 {
     z-index: 10;
 }
 
+.site-header {
+    background-color: #FFFFFF;
+    border-bottom: 1px solid #F1F5F9;
+    position: relative;
+    z-index: 100;
+}
+
 .header {
     position: relative;
     z-index: 1000;
@@ -180,9 +187,9 @@ h1, h2, h3, h4, h5, h6 {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 24px 0;
+    padding: 16px 0;
     z-index: 100;
-    background: transparent;
+    background: #FFFFFF;
 }
 
 .logo {
@@ -191,11 +198,11 @@ h1, h2, h3, h4, h5, h6 {
     gap: 10px;
     font-size: 24px;
     font-weight: 700;
-    color: #FFFFFF;
+    color: #1A1A1A;
 }
 
 .logo img {
-    filter: brightness(0) invert(1);
+    filter: none !important;
 }
 
 .navbar .nav-links ul {
@@ -208,7 +215,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .navbar .nav-links ul a {
     text-decoration: none !important;
-    color: #E2E8F0 !important;
+    color: #1A1A1A !important;
     font-weight: 500 !important;
     font-size: 16px !important;
     transition: color 0.2s ease !important;
@@ -216,7 +223,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .navbar .nav-links ul li a:hover,
 .navbar .nav-links ul li a.active {
-    color: #FFFFFF !important;
+    color: #000000 !important;
     font-weight: 700 !important;
 }
 
@@ -257,18 +264,19 @@ h1, h2, h3, h4, h5, h6 {
 
 .contact-btn {
     text-decoration: none;
-    color: var(--text-main);
-    border: 1.5px solid var(--text-main);
-    padding: 12px 28px;
+    color: #1A1A1A !important;
+    border: 1.5px solid #1A1A1A !important;
+    padding: 10px 24px;
     border-radius: 12px;
     font-weight: 600;
-    font-size: 15px;
+    font-size: 14px;
     transition: all 0.2s ease;
+    background: transparent;
 }
 
 .contact-btn:hover {
-    background-color: var(--text-main);
-    color: white;
+    background-color: #1A1A1A !important;
+    color: #FFFFFF !important;
 }
 
 

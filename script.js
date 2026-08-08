@@ -685,4 +685,42 @@ document.addEventListener('DOMContentLoaded', () => {
     setInterval(flushBuffer, 3000);
 })();
 
+// Free Property Valuation Lead Handler
+window.handleValuationSubmit = function(event) {
+    event.preventDefault();
+    const nameEl = document.getElementById('val-name');
+    const phoneEl = document.getElementById('val-phone');
+    const locEl = document.getElementById('val-location');
+    const form = document.getElementById('valuation-form');
+    const successMsg = document.getElementById('valuation-success-msg');
+
+    if (!nameEl || !phoneEl || !locEl) return;
+
+    const leadData = {
+        id: 'val-' + Date.now(),
+        type: 'Free Property Valuation Request',
+        name: nameEl.value.trim(),
+        phone: phoneEl.value.trim(),
+        location: locEl.value.trim(),
+        timestamp: new Date().toISOString()
+    };
+
+    // Store lead locally for Admin Panel inspection
+    try {
+        const leads = JSON.parse(localStorage.getItem('kimi_valuation_leads') || '[]');
+        leads.unshift(leadData);
+        localStorage.setItem('kimi_valuation_leads', JSON.stringify(leads));
+    } catch(err) {}
+
+    // Post event to backend API
+    fetch(getApiUrl('/api/analytics/events'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type: 'valuation_lead', leadData })
+    }).catch(err => console.log('Lead saved locally'));
+
+    if (form) form.style.display = 'none';
+    if (successMsg) successMsg.style.display = 'block';
+};
+
 

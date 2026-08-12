@@ -290,6 +290,10 @@
                             <h2 class="pd-sec-heading">Drone Aerial View</h2>
                             <div id="pd-drone-box"></div>
                         </div>
+                        <div id="pd-video-sec" style="display:none; margin-bottom: 32px;">
+                            <h2 class="pd-sec-heading">Video Tour</h2>
+                            <div id="pd-video-box"></div>
+                        </div>
                     </div>
                 </div>
 
@@ -741,6 +745,20 @@
                     `;
                     droneSec.style.display = 'block';
                 }
+            }
+        }
+
+        // Uploaded Video Files Rendering
+        if (prop.videos && prop.videos.length > 0) {
+            const videoSec = document.getElementById('pd-video-sec');
+            const videoBox = document.getElementById('pd-video-box');
+            if (videoSec && videoBox) {
+                videoBox.innerHTML = prop.videos.map(videoUrl => `
+                    <div style="margin-bottom: 16px;">
+                        <video src="${videoUrl}" controls style="width: 100%; border-radius: 12px; border: 1px solid #E2E8F0; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); max-height: 500px; background: #000; display: block;"></video>
+                    </div>
+                `).join('');
+                videoSec.style.display = 'block';
             }
         }
 

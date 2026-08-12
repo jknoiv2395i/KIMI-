@@ -473,6 +473,30 @@ h1, h2, h3, h4, h5, h6 {
     margin-left: 3px;
 }
 
+/* Card Price inside Body */
+.card-price-container {
+    margin: 10px 0 14px 0;
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+}
+
+.card-price-text {
+    font-family: 'Outfit', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    color: #335C67; /* Brand Primary Accent */
+    letter-spacing: -0.5px;
+}
+
+.card-price-unit {
+    font-family: 'Outfit', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: #64748B;
+    margin-left: 2px;
+}
+
 /* Status Badges Top-Right */
 .card-status-badge {
     position: absolute;

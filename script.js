@@ -317,7 +317,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="property-card" onclick="window.location.href='property-detail.html?id=${prop._id || prop.id}'" data-location="${prop.location || 'all'}" data-type="${prop.category}" data-transaction="${prop.transactionType || 'New'}" data-status="${prop.status || ''}">
                         <div class="card-image-box">
                             <img src="${(prop.images && prop.images[0]) || prop.image || 'assets/hero-illustration.png'}" alt="${prop.name}" loading="lazy">
-                            <div class="card-price-badge">${formatPrice(prop.price)}<span class="price-unit">${prop.priceUnit || ''}</span></div>
                             <span class="card-condition-tag ${conditionClass}">${conditionLabel}</span>
                             ${prop.isSoldOut ? '<span class="card-status-badge status-sold">SOLD OUT</span>' : (prop.isNegotiable !== false ? '<span class="card-status-badge status-negotiable">NEGOTIABLE</span>' : '<span class="card-status-badge status-fixed">FIXED PRICE</span>')}
                         </div>
@@ -327,6 +326,10 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
                                 ${prop.address || (prop.location || 'Nagpur')}
                             </p>
+                            <div class="card-price-container">
+                                <span class="card-price-text">${formatPrice(prop.price)}</span>
+                                <span class="card-price-unit">${prop.priceUnit || ''}</span>
+                            </div>
                             <div class="card-specs-row">
                                 ${prop.beds ? `
                                     <div class="card-spec-item">

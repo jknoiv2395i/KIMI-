@@ -654,8 +654,8 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.contact-btn, .btn-browse-action, .btn-submit').forEach(btn => {
         btn.addEventListener('mousemove', (e) => {
             const position = btn.getBoundingClientRect();
-            const x = e.pageX - position.left - position.width / 2;
-            const y = e.pageY - position.top - position.height / 2;
+            const x = e.clientX - position.left - position.width / 2;
+            const y = e.clientY - position.top - position.height / 2;
             
             btn.style.transform = `translate(${x * 0.3}px, ${y * 0.5}px)`;
         });

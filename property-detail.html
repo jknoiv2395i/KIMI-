@@ -461,8 +461,18 @@
         document.title = (prop.isSoldOut ? '[SOLD] ' : '') + (prop.name || 'Property') + ' | KIMI Properties';
 
         // Price formatting
-        const priceVal = prop.price || 'Contact for Price';
+        const formatPrice = (price) => {
+            if (!price || String(price).toLowerCase().includes('contact')) return price || 'Contact for Price';
+            const num = String(price).replace(/,/g, '');
+            if (!isNaN(num) && num.trim() !== '') {
+                return '₹' + Number(num).toLocaleString('en-IN');
+            }
+            return String(price).includes('₹') ? price : '₹' + price;
+        };
+
+        const priceVal = formatPrice(prop.price);
         const priceUnitVal = prop.priceUnit || (prop.category && prop.category.toLowerCase().includes('rental') ? '/ month' : '');
+        
         document.getElementById('pd-book-price').textContent = priceVal;
         document.getElementById('pd-book-unit').textContent = priceUnitVal;
         document.getElementById('pd-bd-rent').textContent = priceVal;
@@ -471,7 +481,7 @@
         document.getElementById('pd-mobile-unit').textContent = priceUnitVal;
         
         if (prop.securityDeposit) {
-            document.getElementById('pd-bd-deposit').textContent = prop.securityDeposit;
+            document.getElementById('pd-bd-deposit').textContent = formatPrice(prop.securityDeposit);
         } else {
             document.getElementById('pd-bd-deposit-row').style.display = 'none';
         }

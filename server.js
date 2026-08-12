@@ -43,7 +43,7 @@ let useMongoDB = false;
 const storage = multer.memoryStorage();
 const upload = multer({ 
     storage: storage,
-    limits: { fileSize: 15 * 1024 * 1024 } // 15MB limit for videos and high-res images
+    limits: { fileSize: 100 * 1024 * 1024 } // 100MB limit for videos and high-res images
 });
 
 // Database Connection with Fallback
@@ -70,7 +70,8 @@ if (!JWT_SECRET || JWT_SECRET === 'undefined') {
 console.log('JWT Secret Validated: YES (' + JWT_SECRET.substring(0, 3) + '...)');
 
 app.use(cors());
-app.use(express.json({ limit: '50mb' }));
+app.use(express.json({ limit: '100mb' }));
+app.use(express.urlencoded({ limit: '100mb', extended: true }));
 
 // Global API Cache Disabler to ensure fresh data updates
 app.use('/api', (req, res, next) => {

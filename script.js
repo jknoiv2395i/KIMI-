@@ -438,44 +438,94 @@ document.addEventListener('DOMContentLoaded', () => {
     // Start the hybrid loading sequence
     fetchFrontendData();
 
-    // Property Filtering Logic
+    // Property Category Sub-Sections & Filter Logic
     const applyFiltersBtn = document.getElementById('apply-filters');
     const propertiesGrid = document.getElementById('properties-grid');
     const resultCountSpan = document.getElementById('result-count');
+    const categoryTabBtns = document.querySelectorAll('.cat-tab-btn');
+
+    let activeCategory = 'all';
+
+    function filterProperties() {
+        if (!propertiesGrid) return;
+        const locationSelect = document.getElementById('location-filter');
+        const typeSelect = document.getElementById('type-filter');
+
+        const locationValue = locationSelect ? locationSelect.value : 'all';
+        const typeValue = typeSelect ? typeSelect.value : 'all';
+        
+        const cards = propertiesGrid.querySelectorAll('.property-card');
+        let visibleCount = 0;
+
+        cards.forEach(card => {
+            const cardLocation = card.getAttribute('data-location') || '';
+            const cardType = card.getAttribute('data-type') || '';
+
+            // Match Location
+            let matchLocation = (!locationValue || locationValue === 'all' || cardLocation === 'all' || locationValue === cardLocation || cardLocation.includes(locationValue));
+            
+            // Match Dropdown Type
+            let matchDropdownType = (!typeValue || typeValue === 'all' || cardType === 'all' || typeValue === cardType || cardType.includes(typeValue) || typeValue.includes(cardType));
+
+            // Match Category Tab
+            let matchCategoryTab = true;
+            if (activeCategory && activeCategory !== 'all') {
+                const searchCat = activeCategory.toLowerCase();
+                const itemCat = cardType.toLowerCase();
+                matchCategoryTab = itemCat.includes(searchCat);
+            }
+
+            if (matchLocation && matchDropdownType && matchCategoryTab) {
+                card.style.display = 'flex';
+                visibleCount++;
+            } else {
+                card.style.display = 'none';
+            }
+        });
+
+        if (resultCountSpan) {
+            resultCountSpan.textContent = visibleCount;
+        }
+    }
+
+    // Category Tab Button Click Handlers
+    if (categoryTabBtns.length > 0) {
+        categoryTabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                categoryTabBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                activeCategory = btn.getAttribute('data-category') || 'all';
+
+                // Sync Type Dropdown if matching option exists
+                const typeSelect = document.getElementById('type-filter');
+                if (typeSelect && activeCategory !== 'all') {
+                    const matchOption = Array.from(typeSelect.options).find(opt => opt.value.toLowerCase().includes(activeCategory.toLowerCase()));
+                    if (matchOption) typeSelect.value = matchOption.value;
+                } else if (typeSelect && activeCategory === 'all') {
+                    typeSelect.value = 'all';
+                }
+
+                filterProperties();
+
+                // Update URL history state without reloading
+                if (window.history.pushState) {
+                    const newUrl = window.location.pathname + (activeCategory !== 'all' ? '?category=' + encodeURIComponent(activeCategory) : '');
+                    window.history.pushState({ path: newUrl }, '', newUrl);
+                }
+            });
+        });
+    }
 
     if (applyFiltersBtn && propertiesGrid) {
         applyFiltersBtn.addEventListener('click', () => {
-            const locationValue = document.getElementById('location-filter').value;
-            const typeValue = document.getElementById('type-filter').value;
-            
-            const cards = propertiesGrid.querySelectorAll('.property-card');
-            let visibleCount = 0;
-
-            cards.forEach(card => {
-                const cardLocation = card.getAttribute('data-location');
-                const cardType = card.getAttribute('data-type');
-
-                let matchLocation = (!locationValue || locationValue === 'all' || cardLocation === 'all' || locationValue === cardLocation || (cardLocation && cardLocation.includes(locationValue)));
-                let matchType = (!typeValue || typeValue === 'all' || cardType === 'all' || typeValue === cardType || (cardType && typeValue && (cardType.includes(typeValue) || typeValue.includes(cardType))));
-
-                if (matchLocation && matchType) {
-                    card.style.display = 'flex';
-                    visibleCount++;
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-
-            if (resultCountSpan) {
-                resultCountSpan.textContent = visibleCount;
-            }
+            filterProperties();
             
             // Visual feedback
             applyFiltersBtn.style.opacity = '0.7';
             applyFiltersBtn.textContent = 'Searching...';
             setTimeout(() => {
                 applyFiltersBtn.style.opacity = '1';
-                applyFiltersBtn.textContent = 'Browse';
+                applyFiltersBtn.textContent = 'Browse Property';
             }, 400);
         });
     }
@@ -486,20 +536,18 @@ document.addEventListener('DOMContentLoaded', () => {
     
     if (hamburger && navLinks) {
         hamburger.addEventListener('click', () => {
-            // Toggle Nav
             navLinks.classList.toggle('nav-active');
-            
-            // Burger Animation
             hamburger.classList.toggle('toggle');
         });
     }
 
-    // Handle URL parameters for filters
+    // Handle URL parameters for category & filters
     const urlParams = new URLSearchParams(window.location.search);
     const paramLocation = urlParams.get('location');
     const paramType = urlParams.get('type');
+    const paramCategory = urlParams.get('category');
 
-    if (paramLocation || paramType) {
+    if (paramLocation || paramType || paramCategory) {
         if (paramLocation) {
             const locEl = document.getElementById('location-filter');
             if (locEl) locEl.value = paramLocation;
@@ -508,11 +556,20 @@ document.addEventListener('DOMContentLoaded', () => {
             const typeEl = document.getElementById('type-filter');
             if (typeEl) typeEl.value = paramType;
         }
-        
-        // Auto trigger click
-        setTimeout(() => {
-            if (applyFiltersBtn) applyFiltersBtn.click();
-        }, 100);
+
+        const targetCat = paramCategory || paramType;
+        if (targetCat) {
+            categoryTabBtns.forEach(btn => {
+                const catVal = btn.getAttribute('data-category');
+                if (catVal && targetCat.toLowerCase().includes(catVal.toLowerCase())) {
+                    categoryTabBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    activeCategory = catVal;
+                }
+            });
+        }
+
+        setTimeout(filterProperties, 150);
     }
     function initScrollObserver() {
         const observerOptions = {

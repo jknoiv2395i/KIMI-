@@ -295,11 +295,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     const waNum = (prop.ownerWhatsapp || prop.ownerPhone || '+919696976950').replace(/[^0-9]/g, '');
                     const waMsg = encodeURIComponent('Hello KIMI Properties, I am interested in ' + prop.name);
 
+                    const isResale = prop.transactionType === 'Resale' || prop.transactionType === 'Old';
+                    const conditionLabel = isResale ? 'RESALE' : 'NEW LAUNCH';
+                    const conditionClass = isResale ? 'tag-resale' : 'tag-new';
+
                     return `
-                    <div class="property-card" onclick="window.location.href='property-detail.html?id=${prop._id || prop.id}'" data-location="${prop.location || 'all'}" data-type="${prop.category}">
+                    <div class="property-card" onclick="window.location.href='property-detail.html?id=${prop._id || prop.id}'" data-location="${prop.location || 'all'}" data-type="${prop.category}" data-transaction="${prop.transactionType || 'New'}" data-status="${prop.status || ''}">
                         <div class="card-image-box">
                             <img src="${(prop.images && prop.images[0]) || prop.image || 'assets/hero-illustration.png'}" alt="${prop.name}" loading="lazy">
                             <div class="card-price-badge">${formatPrice(prop.price)}<span class="price-unit">${prop.priceUnit || ''}</span></div>
+                            <span class="card-condition-tag ${conditionClass}">${conditionLabel}</span>
                             ${prop.isSoldOut ? '<span class="card-status-badge status-sold">SOLD OUT</span>' : (prop.isNegotiable !== false ? '<span class="card-status-badge status-negotiable">NEGOTIABLE</span>' : '<span class="card-status-badge status-fixed">FIXED PRICE</span>')}
                         </div>
                         <div class="card-body">
@@ -443,8 +448,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const propertiesGrid = document.getElementById('properties-grid');
     const resultCountSpan = document.getElementById('result-count');
     const categoryTabBtns = document.querySelectorAll('.cat-tab-btn');
+    const conditionPillBtns = document.querySelectorAll('.condition-pill-btn');
 
     let activeCategory = 'all';
+    let activeCondition = 'all';
 
     function filterProperties() {
         if (!propertiesGrid) return;
@@ -460,6 +467,8 @@ document.addEventListener('DOMContentLoaded', () => {
         cards.forEach(card => {
             const cardLocation = card.getAttribute('data-location') || '';
             const cardType = card.getAttribute('data-type') || '';
+            const cardTx = card.getAttribute('data-transaction') || 'New';
+            const cardStatus = card.getAttribute('data-status') || '';
 
             // Match Location
             let matchLocation = (!locationValue || locationValue === 'all' || cardLocation === 'all' || locationValue === cardLocation || cardLocation.includes(locationValue));
@@ -467,7 +476,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Match Dropdown Type
             let matchDropdownType = (!typeValue || typeValue === 'all' || cardType === 'all' || typeValue === cardType || cardType.includes(typeValue) || typeValue.includes(cardType));
 
-            // Match Category Tab
+            // Match Category Tab (Residential, Commercial, Industrial, Agricultural)
             let matchCategoryTab = true;
             if (activeCategory && activeCategory !== 'all') {
                 const searchCat = activeCategory.toLowerCase();
@@ -475,7 +484,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 matchCategoryTab = itemCat.includes(searchCat);
             }
 
-            if (matchLocation && matchDropdownType && matchCategoryTab) {
+            // Match Condition Tab (New vs Resale)
+            let matchConditionTab = true;
+            if (activeCondition && activeCondition !== 'all') {
+                if (activeCondition === 'New') {
+                    matchConditionTab = (cardTx === 'New' || cardStatus === 'Ready to Move' || !cardTx.toLowerCase().includes('resale'));
+                } else if (activeCondition === 'Resale') {
+                    matchConditionTab = (cardTx === 'Resale' || cardTx === 'Old' || cardStatus === 'Under Construction' || cardTx.toLowerCase().includes('resale'));
+                }
+            }
+
+            if (matchLocation && matchDropdownType && matchCategoryTab && matchConditionTab) {
                 card.style.display = 'flex';
                 visibleCount++;
             } else {
@@ -507,11 +526,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 filterProperties();
 
-                // Update URL history state without reloading
                 if (window.history.pushState) {
                     const newUrl = window.location.pathname + (activeCategory !== 'all' ? '?category=' + encodeURIComponent(activeCategory) : '');
                     window.history.pushState({ path: newUrl }, '', newUrl);
                 }
+            });
+        });
+    }
+
+    // Condition Pill Button Click Handlers (New vs Resale)
+    if (conditionPillBtns.length > 0) {
+        conditionPillBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                conditionPillBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                activeCondition = btn.getAttribute('data-condition') || 'all';
+                filterProperties();
             });
         });
     }

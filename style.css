@@ -3595,6 +3595,83 @@ h1, h2, h3, h4, h5, h6 {
     stroke: #FFFFFF;
 }
 
+/* Condition Segregation Bar (New vs Resale / Old) */
+.subsections-right-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.condition-subsections-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-top: 8px;
+    border-top: 1px dashed #E2E8F0;
+}
+
+.condition-filter-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: #64748B;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-right: 4px;
+}
+
+.condition-pill-btn {
+    background: #F1F5F9;
+    border: 1px solid #E2E8F0;
+    color: #475569;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+}
+
+.condition-pill-btn:hover {
+    background: #E2E8F0;
+    color: #0F172A;
+}
+
+.condition-pill-btn.active {
+    background: #335C67;
+    border-color: #335C67;
+    color: #FFFFFF;
+    box-shadow: 0 2px 8px rgba(51, 92, 103, 0.3);
+}
+
+/* Property Card Condition Badge */
+.card-condition-tag {
+    position: absolute;
+    bottom: 12px;
+    left: 12px;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    z-index: 2;
+    backdrop-filter: blur(6px);
+}
+
+.card-condition-tag.tag-new {
+    background: rgba(16, 185, 129, 0.9);
+    color: #FFFFFF;
+}
+
+.card-condition-tag.tag-resale {
+    background: rgba(245, 158, 11, 0.9);
+    color: #FFFFFF;
+}
+
 @media (max-width: 992px) {
     .category-subsections-card {
         flex-direction: column;
@@ -3603,7 +3680,12 @@ h1, h2, h3, h4, h5, h6 {
         padding: 20px;
     }
     
-    .category-subsections-bar {
+    .subsections-right-group {
         width: 100%;
+    }
+
+    .category-subsections-bar, .condition-subsections-bar {
+        width: 100%;
+        overflow-x: auto;
     }
 }

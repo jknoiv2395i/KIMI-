@@ -833,4 +833,38 @@ window.handleValuationSubmit = function(event) {
     if (successMsg) successMsg.style.display = 'block';
 };
 
+// WhatsApp Contact Form Lead Handler
+window.handleContactSubmit = function(event) {
+    event.preventDefault();
+    const fnameEl = document.getElementById('contact-fname');
+    const lnameEl = document.getElementById('contact-lname');
+    const phoneEl = document.getElementById('contact-phone');
+    const emailEl = document.getElementById('contact-email');
+    const msgEl = document.getElementById('contact-message');
+
+    if (!fnameEl || !phoneEl || !msgEl) return;
+
+    const fname = fnameEl.value.trim();
+    const lname = lnameEl ? lnameEl.value.trim() : '';
+    const phone = phoneEl.value.trim();
+    const email = emailEl ? emailEl.value.trim() : '';
+    const message = msgEl.value.trim();
+
+    // Format message layout nicely
+    const waMessage = `*New Contact Inquiry on KIMI Properties*\n\n` +
+                      `*Name:* ${fname} ${lname}\n` +
+                      `*Phone:* ${phone}\n` +
+                      `*Email:* ${email || 'Not provided'}\n\n` +
+                      `*Message:* ${message}`;
+
+    const encodedMsg = encodeURIComponent(waMessage);
+    const waUrl = `https://wa.me/919696976950?text=${encodedMsg}`;
+
+    // Clear the form inputs
+    event.target.reset();
+
+    // Open WhatsApp URL
+    window.open(waUrl, '_blank');
+};
+
 

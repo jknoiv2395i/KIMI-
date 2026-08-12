@@ -227,7 +227,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 1. DATA INFRASTRUCTURE
     const defaultContent = {
         hero: { title: "We help people to realize their dream property", subtitle: "We are creative people who provide the best way to you who want to have a new comfortable and suitable place to live" },
-        contact: { phone: "+91 96969 76950", email: "hello@kimiproperties.in", address: "Nagpur, Maharashtra, India", facebook: "https://www.facebook.com/kimiproperties.in", instagram: "https://www.instagram.com/_kimiproperties.in?igsh=MW41ZnJrcGRwdHQycA==" },
+        contact: { phone: "+91 96969 76950", email: "hello@kimiproperties.in", address: "Nagpur, Maharashtra, India", facebook: "https://www.facebook.com/people/KIMI-Properties/61590282696335/", instagram: "https://www.instagram.com/_kimiproperties.in?igsh=MW41ZnJrcGRwdHQycA==" },
         locations: ["Nagpur", "Mumbai", "Pune"],
         categories: ["Residential (Purchase)", "Residential Rental", "Commercial (Purchase)", "Commercial Rental", "Industrial", "Agriculture"],
         properties: [
@@ -241,6 +241,20 @@ document.addEventListener('DOMContentLoaded', () => {
     function populatePageContent(content) {
         if (!content) return;
         console.log("populatePageContent: called with properties count =", content.properties ? content.properties.length : 0);
+
+        // Update Social Links Dynamically
+        if (content.contact) {
+            if (content.contact.facebook) {
+                document.querySelectorAll('.social-links a[title="Facebook"]').forEach(a => {
+                    a.href = content.contact.facebook;
+                });
+            }
+            if (content.contact.instagram) {
+                document.querySelectorAll('.social-links a[title="Instagram"]').forEach(a => {
+                    a.href = content.contact.instagram;
+                });
+            }
+        }
 
         // Populate Location Dropdowns
         const heroLocation = document.getElementById('hero-location');

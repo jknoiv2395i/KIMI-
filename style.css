@@ -756,8 +756,8 @@ h1, h2, h3, h4, h5, h6 {
 
 .categories-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 30px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
 }
 
 .category-card {

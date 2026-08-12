@@ -3487,10 +3487,47 @@ h1, h2, h3, h4, h5, h6 {
     }
 }
 
-/* Category Sub-Sections Bar */
+/* Redesigned Category Sub-Sections Card System */
 .category-subsections-wrapper {
-    margin-bottom: 24px;
+    margin-top: 36px;
+    margin-bottom: 32px;
     position: relative;
+    z-index: 5;
+}
+
+.category-subsections-card {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 20px;
+    padding: 20px 28px;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.04);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+}
+
+.cat-card-header {
+    flex-shrink: 0;
+}
+
+.cat-card-subtitle {
+    font-size: 11px;
+    font-weight: 700;
+    color: #335C67;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    display: block;
+    margin-bottom: 2px;
+}
+
+.cat-card-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: #0F172A;
+    margin: 0;
+    letter-spacing: -0.3px;
 }
 
 .category-subsections-bar {
@@ -3498,7 +3535,7 @@ h1, h2, h3, h4, h5, h6 {
     align-items: center;
     gap: 12px;
     overflow-x: auto;
-    padding: 6px 2px;
+    padding: 4px 2px;
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
 }
@@ -3513,9 +3550,9 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .cat-tab-btn {
-    background: #FFFFFF;
+    background: #F8FAFC;
     border: 1.5px solid #E2E8F0;
-    color: #475569;
+    color: #334155;
     padding: 10px 22px;
     border-radius: 30px;
     font-family: 'Outfit', sans-serif;
@@ -3527,7 +3564,6 @@ h1, h2, h3, h4, h5, h6 {
     gap: 8px;
     white-space: nowrap;
     transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-    box-shadow: 0 2px 6px rgba(0,0,0,0.02);
 }
 
 .cat-tab-btn svg {
@@ -3537,6 +3573,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .cat-tab-btn:hover {
+    background: #FFFFFF;
     border-color: #0F172A;
     color: #0F172A;
     transform: translateY(-2px);
@@ -3551,9 +3588,22 @@ h1, h2, h3, h4, h5, h6 {
     background: #0F172A;
     border-color: #0F172A;
     color: #FFFFFF;
-    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.2);
+    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.25);
 }
 
 .cat-tab-btn.active svg {
     stroke: #FFFFFF;
+}
+
+@media (max-width: 992px) {
+    .category-subsections-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+        padding: 20px;
+    }
+    
+    .category-subsections-bar {
+        width: 100%;
+    }
 }

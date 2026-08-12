@@ -1,8 +1,8 @@
 server.js
 models/
-node_modules/
-package.json
-package-lock.json
+migrate.js
+local_server.ps1
 .env
 .git
 .gitignore
+

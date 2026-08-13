@@ -271,6 +271,14 @@
                     </div>
 
                     <div class="form-group">
+                        <label>Listing Purpose (Buy / Rent) *</label>
+                        <select id="prop-purpose" style="font-weight: 600;">
+                            <option value="Buy">🏷️ For Sale (Buy)</option>
+                            <option value="Rent">🔑 For Rent (Rental)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
                         <label>Transaction Type</label>
                         <select id="prop-type">
                             <option value="New">New Property</option>
@@ -1222,11 +1230,14 @@
                 const city = prop.location || '';
                 const area = prop.area || '';
                 
+                const isRentProp = prop.purpose === 'Rent' || (prop.category && prop.category.toLowerCase().includes('rental')) || prop.transactionType === 'Rental';
+                const purposeBadgeAdmin = isRentProp ? '<span class="badge-rent-admin">🔑 FOR RENT</span>' : '<span class="badge-buy-admin">🏷️ FOR SALE</span>';
+
                 item.innerHTML = `
                     <div class="property-info">
                         <img src="${imgSrc}" alt="Property Image">
                         <div class="property-details">
-                            <h4>${prop.name} ${prop.isSoldOut ? `<span class="sold-badge-admin">SOLD ${prop.buyerName ? 'to ' + prop.buyerName : ''}</span>` : ''}</h4>
+                            <h4>${prop.name} ${purposeBadgeAdmin} ${prop.isSoldOut ? `<span class="sold-badge-admin">SOLD ${prop.buyerName ? 'to ' + prop.buyerName : ''}</span>` : ''}</h4>
                             <div class="property-meta">
                                 <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> ${location} (${city})</span>
                                 <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg> ${price}</span>
@@ -1272,6 +1283,7 @@
                 document.getElementById('prop-status').value = prop.status || 'Ready to Move';
                 document.getElementById('prop-type').value = prop.transactionType || 'New';
                 document.getElementById('prop-category').value = prop.category || 'Residential (Purchase)';
+                document.getElementById('prop-purpose').value = prop.purpose || ((prop.category && prop.category.toLowerCase().includes('rental')) || prop.transactionType === 'Rental' ? 'Rent' : 'Buy');
                 document.getElementById('prop-facing').value = prop.facing || '';
                 document.getElementById('prop-road-width').value = prop.roadWidth || '';
                 document.getElementById('prop-corner').value = prop.isCornerPlot ? 'yes' : 'no';
@@ -1346,6 +1358,7 @@
                 document.getElementById('prop-status').value = 'Ready to Move';
                 document.getElementById('prop-type').value = 'New';
                 document.getElementById('prop-category').value = currentFilter !== 'All' ? currentFilter : 'Residential (Purchase)';
+                document.getElementById('prop-purpose').value = 'Buy';
                 document.getElementById('prop-facing').value = '';
                 document.getElementById('prop-road-width').value = '';
                 document.getElementById('prop-corner').value = 'no';
@@ -1668,6 +1681,7 @@
                 status: document.getElementById('prop-status').value,
                 transactionType: document.getElementById('prop-type').value,
                 category: document.getElementById('prop-category').value,
+                purpose: document.getElementById('prop-purpose').value,
                 facing: document.getElementById('prop-facing').value,
                 roadWidth: document.getElementById('prop-road-width').value,
                 isCornerPlot: document.getElementById('prop-corner').value === 'yes',

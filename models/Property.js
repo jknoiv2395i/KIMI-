@@ -7,6 +7,7 @@ const propertySchema = new mongoose.Schema({
     address: String,
     location: String,
     category: String,
+    purpose: { type: String, default: 'Buy' },
     status: String,
     transactionType: String,
     beds: Number,

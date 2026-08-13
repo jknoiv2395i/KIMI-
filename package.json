@@ -1,10 +1,9 @@
 {
-  "name": "birbal",
+  "name": "kimi-properties",
   "version": "1.0.0",
-  "description": "",
-  "main": "server.js",
+  "description": "KIMI Properties Real Estate Web Application",
   "scripts": {
-    "build": "echo 'Build complete'",
+    "build": "echo 'Static build ready'",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
   },

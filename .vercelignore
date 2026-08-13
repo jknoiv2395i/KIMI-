@@ -1,8 +1,5 @@
-server.js
-models/
-migrate.js
-local_server.ps1
 .env
 .git
 .gitignore
+
 

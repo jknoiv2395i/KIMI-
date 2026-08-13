@@ -1,7 +1,7 @@
 {
     "hero": {
         "title": "We help people to realize their dream property",
-        "subtitle": "We are creative people who provide the best way to you who want to have a new comfortable and suitable place to live",
+        "subtitle": "KIMI Properties is a trusted real estate agency in Nagpur, specializing in Industrial, Commercial, Residential and Agricultural properties across Hingna, Wadi, Butibori and other key locations in Nagpur.",
         "location": "Any Location",
         "type": "All Types"
     },
@@ -12,7 +12,7 @@
         "facebook": "https://www.facebook.com/people/KIMI-Properties/61590282696335/",
         "instagram": "https://www.instagram.com/_kimiproperties.in?igsh=MW41ZnJrcGRwdHQycA=="
     },
-    "locations": ["Nagpur", "Mumbai", "Pune", "Hull, UK", "Highland Lake, FL", "London, UK"],
+    "locations": ["Hingna", "Hingna MIDC", "Wadi MIDC", "Butibori MIDC", "Wanadongri", "Sangam Road", "Nagpur Agricultural Land", "Nagpur", "Mumbai", "Pune"],
     "categories": ["Residential (Purchase)", "Residential Rental", "Commercial (Purchase)", "Commercial Rental", "Industrial", "Agriculture"],
     "properties": [
         {
@@ -24,6 +24,7 @@
             "address": "3 Leame Close, Hull, HU3 6ND",
             "location": "Nagpur",
             "category": "Residential (Purchase)",
+            "purpose": "Buy",
             "status": "Ready to Move",
             "transactionType": "New",
             "beds": 3,
@@ -78,6 +79,7 @@
             "address": "2699 Green Valley, Highland Lake, FL",
             "location": "Nagpur",
             "category": "Residential Rental",
+            "purpose": "Rent",
             "status": "Under Construction",
             "transactionType": "Resale",
             "beds": 4,
@@ -98,6 +100,7 @@
             "address": "28B Highgate Road, London, NW5 1NS",
             "location": "Nagpur",
             "category": "Commercial (Purchase)",
+            "purpose": "Buy",
             "status": "Ready to Move",
             "transactionType": "New",
             "beds": 2,

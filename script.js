@@ -313,10 +313,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     const conditionLabel = isResale ? 'RESALE' : 'NEW LAUNCH';
                     const conditionClass = isResale ? 'tag-resale' : 'tag-new';
 
+                    const isRentProp = prop.purpose === 'Rent' || (prop.category && prop.category.toLowerCase().includes('rental')) || prop.transactionType === 'Rental';
+                    const purposeBadge = isRentProp ? '<span class="card-purpose-badge purpose-rent">FOR RENT</span>' : '<span class="card-purpose-badge purpose-buy">FOR SALE</span>';
+
                     return `
-                    <div class="property-card" onclick="window.location.href='property-detail.html?id=${prop._id || prop.id}'" data-location="${prop.location || 'all'}" data-type="${prop.category}" data-transaction="${prop.transactionType || 'New'}" data-status="${prop.status || ''}">
+                    <div class="property-card" onclick="window.location.href='property-detail.html?id=${prop._id || prop.id}'" data-location="${prop.location || 'all'}" data-type="${prop.category}" data-purpose="${isRentProp ? 'Rent' : 'Buy'}" data-transaction="${prop.transactionType || 'New'}" data-status="${prop.status || ''}">
                         <div class="card-image-box">
                             <img src="${(prop.images && prop.images[0]) || prop.image || 'assets/hero-illustration.png'}" alt="${prop.name}" loading="lazy">
+                            ${purposeBadge}
                             <div class="card-price-badge">${formatPrice(prop.price)}<span class="price-unit">${prop.priceUnit || ''}</span></div>
                             <span class="card-condition-tag ${conditionClass}">${conditionLabel}</span>
                             ${prop.isSoldOut ? '<span class="card-status-badge status-sold">SOLD OUT</span>' : (prop.isNegotiable !== false ? '<span class="card-status-badge status-negotiable">NEGOTIABLE</span>' : '<span class="card-status-badge status-fixed">FIXED PRICE</span>')}

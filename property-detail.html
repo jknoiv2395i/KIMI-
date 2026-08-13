@@ -473,8 +473,10 @@
 
         // Render Tag Pills (Matching Image 1 Badges)
         const pillsEl = document.getElementById('pd-pills');
-        const defaultPills = [prop.category, prop.status, prop.location, prop.isCornerPlot ? 'Corner Plot' : '', prop.isNegotiable ? 'Negotiable' : ''].filter(Boolean);
-        const allPills = prop.highlights && prop.highlights.length > 0 ? prop.highlights : defaultPills;
+        const isRentPropDetail = prop.purpose === 'Rent' || (prop.category && prop.category.toLowerCase().includes('rental')) || prop.transactionType === 'Rental';
+        const purposeTagDetail = isRentPropDetail ? '🔑 FOR RENT' : '🏷️ FOR SALE';
+        const defaultPills = [purposeTagDetail, prop.category, prop.status, prop.location, prop.isCornerPlot ? 'Corner Plot' : '', prop.isNegotiable ? 'Negotiable' : ''].filter(Boolean);
+        const allPills = prop.highlights && prop.highlights.length > 0 ? [purposeTagDetail, ...prop.highlights] : defaultPills;
         pillsEl.innerHTML = allPills.map(pill => `<div class="pd-pill">${pill}</div>`).join('');
 
         // Lightbox State

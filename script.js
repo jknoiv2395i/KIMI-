@@ -331,6 +331,10 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
                                 ${prop.address || (prop.location || 'Nagpur')}
                             </p>
+                            <div class="card-price-container">
+                                <span class="card-price-text">${formatPrice(prop.price)}</span>
+                                <span class="card-price-unit">${prop.priceUnit || ''}</span>
+                            </div>
                             <div class="card-specs-row">
                                 ${prop.beds ? `
                                     <div class="card-spec-item">
@@ -428,7 +432,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         function getApiUrl(path) {
             if (!path.startsWith('/')) path = '/' + path;
-            if (window.location.protocol === 'file:' || (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1' && !window.location.port)) {
+            const isLocalDev = window.location.hostname === 'localhost' || 
+                               window.location.hostname === '127.0.0.1' || 
+                               window.location.hostname === '';
+            const isFileProtocol = window.location.protocol === 'file:';
+            const isDifferentPort = window.location.port && window.location.port !== '3001';
+            
+            if (isFileProtocol || (isLocalDev && isDifferentPort)) {
                 return 'http://localhost:3001' + path;
             }
             return path;
@@ -649,8 +659,8 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.contact-btn, .btn-browse-action, .btn-submit').forEach(btn => {
         btn.addEventListener('mousemove', (e) => {
             const position = btn.getBoundingClientRect();
-            const x = e.pageX - position.left - position.width / 2;
-            const y = e.pageY - position.top - position.height / 2;
+            const x = e.clientX - position.left - position.width / 2;
+            const y = e.clientY - position.top - position.height / 2;
             
             btn.style.transform = `translate(${x * 0.3}px, ${y * 0.5}px)`;
         });
@@ -826,6 +836,40 @@ window.handleValuationSubmit = function(event) {
 
     if (form) form.style.display = 'none';
     if (successMsg) successMsg.style.display = 'block';
+};
+
+// WhatsApp Contact Form Lead Handler
+window.handleContactSubmit = function(event) {
+    event.preventDefault();
+    const fnameEl = document.getElementById('contact-fname');
+    const lnameEl = document.getElementById('contact-lname');
+    const phoneEl = document.getElementById('contact-phone');
+    const emailEl = document.getElementById('contact-email');
+    const msgEl = document.getElementById('contact-message');
+
+    if (!fnameEl || !phoneEl || !msgEl) return;
+
+    const fname = fnameEl.value.trim();
+    const lname = lnameEl ? lnameEl.value.trim() : '';
+    const phone = phoneEl.value.trim();
+    const email = emailEl ? emailEl.value.trim() : '';
+    const message = msgEl.value.trim();
+
+    // Format message layout nicely
+    const waMessage = `*New Contact Inquiry on KIMI Properties*\n\n` +
+                      `*Name:* ${fname} ${lname}\n` +
+                      `*Phone:* ${phone}\n` +
+                      `*Email:* ${email || 'Not provided'}\n\n` +
+                      `*Message:* ${message}`;
+
+    const encodedMsg = encodeURIComponent(waMessage);
+    const waUrl = `https://wa.me/919696976950?text=${encodedMsg}`;
+
+    // Clear the form inputs
+    event.target.reset();
+
+    // Open WhatsApp URL
+    window.open(waUrl, '_blank');
 };
 
 

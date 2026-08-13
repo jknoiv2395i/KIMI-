@@ -736,7 +736,7 @@
                 const token = localStorage.getItem('kimi_token');
                 if (!token) return;
                 try {
-                    const res = await fetch('/api/content');
+                    const res = await fetch(getApiUrl('/api/content'));
                     if (res.status === 401 || res.status === 403) {
                         alert("Session expired in background. Please log in again to save your work.");
                         logout();
@@ -747,7 +747,13 @@
 
         function getApiUrl(path) {
             if (!path.startsWith('/')) path = '/' + path;
-            if (window.location.protocol === 'file:' || (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1' && !window.location.port)) {
+            const isLocalDev = window.location.hostname === 'localhost' || 
+                               window.location.hostname === '127.0.0.1' || 
+                               window.location.hostname === '';
+            const isFileProtocol = window.location.protocol === 'file:';
+            const isDifferentPort = window.location.port && window.location.port !== '3001';
+            
+            if (isFileProtocol || (isLocalDev && isDifferentPort)) {
                 return 'http://localhost:3001' + path;
             }
             return path;
@@ -1561,7 +1567,7 @@
                 const formData = new FormData();
                 compressedFiles.forEach(file => formData.append('files', file));
 
-                const res = await fetch('/api/upload', {
+                const res = await fetch(getApiUrl('/api/upload'), {
                     method: 'POST',
                     headers: { 'Authorization': `Bearer ${localStorage.getItem('kimi_token')}` },
                     body: formData

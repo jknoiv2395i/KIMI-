@@ -43,7 +43,7 @@ let useMongoDB = false;
 const storage = multer.memoryStorage();
 const upload = multer({ 
     storage: storage,
-    limits: { fileSize: 15 * 1024 * 1024 } // 15MB limit for videos and high-res images
+    limits: { fileSize: 100 * 1024 * 1024 } // 100MB limit for videos and high-res images
 });
 
 // Database Connection with Fallback
@@ -70,7 +70,8 @@ if (!JWT_SECRET || JWT_SECRET === 'undefined') {
 console.log('JWT Secret Validated: YES (' + JWT_SECRET.substring(0, 3) + '...)');
 
 app.use(cors());
-app.use(express.json({ limit: '50mb' }));
+app.use(express.json({ limit: '100mb' }));
+app.use(express.urlencoded({ limit: '100mb', extended: true }));
 
 // Global API Cache Disabler to ensure fresh data updates
 app.use('/api', (req, res, next) => {
@@ -240,38 +241,49 @@ app.get('/api/analytics/audit', async (req, res) => {
     }
 });
 
-// Public: Get full media for a property
 app.get('/api/properties/:id/media', async (req, res) => {
     try {
-        const media = await Media.find({ propertyId: req.params.id });
-        const images = media.filter(m => m.type === 'image').map(m => m.data);
-        const videos = media.filter(m => m.type === 'video').map(m => m.data);
-        
-        // Fallback / Merge with nested fields on the Property document (e.g. legacy/migrated content)
-        try {
-            const property = await Property.findById(req.params.id);
-            if (property) {
-                if (property.images && property.images.length > 0) {
-                    property.images.forEach(img => {
-                        if (img && !images.includes(img)) {
-                            images.push(img);
+        let images = [];
+        let videos = [];
+
+        if (useMongoDB) {
+            const isValidObjectId = mongoose.Types.ObjectId.isValid(req.params.id);
+            if (isValidObjectId) {
+                const media = await Media.find({ propertyId: req.params.id });
+                images = media.filter(m => m.type === 'image').map(m => m.data);
+                videos = media.filter(m => m.type === 'video').map(m => m.data);
+                
+                try {
+                    const property = await Property.findById(req.params.id);
+                    if (property) {
+                        if (property.images && property.images.length > 0) {
+                            property.images.forEach(img => {
+                                if (img && !images.includes(img)) images.push(img);
+                            });
                         }
-                    });
-                }
-                if (property.videos && property.videos.length > 0) {
-                    property.videos.forEach(vid => {
-                        if (vid && !videos.includes(vid)) {
-                            videos.push(vid);
+                        if (property.videos && property.videos.length > 0) {
+                            property.videos.forEach(vid => {
+                                if (vid && !videos.includes(vid)) videos.push(vid);
+                            });
                         }
-                    });
+                    }
+                } catch (e) {
+                    console.error('Failed to merge Property document media:', e.message);
                 }
             }
-        } catch (e) {
-            console.error('Failed to merge Property document media:', e.message);
+        } else {
+            // Local JSON fallback
+            const data = JSON.parse(fs.readFileSync(DATA_PATH, 'utf8'));
+            const property = data.properties.find(p => (p._id || p.id) === req.params.id);
+            if (property) {
+                images = property.images || [];
+                videos = property.videos || [];
+            }
         }
 
         res.json({ images, videos });
     } catch (err) {
+        console.error('Get media error:', err);
         res.status(500).json({ error: err.message });
     }
 });

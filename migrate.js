@@ -19,7 +19,7 @@ async function migrate() {
             hero: data.hero,
             contact: data.contact,
             locations: ["Dharampeth", "Sadar", "Sitabuldi", "Wardha Road", "Manish Nagar", "Ramdaspeth", "Nagpur", "Mumbai", "Pune"],
-            categories: ["Residential (Purchase)", "Residential Rental", "Commercial (Purchase)", "Commercial Rental", "Industrial", "Plots"]
+            categories: ["Residential (Purchase)", "Residential Rental", "Commercial (Purchase)", "Commercial Rental", "Industrial", "Plots", "Agricultural Land"]
         };
 
         await Settings.findOneAndUpdate({}, settingsData, { upsert: true, new: true });

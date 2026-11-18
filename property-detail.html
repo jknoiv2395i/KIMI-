@@ -3,8 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Property Details | KIMI Properties</title>
-    <meta name="description" content="View property details, photos, and location on KIMI Properties Nagpur.">
+    <title>Property Details | KIMI Properties Nagpur</title>
+    <meta name="description" content="View property details, photos, videos, pricing and location on KIMI Properties Nagpur. Industrial, Commercial, Residential & Agricultural properties.">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="author" content="KIMI Properties">
+    <meta name="geo.region" content="IN-MH">
+    <meta name="geo.placename" content="Nagpur">
+    <link rel="canonical" href="https://kimiproperties.in/property-detail">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Property Details | KIMI Properties Nagpur">
+    <meta property="og:description" content="View property details, photos, videos, pricing and location on KIMI Properties Nagpur.">
+    <meta property="og:image" content="https://kimiproperties.in/assets/logo.png">
+    <meta property="og:locale" content="en_IN">
+    <meta property="og:site_name" content="KIMI Properties">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Property Details | KIMI Properties Nagpur">
+    <meta name="twitter:description" content="View property details, photos, videos, pricing and location on KIMI Properties Nagpur.">
+    <meta name="twitter:image" content="https://kimiproperties.in/assets/logo.png">
+
+    <!-- BreadcrumbList Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://kimiproperties.in/"},
+        {"@type": "ListItem", "position": 2, "name": "Properties", "item": "https://kimiproperties.in/properties"},
+        {"@type": "ListItem", "position": 3, "name": "Property Details", "item": "https://kimiproperties.in/property-detail"}
+      ]
+    }
+    </script>
     <link rel="icon" type="image/png" href="assets/logo.png">
     <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="style.css?v=1.4">
@@ -470,7 +502,57 @@
 
         // Title & Price Header
         document.getElementById('pd-name').textContent = prop.name || 'Untitled Property';
-        document.title = (prop.isSoldOut ? '[SOLD] ' : '') + (prop.name || 'Property') + ' | KIMI Properties';
+        const isRentPropDetail = prop.purpose === 'Rent' || (prop.category && prop.category.toLowerCase().includes('rental')) || prop.transactionType === 'Rental';
+        const pageTitle = (prop.isSoldOut ? '[SOLD] ' : '') + (prop.name || 'Property') + ' for ' + (isRentPropDetail ? 'Rent' : 'Sale') + ' in ' + (prop.location || 'Nagpur') + ' | KIMI Properties';
+        document.title = pageTitle;
+
+        // Dynamic SEO meta tags
+        const metaDescEl = document.querySelector('meta[name="description"]');
+        const descContent = (prop.name || 'Property') + ' - ' + (prop.area || '') + ' ' + (prop.category || 'Property') + ' for ' + (isRentPropDetail ? 'Rent' : 'Sale') + ' in ' + (prop.location || 'Nagpur') + '. Verified real estate listing by KIMI Properties Nagpur. Contact +91 96969 76950 or propkimi@gmail.com.';
+        if (metaDescEl) metaDescEl.content = descContent;
+
+        const ogTitleEl = document.querySelector('meta[property="og:title"]');
+        if (ogTitleEl) ogTitleEl.content = pageTitle;
+        const ogDescEl = document.querySelector('meta[property="og:description"]');
+        if (ogDescEl) ogDescEl.content = descContent;
+        const ogImageEl = document.querySelector('meta[property="og:image"]');
+        if (ogImageEl && prop.images && prop.images.length > 0) ogImageEl.content = prop.images[0];
+
+        const twTitleEl = document.querySelector('meta[name="twitter:title"]');
+        if (twTitleEl) twTitleEl.content = pageTitle;
+        const twDescEl = document.querySelector('meta[name="twitter:description"]');
+        if (twDescEl) twDescEl.content = descContent;
+        const twImageEl = document.querySelector('meta[name="twitter:image"]');
+        if (twImageEl && prop.images && prop.images.length > 0) twImageEl.content = prop.images[0];
+
+        // Dynamic RealEstateListing Schema
+        try {
+            const dynamicListingSchema = {
+                "@context": "https://schema.org",
+                "@type": "RealEstateListing",
+                "name": prop.name,
+                "description": prop.description || descContent,
+                "url": window.location.href,
+                "image": (prop.images && prop.images[0]) || "https://kimiproperties.in/assets/logo.png",
+                "datePosted": prop.createdAt || new Date().toISOString(),
+                "offers": {
+                    "@type": "Offer",
+                    "price": String(prop.price || '').replace(/[^0-9]/g, '') || "0",
+                    "priceCurrency": "INR",
+                    "availability": prop.isSoldOut ? "https://schema.org/SoldOut" : "https://schema.org/InStock"
+                },
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressLocality": prop.location || "Nagpur",
+                    "addressRegion": "Maharashtra",
+                    "addressCountry": "IN"
+                }
+            };
+            const schemaTag = document.createElement('script');
+            schemaTag.type = 'application/ld+json';
+            schemaTag.textContent = JSON.stringify(dynamicListingSchema);
+            document.head.appendChild(schemaTag);
+        } catch(e) {}
 
         // Price formatting
         const formatPrice = (price) => {

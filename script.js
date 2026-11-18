@@ -836,6 +836,16 @@ window.handleValuationSubmit = function(event) {
         body: JSON.stringify({ type: 'valuation_lead', leadData })
     }).catch(err => console.log('Lead saved locally'));
 
+    // Google Analytics 4 - Conversion Event Tracking
+    if (typeof gtag === 'function') {
+        gtag('event', 'generate_lead', {
+            event_category: 'Leads',
+            event_label: 'Free Property Valuation - ' + (locEl.value.trim() || 'Nagpur'),
+            value: 1,
+            currency: 'INR'
+        });
+    }
+
     if (form) form.style.display = 'none';
     if (successMsg) successMsg.style.display = 'block';
 };
@@ -867,11 +877,43 @@ window.handleContactSubmit = function(event) {
     const encodedMsg = encodeURIComponent(waMessage);
     const waUrl = `https://wa.me/919696976950?text=${encodedMsg}`;
 
+    // Google Analytics 4 - Conversion Event Tracking
+    if (typeof gtag === 'function') {
+        gtag('event', 'generate_lead', {
+            event_category: 'Contact Form',
+            event_label: 'WhatsApp Contact Inquiry',
+            value: 1,
+            currency: 'INR'
+        });
+    }
+
     // Clear the form inputs
     event.target.reset();
 
     // Open WhatsApp URL
     window.open(waUrl, '_blank');
 };
+
+// Auto-track WhatsApp & Phone Call conversions in Google Analytics
+document.addEventListener('click', function(e) {
+    const target = e.target.closest('a');
+    if (!target) return;
+    const href = target.getAttribute('href') || '';
+    if (typeof gtag === 'function') {
+        if (href.startsWith('tel:')) {
+            gtag('event', 'contact', {
+                event_category: 'Lead Engagement',
+                event_label: 'Phone Call: ' + href.replace('tel:', ''),
+                method: 'phone'
+            });
+        } else if (href.includes('wa.me') || href.includes('whatsapp.com')) {
+            gtag('event', 'generate_lead', {
+                event_category: 'Lead Engagement',
+                event_label: 'WhatsApp Chat Click',
+                method: 'whatsapp'
+            });
+        }
+    }
+}, { passive: true });
 
 

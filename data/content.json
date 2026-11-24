@@ -12,8 +12,27 @@
         "facebook": "https://www.facebook.com/people/KIMI-Properties/61590282696335/",
         "instagram": "https://www.instagram.com/_kimiproperties.in?igsh=MW41ZnJrcGRwdHQycA=="
     },
-    "locations": ["Hingna", "Hingna MIDC", "Wadi MIDC", "Butibori MIDC", "Wanadongri", "Sangam Road", "Nagpur Agricultural Land", "Nagpur", "Mumbai", "Pune"],
-    "categories": ["Residential (Purchase)", "Residential Rental", "Commercial (Purchase)", "Commercial Rental", "Industrial", "Plots", "Agricultural Land"],
+    "locations": [
+        "Hingna",
+        "Hingna MIDC",
+        "Wadi MIDC",
+        "Butibori MIDC",
+        "Wanadongri",
+        "Sangam Road",
+        "Nagpur Agricultural Land",
+        "Nagpur",
+        "Mumbai",
+        "Pune"
+    ],
+    "categories": [
+        "Residential (Purchase)",
+        "Residential Rental",
+        "Commercial (Purchase)",
+        "Commercial Rental",
+        "Industrial",
+        "Plots",
+        "Agricultural Land"
+    ],
     "properties": [
         {
             "id": "prop-1",
@@ -48,8 +67,22 @@
             "hasGarden": true,
             "isNegotiable": true,
             "securityDeposit": "₹50,000",
-            "amenities": ["CCTV", "Security", "Garden", "Lift", "Power Backup", "Borewell", "Compound Wall", "Fire NOC"],
-            "highlights": ["Bank Loan Available", "Road Touch", "Ready to Move", "Immediate Possession"],
+            "amenities": [
+                "CCTV",
+                "Security",
+                "Garden",
+                "Lift",
+                "Power Backup",
+                "Borewell",
+                "Compound Wall",
+                "Fire NOC"
+            ],
+            "highlights": [
+                "Bank Loan Available",
+                "Road Touch",
+                "Ready to Move",
+                "Immediate Possession"
+            ],
             "documents": {
                 "satbara": "Verified 7/12 Satbara Available",
                 "saleDeed": "Clear Title Registered Sale Deed",
@@ -65,7 +98,12 @@
             "seoDescription": "Verified 3BHK flat for sale in Nagpur featuring 1250 Sq.Ft carpet area, North-East facing, 24x7 Security, Lift, and clear 7/12 title.",
             "seoKeywords": "flats in nagpur, 3 bhk nagpur, residential property nagpur, kimi properties",
             "image": "assets/property-1.png",
-            "images": ["assets/property-1.png", "assets/property-2.png", "assets/property-3.png", "assets/property-4.jpg"],
+            "images": [
+                "assets/property-1.png",
+                "assets/property-2.png",
+                "assets/property-3.png",
+                "assets/property-4.jpg"
+            ],
             "video": "",
             "description": "A beautiful residential retreat offering serene views, modern amenities, and clear legal title in Nagpur.",
             "isFeatured": true
@@ -86,7 +124,11 @@
             "baths": 4,
             "area": "6x8 m²",
             "image": "assets/property-2.png",
-            "images": ["assets/property-2.png", "assets/property-1.png", "assets/property-3.png"],
+            "images": [
+                "assets/property-2.png",
+                "assets/property-1.png",
+                "assets/property-3.png"
+            ],
             "video": "",
             "description": "A cozy and affordable studio cottage located in the heart of Nagpur.",
             "isFeatured": true
@@ -107,10 +149,15 @@
             "baths": 3,
             "area": "7x7 m²",
             "image": "assets/property-3.png",
-            "images": ["assets/property-3.png", "assets/property-1.png", "assets/property-2.png"],
+            "images": [
+                "assets/property-3.png",
+                "assets/property-1.png",
+                "assets/property-2.png"
+            ],
             "video": "",
             "description": "Premium commercial space perfect for high-end retail or boutique offices.",
             "isFeatured": true
         }
-    ]
+    ],
+    "leads": []
 }

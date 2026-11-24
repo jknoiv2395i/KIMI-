@@ -9,6 +9,7 @@ const cors = require('cors');
 const Property = require('./models/Property');
 const Settings = require('./models/Settings');
 const Media = require('./models/Media');
+const Lead = require('./models/Lead');
 const fs = require('fs');
 const cloudinary = require('cloudinary').v2;
 const { createClient } = require('@supabase/supabase-js');
@@ -486,6 +487,83 @@ app.delete('/api/properties/:id', authenticateToken, async (req, res) => {
         res.json({ success: true });
     } catch (err) {
         res.status(500).json({ error: err.message });
+    }
+});
+
+// Lead Submission Proxy (Shielding Secrets & CRM Integration)
+app.post('/api/contact/submit', async (req, res) => {
+    try {
+        const { name, phone, email, requirement, propertyTitle, location, type, source } = req.body;
+        if (!phone || (!name && !requirement)) {
+            return res.status(400).json({ success: false, error: 'Phone number and name or requirement are required.' });
+        }
+
+        const leadRecord = {
+            id: 'lead-' + Date.now(),
+            type: type || 'General Contact Inquiry',
+            name: name || 'Prospective Client',
+            phone: phone.trim(),
+            email: email ? email.trim() : '',
+            requirement: requirement ? requirement.trim() : '',
+            propertyTitle: propertyTitle || '',
+            location: location || 'Nagpur',
+            status: 'new',
+            source: source || 'kimiproperties.in',
+            createdAt: new Date().toISOString()
+        };
+
+        if (useMongoDB) {
+            try {
+                await Lead.create(leadRecord);
+            } catch (mErr) {
+                console.warn('MongoDB Lead create failed, falling back to JSON:', mErr.message);
+            }
+        }
+
+        // Always also record to local content.json for guaranteed persistence
+        try {
+            if (fs.existsSync(DATA_PATH)) {
+                const data = JSON.parse(fs.readFileSync(DATA_PATH, 'utf8'));
+                if (!data.leads) data.leads = [];
+                data.leads.unshift(leadRecord);
+                fs.writeFileSync(DATA_PATH, JSON.stringify(data, null, 4));
+            }
+        } catch (jErr) {
+            console.error('Error recording lead in content.json:', jErr.message);
+        }
+
+        // Forward to external CRM Webhook if configured
+        if (process.env.CRM_WEBHOOK_URL) {
+            try {
+                await fetch(process.env.CRM_WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(leadRecord)
+                });
+            } catch (whErr) {
+                console.warn('CRM Webhook forward error:', whErr.message);
+            }
+        }
+
+        res.json({ success: true, message: 'Lead received and processed successfully', leadId: leadRecord.id });
+    } catch (err) {
+        console.error('Contact submission error:', err);
+        res.status(500).json({ success: false, error: err.message });
+    }
+});
+
+// Admin: View Leads
+app.get('/api/leads', authenticateToken, async (req, res) => {
+    try {
+        if (useMongoDB) {
+            const leads = await Lead.find().sort({ createdAt: -1 });
+            return res.json({ success: true, leads });
+        } else {
+            const data = JSON.parse(fs.readFileSync(DATA_PATH, 'utf8'));
+            return res.json({ success: true, leads: data.leads || [] });
+        }
+    } catch (err) {
+        res.status(500).json({ success: false, error: err.message });
     }
 });
 

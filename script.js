@@ -308,8 +308,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 const gridHTML = propsToShow.map(prop => {
                     const phone = (prop.ownerPhone || '+919696976950').replace(/\s+/g, '');
-                    const waNum = (prop.ownerWhatsapp || prop.ownerPhone || '+919696976950').replace(/[^0-9]/g, '');
-                    const waMsg = encodeURIComponent('Hello KIMI Properties, I am interested in ' + prop.name);
+                    const waNum = (prop.ownerWhatsapp || prop.ownerPhone || '919696976950').replace(/[^0-9]/g, '');
+                    const waMsg = encodeURIComponent(`Hello KIMI Properties! I am interested in details and site visit for: "${prop.name}" in ${prop.location || 'Nagpur'}. Please share price and inspection schedule.`);
 
                     const isResale = prop.transactionType === 'Resale' || prop.transactionType === 'Old';
                     const conditionLabel = isResale ? 'RESALE' : 'NEW LAUNCH';
@@ -338,21 +338,29 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <span class="card-price-unit">${prop.priceUnit || ''}</span>
                             </div>
                             <div class="card-specs-row">
-                                ${prop.beds ? `
-                                    <div class="card-spec-item">
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4v16"/><path d="M2 8h18a2 2 0 0 1 2 2v10"/><path d="M2 17h20"/><path d="M6 8v9"/></svg>
-                                        <span>${prop.beds} Beds</span>
-                                    </div>` : ''}
-                                ${prop.baths ? `
-                                    <div class="card-spec-item">
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6 6.5 3.5a1.5 1.5 0 0 0-2.12 0 1.5 1.5 0 0 0 0 2.12L7 8"/><path d="M4 12h16a1 1 0 0 1 1 1v3a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4v-3a1 1 0 0 1 1-1z"/><path d="M6 12v-2a2 2 0 0 1 2-2h3"/></svg>
-                                        <span>${prop.baths} Baths</span>
-                                    </div>` : ''}
                                 ${prop.area ? `
                                     <div class="card-spec-item">
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+                                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
                                         <span>${prop.area}</span>
                                     </div>` : ''}
+                                ${prop.beds ? `
+                                    <div class="card-spec-item">
+                                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4v16"/><path d="M2 8h18a2 2 0 0 1 2 2v10"/><path d="M2 17h20"/><path d="M6 8v9"/></svg>
+                                        <span>${prop.beds} Beds</span>
+                                    </div>` : (!prop.beds && prop.category ? `
+                                    <div class="card-spec-item">
+                                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 20V9l10-6 10 6v11a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2z"/></svg>
+                                        <span>${prop.category}</span>
+                                    </div>` : '')}
+                                ${prop.baths ? `
+                                    <div class="card-spec-item">
+                                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12h16a1 1 0 0 1 1 1v3a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4v-3a1 1 0 0 1 1-1z"/></svg>
+                                        <span>${prop.baths} Baths</span>
+                                    </div>` : (prop.transactionType ? `
+                                    <div class="card-spec-item">
+                                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                                        <span>${prop.transactionType}</span>
+                                    </div>` : '')}
                             </div>
                             <div class="card-footer-row">
                                 <span class="card-btn-view">View Details →</span>
@@ -360,7 +368,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                     <a href="tel:${phone}" class="card-action-icon" title="Call Agent">
                                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
                                     </a>
-                                    <a href="https://wa.me/${waNum}?text=${waMsg}" target="_blank" class="card-action-icon wa-icon" title="WhatsApp Agent">
+                                    <a href="https://wa.me/${waNum}?text=${waMsg}" target="_blank" rel="noopener noreferrer" class="card-action-icon wa-icon" title="WhatsApp Agent">
                                         <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
                                     </a>
                                 </div>
@@ -829,7 +837,19 @@ window.handleValuationSubmit = function(event) {
         localStorage.setItem('kimi_valuation_leads', JSON.stringify(leads));
     } catch(err) {}
 
-    // Post event to backend API
+    // Post event to backend API and dispatch lead
+    fetch(getApiUrl('/api/contact/submit'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            name: leadData.name,
+            phone: leadData.phone,
+            requirement: 'Free Property Valuation in ' + leadData.location,
+            location: leadData.location,
+            type: 'Valuation Lead'
+        })
+    }).catch(err => console.log('Lead dispatch locally buffered'));
+
     fetch(getApiUrl('/api/analytics/events'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -897,6 +917,19 @@ window.handleContactSubmit = function(event) {
 
     const encodedMsg = encodeURIComponent(waMessage);
     const waUrl = `https://wa.me/919696976950?text=${encodedMsg}`;
+
+    // Dispatch lead to backend CRM endpoint
+    fetch(getApiUrl('/api/contact/submit'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            name: `${fname} ${lname}`.trim(),
+            phone: phone,
+            email: email,
+            requirement: message,
+            type: 'Contact Form Inquiry'
+        })
+    }).catch(err => console.log('Contact dispatch locally buffered'));
 
     // Google Analytics 4 - Conversion Event Tracking
     if (typeof gtag === 'function') {

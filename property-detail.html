@@ -39,7 +39,7 @@
     </script>
     <link rel="icon" type="image/png" href="assets/logo.png">
     <link rel="manifest" href="manifest.json">
-    <link rel="stylesheet" href="style.css?v=1.4">
+    <link rel="stylesheet" href="/style.css?v=2.2">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -776,8 +776,9 @@
         document.getElementById('pd-btn-call').href = callHref;
         document.getElementById('pd-mobile-btn-call').href = callHref;
 
-        const waNum = (prop.ownerWhatsapp || phone).replace(/[^0-9]/g, '');
-        const waHref = `https://wa.me/${waNum}?text=${encodeURIComponent('Hello KIMI Properties, I am interested in viewing ' + prop.name)}`;
+        const waNum = (prop.ownerWhatsapp || phone).replace(/[^0-9]/g, '') || '919696976950';
+        const waMsg = encodeURIComponent(`Hello KIMI Properties! I am interested in details and site visit for: "${prop.name}" in ${prop.location || 'Nagpur'}. Please share price and inspection schedule.`);
+        const waHref = `https://wa.me/${waNum}?text=${waMsg}`;
         document.getElementById('pd-btn-wa').href = waHref;
         document.getElementById('pd-mobile-btn-wa').href = waHref;
 

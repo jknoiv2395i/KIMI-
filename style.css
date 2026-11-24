@@ -15,9 +15,9 @@
     --transition-fast: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Pre-reveal states for Framer-style motion */
+/* Clean visible defaults - eliminates partial/blank page loading */
 .hero-title span, .hero-subtitle, .search-bar-container, .main-hero-image, .benefit-card, .category-card, .city-card, .cta-box {
-    opacity: 0;
+    opacity: 1;
 }
 
 /* Lenis Smooth Scroll Base */
@@ -49,6 +49,7 @@ html.lenis {
 
 .mask-reveal-content {
     display: block;
+    opacity: 1;
     transition: var(--transition-smooth);
 }
 
@@ -115,10 +116,9 @@ html.lenis {
     transform: scale(1.08);
 }
 
-/* Reveal on Scroll Trigger */
+/* Reveal on Scroll Trigger - 100% visible by default */
 .reveal-on-scroll {
-    opacity: 0;
-    transform: translateY(20px);
+    opacity: 1;
     transition: var(--transition-smooth);
 }
 
@@ -1418,6 +1418,8 @@ h1, h2, h3, h4, h5, h6 {
     margin-bottom: 25px;
     font-weight: 700;
 }
+
+.footer-links {
     display: flex;
     flex-direction: column;
     gap: 15px;
@@ -3959,5 +3961,69 @@ h1, h2, h3, h4, h5, h6 {
         width: 320px;
         padding: 24px;
         min-height: 210px;
+    }
+}
+
+/* --- STICKY MOBILE ACTION BAR (High-Converting Conversion Hook) --- */
+.mobile-sticky-action-bar {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .mobile-sticky-action-bar {
+        display: flex !important;
+        position: fixed !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        width: 100% !important;
+        background: rgba(255, 255, 255, 0.96) !important;
+        backdrop-filter: blur(12px) !important;
+        -webkit-backdrop-filter: blur(12px) !important;
+        border-top: 1px solid #E5E7EB !important;
+        padding: 10px 16px !important;
+        gap: 12px !important;
+        z-index: 9999999 !important;
+        box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.08) !important;
+        box-sizing: border-box !important;
+    }
+
+    .mobile-bar-btn {
+        flex: 1 !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 8px !important;
+        padding: 12px 14px !important;
+        border-radius: 12px !important;
+        font-family: var(--font-alt) !important;
+        font-size: 14px !important;
+        font-weight: 700 !important;
+        text-decoration: none !important;
+        transition: transform 0.2s ease, filter 0.2s ease !important;
+    }
+
+    .btn-call-bar {
+        background: #111111 !important;
+        color: #FFFFFF !important;
+    }
+
+    .btn-wa-bar {
+        background: #25D366 !important;
+        color: #FFFFFF !important;
+    }
+
+    .btn-call-bar:active, .btn-wa-bar:active {
+        transform: scale(0.97) !important;
+    }
+
+    /* On mobile, ensure page content doesn't get covered by sticky bar */
+    body {
+        padding-bottom: 70px !important;
+    }
+
+    /* Hide the old single floating buttons on mobile so they don't overlap with the bar */
+    .call-float, .whatsapp-float {
+        display: none !important;
     }
 }

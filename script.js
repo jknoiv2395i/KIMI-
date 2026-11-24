@@ -311,71 +311,112 @@ document.addEventListener('DOMContentLoaded', () => {
                     const waNum = (prop.ownerWhatsapp || prop.ownerPhone || '919696976950').replace(/[^0-9]/g, '');
                     const waMsg = encodeURIComponent(`Hello KIMI Properties! I am interested in details and site visit for: "${prop.name}" in ${prop.location || 'Nagpur'}. Please share price and inspection schedule.`);
 
-                    const isResale = prop.transactionType === 'Resale' || prop.transactionType === 'Old';
-                    const conditionLabel = isResale ? 'RESALE' : 'NEW LAUNCH';
-                    const conditionClass = isResale ? 'tag-resale' : 'tag-new';
-
                     const isRentProp = prop.purpose === 'Rent' || (prop.category && prop.category.toLowerCase().includes('rental')) || prop.transactionType === 'Rental';
-                    const purposeBadge = isRentProp ? '<span class="card-purpose-badge purpose-rent">FOR RENT</span>' : '<span class="card-purpose-badge purpose-buy">FOR SALE</span>';
+                    
+                    // Authority marker top-right
+                    let badgeTopRight = 'Ready Possession';
+                    const locLower = (prop.location || prop.address || '').toLowerCase();
+                    const catLower = (prop.category || '').toLowerCase();
+                    if (locLower.includes('midc')) {
+                        badgeTopRight = 'MIDC Allotted';
+                    } else if (catLower.includes('agri') || locLower.includes('agri')) {
+                        badgeTopRight = '7/12 Clear';
+                    } else if (prop.transactionType === 'Resale' || prop.transactionType === 'Old') {
+                        badgeTopRight = 'Clear Title';
+                    } else if (prop.highlights && prop.highlights.length > 0) {
+                        badgeTopRight = prop.highlights[0];
+                    }
+
+                    // Price Status Tag
+                    let priceStatusTag = '';
+                    if (prop.isSoldOut) {
+                        priceStatusTag = '<span class="price-note note-sold">Sold Out</span>';
+                    } else if (prop.isNegotiable !== false) {
+                        priceStatusTag = '<span class="price-note note-neg">Negotiable</span>';
+                    } else {
+                        priceStatusTag = '<span class="price-note note-fixed">Fixed Price</span>';
+                    }
+
+                    // Clean category label
+                    let categoryShort = prop.category || 'Commercial';
+                    if (categoryShort.includes('(')) categoryShort = categoryShort.split('(')[0].trim();
+
+                    // Spec 3 logic
+                    let spec3Label = 'Type';
+                    let spec3Val = prop.transactionType || 'Resale';
+                    if (prop.beds) {
+                        spec3Label = 'Layout';
+                        spec3Val = `${prop.beds} BHK`;
+                    } else if (prop.clearHeight) {
+                        spec3Label = 'Clear Height';
+                        spec3Val = prop.clearHeight;
+                    } else if (catLower.includes('agri')) {
+                        spec3Label = 'Zone';
+                        spec3Val = 'Agricultural';
+                    } else if (catLower.includes('indust')) {
+                        spec3Label = 'Type';
+                        spec3Val = 'Industrial Shed';
+                    }
+
+                    const photosCount = (prop.images && prop.images.length) || 4;
 
                     return `
                     <div class="property-card" onclick="trackPropertyClick('${prop._id || prop.id}', '${(prop.name || '').replace(/'/g, "\\'")}'); window.location.href='/property-detail?id=${prop._id || prop.id}'" data-location="${prop.location || 'all'}" data-type="${prop.category}" data-purpose="${isRentProp ? 'Rent' : 'Buy'}" data-transaction="${prop.transactionType || 'New'}" data-status="${prop.status || ''}">
                         <div class="card-image-box">
                             <img src="${(prop.images && prop.images[0]) || prop.image || 'assets/hero-illustration.png'}" alt="${prop.name}" loading="lazy">
-                            ${purposeBadge}
-                            <div class="card-price-badge">${formatPrice(prop.price)}<span class="price-unit">${prop.priceUnit || ''}</span></div>
-                            <span class="card-condition-tag ${conditionClass}">${conditionLabel}</span>
-                            ${prop.isSoldOut ? '<span class="card-status-badge status-sold">SOLD OUT</span>' : (prop.isNegotiable !== false ? '<span class="card-status-badge status-negotiable">NEGOTIABLE</span>' : '<span class="card-status-badge status-fixed">FIXED PRICE</span>')}
-                        </div>
-                        <div class="card-body">
-                            <h3 class="card-title">${prop.name}</h3>
-                            <p class="card-location">
-                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                                ${prop.address || (prop.location || 'Nagpur')}
-                            </p>
-                            <div class="card-price-container">
-                                <span class="card-price-text">${formatPrice(prop.price)}</span>
-                                <span class="card-price-unit">${prop.priceUnit || ''}</span>
+                            <div class="badge-top-left">
+                                <span class="dot-indicator"></span>
+                                ${isRentProp ? 'For Rent' : 'For Sale'}
                             </div>
-                            <div class="card-specs-row">
-                                ${prop.area ? `
-                                    <div class="card-spec-item">
-                                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
-                                        <span>${prop.area}</span>
-                                    </div>` : ''}
-                                ${prop.beds ? `
-                                    <div class="card-spec-item">
-                                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4v16"/><path d="M2 8h18a2 2 0 0 1 2 2v10"/><path d="M2 17h20"/><path d="M6 8v9"/></svg>
-                                        <span>${prop.beds} Beds</span>
-                                    </div>` : (!prop.beds && prop.category ? `
-                                    <div class="card-spec-item">
-                                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 20V9l10-6 10 6v11a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2z"/></svg>
-                                        <span>${prop.category}</span>
-                                    </div>` : '')}
-                                ${prop.baths ? `
-                                    <div class="card-spec-item">
-                                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12h16a1 1 0 0 1 1 1v3a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4v-3a1 1 0 0 1 1-1z"/></svg>
-                                        <span>${prop.baths} Baths</span>
-                                    </div>` : (prop.transactionType ? `
-                                    <div class="card-spec-item">
-                                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-                                        <span>${prop.transactionType}</span>
-                                    </div>` : '')}
-                            </div>
-                            <div class="card-footer-row">
-                                <span class="card-btn-view">View Details →</span>
-                                <div class="card-contact-quick" onclick="event.stopPropagation()">
-                                    <a href="tel:${phone}" class="card-action-icon" title="Call Agent">
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                                    </a>
-                                    <a href="https://wa.me/${waNum}?text=${waMsg}" target="_blank" rel="noopener noreferrer" class="card-action-icon wa-icon" title="WhatsApp Agent">
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
-                                    </a>
+                            <div class="badge-top-right">${badgeTopRight}</div>
+                            <div class="img-bottom-overlay">
+                                <div class="photo-count-pill">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                                    <span>${photosCount} Photos</span>
                                 </div>
                             </div>
                         </div>
+                        <div class="card-body">
+                            <div class="price-row">
+                                <span class="price-val">${formatPrice(prop.price)}<span class="price-unit">${prop.priceUnit || ''}</span></span>
+                                ${priceStatusTag}
+                            </div>
+                            <h3 class="card-title">${prop.name}</h3>
+                            <div class="card-location">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                                <span>${prop.address || (prop.location || 'Nagpur')}</span>
+                            </div>
+
+                            <div class="specs-pill-grid">
+                                <div class="spec-chip">
+                                    <span class="spec-label">Area</span>
+                                    <span class="spec-val">${prop.area || 'On Request'}</span>
+                                </div>
+                                <div class="spec-chip">
+                                    <span class="spec-label">Category</span>
+                                    <span class="spec-val">${categoryShort}</span>
+                                </div>
+                                <div class="spec-chip">
+                                    <span class="spec-label">${spec3Label}</span>
+                                    <span class="spec-val">${spec3Val}</span>
+                                </div>
+                            </div>
+
+                            <div class="actions-bar" onclick="event.stopPropagation()">
+                                <a href="/property-detail?id=${prop._id || prop.id}" class="btn-primary-view">
+                                    <span>View Details</span>
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                                </a>
+                                <a href="https://wa.me/${waNum}?text=${waMsg}" target="_blank" rel="noopener noreferrer" class="btn-wa-direct" title="Instant WhatsApp">
+                                    <svg width="18" height="18" viewBox="0 0 448 512" fill="currentColor"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l114.1-29.9c32.7 17.8 69.4 27.2 107.4 27.2h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.1 0-65.6-8.9-93.9-25.7l-6.7-4-69.8 18.3 18.7-68.1-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-5.5-2.8-23.2-8.5-44.2-27.3-16.3-14.5-27.3-32.5-30.5-37.9-3.2-5.5-.3-8.5 2.5-11.2 2.5-2.5 5.5-6.5 8.3-9.7 2.8-3.2 3.7-5.5 5.6-9.2 1.9-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 13.2 5.8 23.5 9.2 31.5 11.8 13.3 4.2 25.4 3.6 35 2.2 10.7-1.6 32.8-13.4 37.4-26.3 4.6-13 4.6-24.1 3.2-26.3-1.4-2.2-5-3.5-10.5-6.3z"/></svg>
+                                </a>
+                                <a href="tel:${phone}" class="btn-call-direct" title="Call Direct">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                                </a>
+                            </div>
+                        </div>
                     </div>
-                `;
+                    `;
                 }).join('');
 
                 grids.forEach(grid => {

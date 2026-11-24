@@ -193,8 +193,37 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--text-main);
 }
 
-.logo img {
-    /* Original logo without filter */
+.brand-link {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    line-height: 0;
+}
+
+.brand-logo-img {
+    height: 56px;
+    width: auto;
+    max-width: 220px;
+    object-fit: contain;
+    display: block;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.brand-link:hover .brand-logo-img {
+    opacity: 0.92;
+    transform: scale(1.02);
+}
+
+@media (max-width: 768px) {
+    .brand-logo-img {
+        height: 44px;
+        max-width: 170px;
+    }
+}
+
+.footer-brand-col .brand-logo-img {
+    height: 68px;
+    margin-bottom: 20px;
 }
 
 .navbar .nav-links ul {
@@ -2437,12 +2466,13 @@ h1, h2, h3, h4, h5, h6 {
     .mobile-nav-header {
         display: flex !important;
         width: 100% !important;
-        height: 80px !important;
-        background: #C1A5FF !important; /* Theme purple as requested */
-        padding: 0 40px !important;
+        height: 70px !important;
+        background: #1A1A1A !important;
+        padding: 0 30px !important;
         align-items: center !important;
         justify-content: flex-start !important;
-        margin-bottom: 20px !important;
+        border-bottom: 1px solid rgba(255,255,255,0.08) !important;
+        margin-bottom: 10px !important;
     }
 
     .nav-links ul {
@@ -2766,6 +2796,7 @@ h1, h2, h3, h4, h5, h6 {
     /* Priority Section */
     .priority-section {
         padding: 60px 0 !important;
+        overflow: hidden !important;
     }
     .priority-layout {
         flex-direction: column !important;

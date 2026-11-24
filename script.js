@@ -319,7 +319,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const purposeBadge = isRentProp ? '<span class="card-purpose-badge purpose-rent">FOR RENT</span>' : '<span class="card-purpose-badge purpose-buy">FOR SALE</span>';
 
                     return `
-                    <div class="property-card" onclick="window.location.href='property-detail.html?id=${prop._id || prop.id}'" data-location="${prop.location || 'all'}" data-type="${prop.category}" data-purpose="${isRentProp ? 'Rent' : 'Buy'}" data-transaction="${prop.transactionType || 'New'}" data-status="${prop.status || ''}">
+                    <div class="property-card" onclick="trackPropertyClick('${prop._id || prop.id}', '${(prop.name || '').replace(/'/g, "\\'")}'); window.location.href='/property-detail?id=${prop._id || prop.id}'" data-location="${prop.location || 'all'}" data-type="${prop.category}" data-purpose="${isRentProp ? 'Rent' : 'Buy'}" data-transaction="${prop.transactionType || 'New'}" data-status="${prop.status || ''}">
                         <div class="card-image-box">
                             <img src="${(prop.images && prop.images[0]) || prop.image || 'assets/hero-illustration.png'}" alt="${prop.name}" loading="lazy">
                             ${purposeBadge}
@@ -395,7 +395,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Populate Individual Details
-        if (window.location.pathname.includes('property-detail.html')) {
+        if (window.location.pathname.includes('property-detail')) {
             const urlParams = new URLSearchParams(window.location.search);
             const propId = urlParams.get('id');
             if (propId && content.properties) {
@@ -842,12 +842,33 @@ window.handleValuationSubmit = function(event) {
             event_category: 'Leads',
             event_label: 'Free Property Valuation - ' + (locEl.value.trim() || 'Nagpur'),
             value: 1,
-            currency: 'INR'
+            currency: 'INR',
+            transport_type: 'beacon'
+        });
+        gtag('event', 'contact', {
+            event_category: 'Leads',
+            event_label: 'Free Property Valuation Form',
+            method: 'valuation_form',
+            transport_type: 'beacon'
         });
     }
 
     if (form) form.style.display = 'none';
     if (successMsg) successMsg.style.display = 'block';
+};
+
+// Track Property Card Click in GA4
+window.trackPropertyClick = function(id, name) {
+    if (typeof gtag === 'function') {
+        gtag('event', 'select_item', {
+            item_list_name: 'Property Listings',
+            items: [{
+                item_id: id,
+                item_name: name
+            }],
+            transport_type: 'beacon'
+        });
+    }
 };
 
 // WhatsApp Contact Form Lead Handler
@@ -883,7 +904,14 @@ window.handleContactSubmit = function(event) {
             event_category: 'Contact Form',
             event_label: 'WhatsApp Contact Inquiry',
             value: 1,
-            currency: 'INR'
+            currency: 'INR',
+            transport_type: 'beacon'
+        });
+        gtag('event', 'contact', {
+            event_category: 'Contact Form',
+            event_label: 'WhatsApp Contact Form Submit',
+            method: 'whatsapp',
+            transport_type: 'beacon'
         });
     }
 
@@ -904,13 +932,31 @@ document.addEventListener('click', function(e) {
             gtag('event', 'contact', {
                 event_category: 'Lead Engagement',
                 event_label: 'Phone Call: ' + href.replace('tel:', ''),
-                method: 'phone'
+                method: 'phone',
+                transport_type: 'beacon'
+            });
+            gtag('event', 'generate_lead', {
+                event_category: 'Lead Engagement',
+                event_label: 'Phone Call Click',
+                method: 'phone',
+                value: 1,
+                currency: 'INR',
+                transport_type: 'beacon'
             });
         } else if (href.includes('wa.me') || href.includes('whatsapp.com')) {
             gtag('event', 'generate_lead', {
                 event_category: 'Lead Engagement',
                 event_label: 'WhatsApp Chat Click',
-                method: 'whatsapp'
+                method: 'whatsapp',
+                value: 1,
+                currency: 'INR',
+                transport_type: 'beacon'
+            });
+            gtag('event', 'contact', {
+                event_category: 'Lead Engagement',
+                event_label: 'WhatsApp Chat Initiated',
+                method: 'whatsapp',
+                transport_type: 'beacon'
             });
         }
     }

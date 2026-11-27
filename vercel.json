@@ -52,7 +52,7 @@
     },
     {
       "source": "/listings/:slug",
-      "destination": "/property-detail.html"
+      "destination": "/property-detail"
     }
   ]
 }

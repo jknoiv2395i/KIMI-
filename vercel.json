@@ -12,6 +12,12 @@
       ]
     },
     {
+      "source": "/(.*)\\.(webp|png|jpg|jpeg|svg|ico)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    },
+    {
       "source": "/(.*)\\.css",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
@@ -20,7 +26,7 @@
     {
       "source": "/(.*)\\.js",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=86400, must-revalidate" }
+        { "key": "Cache-Control", "value": "public, max-age=3600, must-revalidate" }
       ]
     },
     {
@@ -43,6 +49,10 @@
     {
       "source": "/api/:path*",
       "destination": "https://kimi-07oi.onrender.com/api/:path*"
+    },
+    {
+      "source": "/listings/:slug",
+      "destination": "/property-detail.html"
     }
   ]
 }

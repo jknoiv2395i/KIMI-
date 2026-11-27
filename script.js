@@ -36,12 +36,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 targetScroll = container.scrollWidth;
             }
 
-            gsap.to(container, {
-                scrollLeft: targetScroll,
-                duration: 1.2,
-                ease: "power4.out",
-                overwrite: true
-            });
+            if (typeof gsap !== 'undefined') {
+                gsap.to(container, {
+                    scrollLeft: targetScroll,
+                    duration: 1.2,
+                    ease: "power4.out",
+                    overwrite: true
+                });
+            } else {
+                container.scrollTo({ left: targetScroll, behavior: 'smooth' });
+            }
         };
 
         nextBtn.addEventListener('click', () => slideTo('next'));
@@ -84,156 +88,131 @@ document.addEventListener('DOMContentLoaded', () => {
     initSlider('more-slider-container', 'more-next', 'more-prev');
 
 
-    // Initialize Lenis Smooth Scroll
-    const lenis = new Lenis({
-        duration: 1.2,
-        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        orientation: 'vertical',
-        gestureOrientation: 'vertical',
-        smoothWheel: true,
-        wheelMultiplier: 1,
-        smoothTouch: false,
-        touchMultiplier: 2,
-        infinite: false,
-    });
+    // Initialize Lenis Smooth Scroll & GSAP Safely
+    if (typeof Lenis !== 'undefined' && typeof gsap !== 'undefined') {
+        const lenis = new Lenis({
+            duration: 1.2,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            orientation: 'vertical',
+            gestureOrientation: 'vertical',
+            smoothWheel: true,
+            wheelMultiplier: 1,
+            smoothTouch: false,
+            touchMultiplier: 2,
+            infinite: false,
+        });
 
-    // Sync Lenis with GSAP ScrollTrigger
-    lenis.on('scroll', ScrollTrigger.update);
+        if (typeof ScrollTrigger !== 'undefined') {
+            lenis.on('scroll', ScrollTrigger.update);
+            gsap.registerPlugin(ScrollTrigger);
 
-    gsap.ticker.add((time) => {
-        lenis.raf(time * 1000);
-    });
+            gsap.to(".benefit-card", {
+                x: 0,
+                opacity: 1,
+                duration: 1.2,
+                stagger: 0.1,
+                ease: "back.out(1.2)",
+                scrollTrigger: {
+                    trigger: ".priority-section",
+                    start: "top 85%",
+                    toggleActions: "play none none none"
+                }
+            });
 
-    gsap.ticker.lagSmoothing(0);
+            gsap.to(".category-card", {
+                scale: 1,
+                opacity: 1,
+                duration: 1,
+                stagger: 0.1,
+                ease: "back.out(1.5)",
+                scrollTrigger: {
+                    trigger: ".categories-section",
+                    start: "top 80%",
+                    toggleActions: "play none none none"
+                }
+            });
 
-    // GSAP Scroll Animations (Framer Style Spring) - EXCEPT HERO SECTION
-    gsap.registerPlugin(ScrollTrigger);
+            gsap.to(".city-card", {
+                y: 0,
+                opacity: 1,
+                duration: 1.2,
+                stagger: 0.1,
+                ease: "power4.out",
+                scrollTrigger: {
+                    trigger: ".cities-grid",
+                    start: "top 85%",
+                    toggleActions: "play none none none"
+                }
+            });
 
-    // Benefit Cards Reveal (Priority Section) - Spring Slide
-    gsap.to(".benefit-card", {
-        x: 0,
-        opacity: 1,
-        duration: 1.2,
-        stagger: 0.1,
-        ease: "back.out(1.2)",
-        scrollTrigger: {
-            trigger: ".priority-section",
-            start: "top 85%",
-            toggleActions: "play none none none"
+            gsap.to(".testimonials-section .section-title", {
+                y: 0,
+                opacity: 1,
+                duration: 1,
+                ease: "power3.out",
+                scrollTrigger: {
+                    trigger: ".testimonials-section",
+                    start: "top 90%"
+                }
+            });
+
+            gsap.to(".cta-box", {
+                scaleX: 1,
+                opacity: 1,
+                duration: 1.4,
+                ease: "power2.inOut",
+                scrollTrigger: {
+                    trigger: ".cta-section",
+                    start: "top 80%"
+                }
+            });
+
+            gsap.to(".priority-bg img", {
+                y: -100,
+                scrollTrigger: {
+                    trigger: ".priority-section",
+                    start: "top bottom",
+                    end: "bottom top",
+                    scrub: true
+                }
+            });
+
+            window.addEventListener('load', () => {
+                setTimeout(() => {
+                    ScrollTrigger.refresh();
+                }, 500);
+            });
         }
-    });
 
-    // Categories Reveal - Spring Scale
-    gsap.to(".category-card", {
-        scale: 1,
-        opacity: 1,
-        duration: 1,
-        stagger: 0.1,
-        ease: "back.out(1.5)",
-        scrollTrigger: {
-            trigger: ".categories-section",
-            start: "top 80%",
-            toggleActions: "play none none none"
-        }
-    });
+        gsap.ticker.add((time) => {
+            lenis.raf(time * 1000);
+        });
 
-    // City Cards Reveal - Smooth Float Up
-    gsap.to(".city-card", {
-        y: 0,
-        opacity: 1,
-        duration: 1.2,
-        stagger: 0.1,
-        ease: "power4.out",
-        scrollTrigger: {
-            trigger: ".cities-grid",
-            start: "top 85%",
-            toggleActions: "play none none none"
-        }
-    });
-
-    // Testimonials Title Reveal
-    gsap.to(".testimonials-section .section-title", {
-        y: 0,
-        opacity: 1,
-        duration: 1,
-        ease: "power3.out",
-        scrollTrigger: {
-            trigger: ".testimonials-section",
-            start: "top 90%"
-        }
-    });
-
-    // CTA Box Reveal - Elegant Stretch
-    gsap.to(".cta-box", {
-        scaleX: 1,
-        opacity: 1,
-        duration: 1.4,
-        ease: "power2.inOut",
-        scrollTrigger: {
-            trigger: ".cta-section",
-            start: "top 80%"
-        }
-    });
-
-    // Parallax for Buildings in Priority Section
-    gsap.to(".priority-bg img", {
-        y: -100,
-        scrollTrigger: {
-            trigger: ".priority-section",
-            start: "top bottom",
-            end: "bottom top",
-            scrub: true
-        }
-    });
-
-    // GSAP HERO ENTRANCE (ON PAGE LOAD)
-    const heroTl = gsap.timeline({ defaults: { ease: "power4.out" } });
-
-    heroTl.to(".main-hero-image", {
-        opacity: 1,
-        scale: 1,
-        duration: 1.8,
-        ease: "power2.out",
-        startAt: { scale: 1.05 }
-    })
-    .to(".hero-title span", {
-        opacity: 1,
-        y: 0,
-        duration: 1,
-        stagger: 0.2,
-        startAt: { y: 40 }
-    }, "-=1.2")
-    .to(".hero-subtitle", {
-        opacity: 1,
-        y: 0,
-        duration: 1,
-        startAt: { y: 20 }
-    }, "-=0.8")
-    .to(".search-bar-container", {
-        opacity: 1,
-        y: 0,
-        duration: 1.4,
-        ease: "back.out(1.2)",
-        startAt: { y: 60 }
-    }, "-=0.8");
-
-    // Ensure ScrollTrigger refreshes after initial renders
-    window.addEventListener('load', () => {
-        setTimeout(() => {
-            ScrollTrigger.refresh();
-        }, 500);
-    });
+        gsap.ticker.lagSmoothing(0);
+    }
 
     // 1. DATA INFRASTRUCTURE
+    function buildListingSlug(prop) {
+        const id = String(prop._id || prop.id || '').trim();
+        const base = String(prop.name || 'property')
+            .toLowerCase()
+            .replace(/[^\x00-\x7F]/g, ' ')
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/^-+|-+$/g, '')
+            .slice(0, 60)
+            .replace(/-+$/g, '') || 'property';
+        return `${base}-${id}`;
+    }
+
     const defaultContent = {
-        hero: { title: "We help people to realize their dream property", subtitle: "We are creative people who provide the best way to you who want to have a new comfortable and suitable place to live" },
+        hero: { title: "Trusted Properties in Nagpur", subtitle: "Verified MIDC sheds, warehouses, flats, and 7/12 agricultural land across Butibori, Hingna, and Wardha Road" },
         contact: { phone: "+91 96969 76950", email: "propkimi@gmail.com", address: "Nagpur, Maharashtra, India", facebook: "https://www.facebook.com/people/KIMI-Properties/61590282696335/", instagram: "https://www.instagram.com/_kimiproperties.in?igsh=MW41ZnJrcGRwdHQycA==" },
-        locations: ["Nagpur", "Mumbai", "Pune"],
+        locations: ["Butibori MIDC", "Hingna MIDC", "Wadi MIDC", "Wardha Road", "Manish Nagar", "Wanadongri", "Nagpur"],
         categories: ["Residential (Purchase)", "Residential Rental", "Commercial (Purchase)", "Commercial Rental", "Industrial", "Plots", "Agricultural Land"],
         properties: [
-            { id: "prop-1", name: "Riverbend Retreat", price: "$4,299", address: "3 Leame Close, Hull, HU3 6ND", location: "Mumbai", category: "Residential (Purchase)", status: "Ready to Move", transactionType: "New", area: "7x7 m²", image: "assets/property-1.png", isFeatured: true, description: "Experience the epitome of luxury living at Riverbend Retreat. This stunning residential masterpiece combines modern architecture with serene natural surroundings.", beds: 3, baths: 2 },
-            { id: "prop-2", name: "Oakwood Cottage", price: "$2,095", address: "2699 Green Valley, Highland Lake, FL", location: "Pune", category: "Residential Rental", status: "Under Construction", transactionType: "Resale", area: "6x8 m²", image: "assets/property-2.png", isFeatured: true, description: "Perfect for families or those seeking a peaceful escape without compromising on urban convenience.", beds: 2, baths: 1 },
-            { id: "prop-3", name: "Herringbone Realty", price: "$5,099", address: "28B Highgate Road, London, NW5 1NS", location: "Nagpur", category: "Commercial (Purchase)", status: "Ready to Move", transactionType: "New", area: "7x7 m²", image: "assets/property-3.png", isFeatured: true, description: "Located in the heart of Hull, with easy access to premium amenities and schools.", beds: 4, baths: 2 }
+            { id: "prop-1", name: "Verified Industrial Godown & Shed", price: "₹62 Lakh", address: "Butibori MIDC, Nagpur", location: "Butibori MIDC", category: "Industrial", status: "Ready to Move", transactionType: "New", area: "6,000 Sq.Ft", image: "/assets/property-1.webp", isFeatured: true, description: "Ready industrial shed with clear MIDC title and wide container access road." },
+            { id: "prop-2", name: "2 BHK Resale Flat Near Wardha Road", price: "₹53 Lakh", address: "Manish Nagar, Nagpur", location: "Manish Nagar", category: "Residential (Purchase)", status: "Ready to Move", transactionType: "Resale", area: "1,050 Sq.Ft", image: "/assets/property-2.webp", isFeatured: true, description: "Well-maintained residential flat in Manish Nagar with lift and parking.", beds: 2, baths: 2 },
+            { id: "prop-3", name: "Commercial & Agricultural Plot Opportunity", price: "₹85 Lakh", address: "Butibori Umred Road, Nagpur", location: "Butibori MIDC", category: "Agricultural Land", status: "Ready Possession", transactionType: "New", area: "5 Acre", image: "/assets/property-3.webp", isFeatured: true, description: "Road-touch parcel with clear 7/12 extract and immediate access." }
         ]
     };
 
@@ -291,7 +270,7 @@ document.addEventListener('DOMContentLoaded', () => {
             let allProps = isHomePage 
                 ? [...content.properties.filter(p => p.isFeatured), ...content.properties.filter(p => !p.isFeatured)]
                 : content.properties;
-            let itemsPerPage = 12;
+            let itemsPerPage = isHomePage ? 12 : 48;
             let currentPage = 1;
 
             const renderGrid = (page) => {
@@ -359,11 +338,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
 
                     const photosCount = (prop.images && prop.images.length) || 4;
+                    const detailHref = `/listings/${buildListingSlug(prop)}`;
+                    const imgSrc = (prop.images && prop.images[0]) || prop.image || '/assets/property-1.webp';
 
                     return `
-                    <div class="property-card" onclick="trackPropertyClick('${prop._id || prop.id}', '${(prop.name || '').replace(/'/g, "\\'")}'); window.location.href='/property-detail?id=${prop._id || prop.id}'" data-location="${prop.location || 'all'}" data-type="${prop.category}" data-purpose="${isRentProp ? 'Rent' : 'Buy'}" data-transaction="${prop.transactionType || 'New'}" data-status="${prop.status || ''}">
+                    <div class="property-card" onclick="trackPropertyClick('${prop._id || prop.id}', '${(prop.name || '').replace(/'/g, "\\'")}'); window.location.href='${detailHref}'" data-location="${prop.location || 'all'}" data-type="${prop.category}" data-purpose="${isRentProp ? 'Rent' : 'Buy'}" data-transaction="${prop.transactionType || 'New'}" data-status="${prop.status || ''}">
                         <div class="card-image-box">
-                            <img src="${(prop.images && prop.images[0]) || prop.image || 'assets/hero-illustration.png'}" alt="${prop.name}" loading="lazy">
+                            <img src="${imgSrc}" alt="${(prop.name || 'Nagpur Property').replace(/"/g, '&quot;')} in ${prop.location || 'Nagpur'}" width="400" height="250" loading="lazy" decoding="async">
                             <div class="badge-top-left">
                                 <span class="dot-indicator"></span>
                                 ${isRentProp ? 'For Rent' : 'For Sale'}
@@ -403,7 +384,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             </div>
 
                             <div class="actions-bar" onclick="event.stopPropagation()">
-                                <a href="/property-detail?id=${prop._id || prop.id}" class="btn-primary-view">
+                                <a href="${detailHref}" class="btn-primary-view">
                                     <span>View Details</span>
                                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
                                 </a>
@@ -438,6 +419,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         grid.appendChild(loadMoreBtn);
                     }
                 });
+                const rcEl = document.getElementById('result-count');
+                if (rcEl) rcEl.textContent = propsToShow.length;
+                if (typeof filterProperties === 'function') filterProperties();
                 initScrollObserver();
             };
             renderGrid(currentPage);
@@ -465,20 +449,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 2. DATA FETCHING (HYBRID INSTANT LOAD)
     async function fetchFrontendData() {
-        console.log("fetchFrontendData: starting data load");
-        // Step A: Immediate render from Cache/Defaults
+        const hasSSR = document.querySelector('#properties-grid .property-card') !== null;
+        // Step A: Preserve SSR cards if already baked in, or hydrate from localStorage cache
         const cached = localStorage.getItem('kimi_content');
         if (cached) {
             try {
-                console.log("fetchFrontendData: rendering from cache");
                 populatePageContent(JSON.parse(cached));
             } catch (e) {
-                console.error("Error parsing cached content:", e);
-                populatePageContent(defaultContent);
+                if (!hasSSR) populatePageContent(defaultContent);
             }
-        } else {
-            console.log("fetchFrontendData: rendering from defaults");
+        } else if (!hasSSR) {
             populatePageContent(defaultContent);
+        } else {
+            // Even with SSR, sync filter dropdown options smoothly from defaults until API returns
+            const heroLocation = document.getElementById('hero-location');
+            const propLocation = document.getElementById('location-filter');
+            if ((heroLocation || propLocation) && defaultContent.locations.length > 0) {
+                const locOptions = `<option value="all">Any Location</option>` + defaultContent.locations.map(loc => `<option value="${loc}">${loc}</option>`).join('');
+                if (heroLocation) heroLocation.innerHTML = locOptions;
+                if (propLocation) propLocation.innerHTML = locOptions;
+            }
         }
 
         function getApiUrl(path) {

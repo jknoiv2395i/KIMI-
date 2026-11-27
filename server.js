@@ -13,6 +13,12 @@ const Lead = require('./models/Lead');
 const fs = require('fs');
 const cloudinary = require('cloudinary').v2;
 const { createClient } = require('@supabase/supabase-js');
+const {
+    slugifyProperty,
+    renderPropertyCardHTML,
+    renderPropertyDetailHTML,
+    renderSitemapXML
+} = require('./lib/cardRenderer');
 
 // Cloudinary Configuration
 cloudinary.config({
@@ -79,6 +85,19 @@ app.use('/api', (req, res, next) => {
     res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
     res.setHeader('Pragma', 'no-cache');
     res.setHeader('Expires', '0');
+    next();
+});
+
+// Canonical clean-URL 301 redirects (matches Vercel cleanUrls behavior with zero duplicate URLs)
+app.use((req, res, next) => {
+    if (req.method !== 'GET' || req.path.startsWith('/api/')) return next();
+    if (req.path === '/index.html') return res.redirect(301, '/');
+    if (req.path === '/admin.html') return res.redirect(301, '/admin');
+    if (req.path.endsWith('.html')) {
+        const clean = req.path.slice(0, -5);
+        const qs = req.url.includes('?') ? req.url.slice(req.url.indexOf('?')) : '';
+        return res.redirect(301, `${clean}${qs}`);
+    }
     next();
 });
 
@@ -572,78 +591,13 @@ app.use('/api', (req, res) => {
     res.status(404).json({ success: false, error: 'API Route Not Found' });
 });
 
-// --- SSR HELPER: Generate property card HTML on the server ---
-function generatePropertyCardHTML(prop) {
-    const phone = (prop.ownerPhone || '+919696976950').replace(/\s+/g, '');
-    const waNum = (prop.ownerWhatsapp || prop.ownerPhone || '919696976950').replace(/[^0-9]/g, '');
-    const waMsg = encodeURIComponent(`Hello KIMI Properties! I am interested in details and site visit for: "${prop.name}" in ${prop.location || 'Nagpur'}. Please share price and inspection schedule.`);
-
-    const isResale = prop.transactionType === 'Resale' || prop.transactionType === 'Old';
-    const conditionLabel = isResale ? 'RESALE' : 'NEW LAUNCH';
-    const conditionClass = isResale ? 'tag-resale' : 'tag-new';
-
-    const isRentProp = prop.purpose === 'Rent' || (prop.category && prop.category.toLowerCase().includes('rental')) || prop.transactionType === 'Rental';
-    const purposeBadge = isRentProp
-        ? '<span class="card-purpose-badge purpose-rent">FOR RENT</span>'
-        : '<span class="card-purpose-badge purpose-buy">FOR SALE</span>';
-
-    const formatPrice = (price) => {
-        if (!price) return '';
-        const num = String(price).replace(/,/g, '');
-        if (!isNaN(num) && num.trim() !== '') {
-            return '₹' + Number(num).toLocaleString('en-IN');
-        }
-        return String(price).includes('₹') ? price : '₹' + price;
-    };
-
-    const propId = prop._id || prop.id || '';
-    const safeName = (prop.name || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
-
-    let statusBadge = '';
-    if (prop.isSoldOut) {
-        statusBadge = '<span class="card-status-badge status-sold">SOLD OUT</span>';
-    } else if (prop.isNegotiable !== false) {
-        statusBadge = '<span class="card-status-badge status-negotiable">NEGOTIABLE</span>';
-    } else {
-        statusBadge = '<span class="card-status-badge status-fixed">FIXED PRICE</span>';
+// --- SSR HELPER: Safe marker replacement ---
+function replaceSSRMarkers(html, cardsHTML) {
+    const wrapped = `<!-- SSR:START -->\n${cardsHTML}\n<!-- SSR:END -->`;
+    if (html.includes('<!-- SSR:START -->') && html.includes('<!-- SSR:END -->')) {
+        return html.replace(/<!-- SSR:START -->[\s\S]*?<!-- SSR:END -->/g, wrapped);
     }
-
-    const areaSpec = prop.area ? `<div class="card-spec-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg><span>${prop.area}</span></div>` : '';
-    const bedsSpec = prop.beds ? `<div class="card-spec-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4v16"/><path d="M2 8h18a2 2 0 0 1 2 2v10"/><path d="M2 17h20"/><path d="M6 8v9"/></svg><span>${prop.beds} Beds</span></div>` : (!prop.beds && prop.category ? `<div class="card-spec-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 20V9l10-6 10 6v11a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2z"/></svg><span>${prop.category}</span></div>` : '');
-    const bathsSpec = prop.baths ? `<div class="card-spec-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12h16a1 1 0 0 1 1 1v3a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4v-3a1 1 0 0 1 1-1z"/></svg><span>${prop.baths} Baths</span></div>` : (prop.transactionType ? `<div class="card-spec-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg><span>${prop.transactionType}</span></div>` : '');
-
-    return `<div class="property-card" onclick="window.location.href='/property-detail?id=${propId}'" data-location="${prop.location || 'all'}" data-type="${prop.category || ''}" data-purpose="${isRentProp ? 'Rent' : 'Buy'}" data-transaction="${prop.transactionType || 'New'}" data-status="${prop.status || ''}">
-        <div class="card-image-box">
-            <img src="${(prop.images && prop.images[0]) || prop.image || 'assets/hero-illustration.png'}" alt="${safeName}" loading="lazy">
-            ${purposeBadge}
-            <div class="card-price-badge">${formatPrice(prop.price)}<span class="price-unit">${prop.priceUnit || ''}</span></div>
-            <span class="card-condition-tag ${conditionClass}">${conditionLabel}</span>
-            ${statusBadge}
-        </div>
-        <div class="card-body">
-            <h3 class="card-title">${prop.name || ''}</h3>
-            <p class="card-location">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                ${prop.address || (prop.location || 'Nagpur')}
-            </p>
-            <div class="card-price-container">
-                <span class="card-price-text">${formatPrice(prop.price)}</span>
-                <span class="card-price-unit">${prop.priceUnit || ''}</span>
-            </div>
-            <div class="card-specs-row">${areaSpec}${bedsSpec}${bathsSpec}</div>
-            <div class="card-footer-row">
-                <span class="card-btn-view">View Details →</span>
-                <div class="card-contact-quick" onclick="event.stopPropagation()">
-                    <a href="tel:${phone}" class="card-action-icon" title="Call Agent">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                    </a>
-                    <a href="https://wa.me/${waNum}?text=${waMsg}" target="_blank" rel="noopener noreferrer" class="card-action-icon wa-icon" title="WhatsApp Agent">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>`;
+    return html;
 }
 
 // --- SSR: Fetch properties for server-side rendering ---
@@ -662,23 +616,47 @@ async function getPropertiesForSSR() {
     }
 }
 
-// Serve HTML files without extensions
+async function attachMediaForSSR(prop) {
+    if (!prop || !useMongoDB) return prop;
+    try {
+        const propId = prop._id || prop.id;
+        if (!propId || !mongoose.Types.ObjectId.isValid(String(propId))) return prop;
+        const mediaDocs = await Media.find({ propertyId: propId }).lean();
+        if (mediaDocs && mediaDocs.length > 0) {
+            const images = mediaDocs.filter(m => m.type === 'image' && m.data).map(m => m.data);
+            const videos = mediaDocs.filter(m => m.type === 'video' && m.data).map(m => m.data);
+            if (images.length > 0) prop.images = images;
+            if (videos.length > 0) prop.videos = videos;
+        }
+    } catch (err) {
+        console.warn('SSR media lookup warning:', err.message);
+    }
+    return prop;
+}
+
+// Dynamic XML Sitemap reflecting live database listings
+app.get('/sitemap.xml', async (req, res) => {
+    try {
+        const properties = await getPropertiesForSSR();
+        res.setHeader('Content-Type', 'application/xml; charset=utf-8');
+        res.send(renderSitemapXML(properties));
+    } catch (err) {
+        console.error('Sitemap generation error:', err.message);
+        res.sendFile(path.join(__dirname, 'sitemap.xml'));
+    }
+});
+
+// Serve HTML homepage with live SSR property grids
 app.get('/', async (req, res) => {
     try {
         const properties = await getPropertiesForSSR();
         let html = fs.readFileSync(path.join(__dirname, 'index.html'), 'utf8');
 
         if (properties.length > 0) {
-            // Inject featured property cards into the homepage grid
-            const featured = properties.filter(p => p.isFeatured).slice(0, 6);
-            const cardsToRender = featured.length > 0 ? featured : properties.slice(0, 6);
-            const cardsHTML = cardsToRender.map(p => generatePropertyCardHTML(p)).join('\n');
-
-            // Replace empty #properties-grid on homepage
-            html = html.replace(
-                /(<div\s+id="properties-grid"[^>]*>)[\s\S]*?(<\/div>)/,
-                `$1\n${cardsHTML}\n$2`
-            );
+            const featured = properties.filter(p => p.isFeatured);
+            const ordered = [...featured, ...properties.filter(p => !p.isFeatured)].slice(0, 12);
+            const cardsHTML = ordered.map(renderPropertyCardHTML).join('\n');
+            html = replaceSSRMarkers(html, cardsHTML);
         }
 
         res.send(html);
@@ -688,24 +666,17 @@ app.get('/', async (req, res) => {
     }
 });
 
-// SSR route for /properties — fixes Google Soft 404
+// SSR route for /properties
 app.get('/properties', async (req, res) => {
     try {
         const properties = await getPropertiesForSSR();
         let html = fs.readFileSync(path.join(__dirname, 'properties.html'), 'utf8');
 
         if (properties.length > 0) {
-            const cardsHTML = properties.map(p => generatePropertyCardHTML(p)).join('\n');
-
-            // Inject cards into the empty grid
+            const cardsHTML = properties.map(renderPropertyCardHTML).join('\n');
+            html = replaceSSRMarkers(html, cardsHTML);
             html = html.replace(
-                '<!-- Cards will be injected dynamically via JavaScript -->',
-                cardsHTML
-            );
-
-            // Update the result count from 0 to actual count
-            html = html.replace(
-                '<span id="result-count">0</span>',
+                /<span id="result-count">\d*<\/span>/,
                 `<span id="result-count">${properties.length}</span>`
             );
         }
@@ -717,17 +688,81 @@ app.get('/properties', async (req, res) => {
     }
 });
 
+// Clean SEO Listing Detail route: /listings/:slug
+app.get('/listings/:slug', async (req, res) => {
+    try {
+        const slug = String(req.params.slug || '').replace(/\.html$/i, '');
+        const properties = await getPropertiesForSSR();
+        const candidateId = slug.includes('-') ? slug.split('-').pop() : slug;
+
+        let match = properties.find(p => String(p._id || p.id) === candidateId || slugifyProperty(p) === slug);
+        if (match) {
+            match = await attachMediaForSSR({ ...match });
+            const pdTemplate = fs.readFileSync(path.join(__dirname, 'property-detail.html'), 'utf8');
+            return res.send(renderPropertyDetailHTML(match, pdTemplate));
+        }
+
+        const staticPath = path.join(__dirname, 'listings', `${slug}.html`);
+        if (fs.existsSync(staticPath)) {
+            return res.sendFile(staticPath);
+        }
+
+        return res.status(404).sendFile(path.join(__dirname, '404.html'));
+    } catch (err) {
+        console.error('Listing SSR error:', err.message);
+        res.sendFile(path.join(__dirname, 'property-detail.html'));
+    }
+});
+
+// Legacy /property-detail?id=... SSR fallback (no 404 or blank shell)
+app.get('/property-detail', async (req, res) => {
+    try {
+        const propId = String(req.query.id || '').trim();
+        if (propId) {
+            const properties = await getPropertiesForSSR();
+            let match = properties.find(p => String(p._id || p.id) === propId);
+            if (match) {
+                match = await attachMediaForSSR({ ...match });
+                const pdTemplate = fs.readFileSync(path.join(__dirname, 'property-detail.html'), 'utf8');
+                return res.send(renderPropertyDetailHTML(match, pdTemplate));
+            }
+        }
+        return res.sendFile(path.join(__dirname, 'property-detail.html'));
+    } catch (err) {
+        console.error('Property detail fallback error:', err.message);
+        res.sendFile(path.join(__dirname, 'property-detail.html'));
+    }
+});
+
+// Real Estate Guides Hub & Article Routes
+app.get('/guides', (req, res) => {
+    const guidesPath = path.join(__dirname, 'guides.html');
+    if (fs.existsSync(guidesPath)) return res.sendFile(guidesPath);
+    return res.status(404).sendFile(path.join(__dirname, '404.html'));
+});
+
+app.get('/guides/:slug', (req, res) => {
+    const slug = String(req.params.slug || '').replace(/[^a-z0-9-]/gi, '');
+    const filePath = path.join(__dirname, 'guides', `${slug}.html`);
+    if (fs.existsSync(filePath)) return res.sendFile(filePath);
+    return res.status(404).sendFile(path.join(__dirname, '404.html'));
+});
+
+// Serve top-level HTML pages cleanly without extensions
 app.get('/:page', (req, res, next) => {
-    const page = req.params.page;
-    if (page === 'index') return res.redirect('/');
-    if (page === 'properties') return res.redirect('/properties');
-    
+    const page = String(req.params.page || '').replace(/[^a-z0-9-_]/gi, '');
+    if (page === 'index') return res.redirect(301, '/');
+
     const filePath = path.join(__dirname, `${page}.html`);
     if (fs.existsSync(filePath)) {
-        res.sendFile(filePath);
-    } else {
-        next();
+        return res.sendFile(filePath);
     }
+    return next();
+});
+
+// Branded 404 Catch-all for unknown paths
+app.use((req, res) => {
+    res.status(404).sendFile(path.join(__dirname, '404.html'));
 });
 
 // Global Error Handler - Ensures JSON response even for crashes

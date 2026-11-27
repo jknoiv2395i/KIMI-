@@ -97,12 +97,12 @@
             "seoTitle": "Riverbend Retreat 3BHK Flat for Sale in Nagpur | KIMI Properties",
             "seoDescription": "Verified 3BHK flat for sale in Nagpur featuring 1250 Sq.Ft carpet area, North-East facing, 24x7 Security, Lift, and clear 7/12 title.",
             "seoKeywords": "flats in nagpur, 3 bhk nagpur, residential property nagpur, kimi properties",
-            "image": "assets/property-1.png",
+            "image": "/assets/property-1.webp",
             "images": [
-                "assets/property-1.png",
-                "assets/property-2.png",
-                "assets/property-3.png",
-                "assets/property-4.jpg"
+                "/assets/property-1.webp",
+                "/assets/property-2.webp",
+                "/assets/property-3.webp",
+                "/assets/property-4.webp"
             ],
             "video": "",
             "description": "A beautiful residential retreat offering serene views, modern amenities, and clear legal title in Nagpur.",
@@ -123,11 +123,11 @@
             "beds": 4,
             "baths": 4,
             "area": "6x8 m²",
-            "image": "assets/property-2.png",
+            "image": "/assets/property-2.webp",
             "images": [
-                "assets/property-2.png",
-                "assets/property-1.png",
-                "assets/property-3.png"
+                "/assets/property-2.webp",
+                "/assets/property-1.webp",
+                "/assets/property-3.webp"
             ],
             "video": "",
             "description": "A cozy and affordable studio cottage located in the heart of Nagpur.",
@@ -148,11 +148,11 @@
             "beds": 2,
             "baths": 3,
             "area": "7x7 m²",
-            "image": "assets/property-3.png",
+            "image": "/assets/property-3.webp",
             "images": [
-                "assets/property-3.png",
-                "assets/property-1.png",
-                "assets/property-2.png"
+                "/assets/property-3.webp",
+                "/assets/property-1.webp",
+                "/assets/property-2.webp"
             ],
             "video": "",
             "description": "Premium commercial space perfect for high-end retail or boutique offices.",

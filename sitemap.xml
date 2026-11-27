@@ -3,40 +3,200 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
     <url>
         <loc>https://kimiproperties.in/</loc>
-        <lastmod>2026-11-24</lastmod>
+        <lastmod>2026-11-27</lastmod>
         <changefreq>daily</changefreq>
         <priority>1.0</priority>
         <image:image>
-            <image:loc>https://kimiproperties.in/assets/logo.png</image:loc>
-            <image:title>KIMI Properties - Real Estate in Nagpur</image:title>
+            <image:loc>https://kimiproperties.in/assets/property-4.webp</image:loc>
+            <image:title>KIMI Properties Nagpur</image:title>
         </image:image>
     </url>
     <url>
         <loc>https://kimiproperties.in/properties</loc>
-        <lastmod>2026-11-24</lastmod>
+        <lastmod>2026-11-27</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.9</priority>
         <image:image>
-            <image:loc>https://kimiproperties.in/assets/logo.png</image:loc>
-            <image:title>Property Listings in Nagpur</image:title>
+            <image:loc>https://kimiproperties.in/assets/property-1.webp</image:loc>
+            <image:title>Verified Properties in Nagpur</image:title>
         </image:image>
     </url>
     <url>
+        <loc>https://kimiproperties.in/guides</loc>
+        <lastmod>2026-11-27</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://kimiproperties.in/guides/nagpur-investment-guide</loc>
+        <lastmod>2026-11-27</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://kimiproperties.in/guides/best-residential-areas-nagpur</loc>
+        <lastmod>2026-11-27</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://kimiproperties.in/guides/property-buying-checklist</loc>
+        <lastmod>2026-11-27</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://kimiproperties.in/guides/home-loan-guide-nagpur</loc>
+        <lastmod>2026-11-27</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://kimiproperties.in/guides/maharera-rules-guide</loc>
+        <lastmod>2026-11-27</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
         <loc>https://kimiproperties.in/about</loc>
-        <lastmod>2026-11-24</lastmod>
+        <lastmod>2026-11-27</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://kimiproperties.in/contact</loc>
-        <lastmod>2026-11-24</lastmod>
+        <lastmod>2026-11-27</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
-        <loc>https://kimiproperties.in/property-detail</loc>
-        <lastmod>2026-11-24</lastmod>
+        <loc>https://kimiproperties.in/listings/plot-area-16000-factory-for-sale-rent-in-butibori-midc-13000-6ac50d8d7f829703e5c24554</loc>
+        <lastmod>2026-10-06</lastmod>
         <changefreq>weekly</changefreq>
-        <priority>0.8</priority>
+        <priority>0.85</priority>
+        <image:image>
+            <image:loc>https://ohqsrhswsjqiuagprwii.supabase.co/storage/v1/object/public/kimi-properties/1791298665401-gyp8lt6kqs.jpeg</image:loc>
+            <image:title>Plot area 16000 Factory for sale &amp; rent  in butibori midc 13000 sqft  shed 20 hp power </image:title>
+        </image:image>
+    </url>
+    <url>
+        <loc>https://kimiproperties.in/listings/8-acre-agriculture-land-for-sell-in-dunda-khairi-parshivni-n-6aaecb938a2bb018dcf03ea3</loc>
+        <lastmod>2026-09-19</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.85</priority>
+        <image:image>
+            <image:loc>https://ohqsrhswsjqiuagprwii.supabase.co/storage/v1/object/public/kimi-properties/1789839653730-qqrublmrkko.jpeg</image:loc>
+            <image:title>8 Acre Agriculture Land For Sell in Dunda Khairi ,Parshivni,Nagpur</image:title>
+        </image:image>
+    </url>
+    <url>
+        <loc>https://kimiproperties.in/listings/jambhla-pani-2-5-acre-agriculture-land-for-sell-umred-se-1-5-6aaa8943dda521b17905f0de</loc>
+        <lastmod>2026-09-16</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.85</priority>
+        <image:image>
+            <image:loc>https://ohqsrhswsjqiuagprwii.supabase.co/storage/v1/object/public/kimi-properties/1789560863002-iq6lu8jiw9q.jpeg</image:loc>
+            <image:title>Jambhla pani 2.5 Acre  Agriculture Land for sell  umred se 1.5 km ander</image:title>
+        </image:image>
+    </url>
+    <url>
+        <loc>https://kimiproperties.in/listings/5-acre-agriculture-land-for-sell-butibori-umred-road-touch-6aaa8463dda521b17905f0dc</loc>
+        <lastmod>2026-09-16</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.85</priority>
+        <image:image>
+            <image:loc>https://ohqsrhswsjqiuagprwii.supabase.co/storage/v1/object/public/kimi-properties/1789559535911-c1wxt656od.jpeg</image:loc>
+            <image:title>5 Acre Agriculture Land For Sell Butibori  Umred  Road  Touch</image:title>
+        </image:image>
+    </url>
+    <url>
+        <loc>https://kimiproperties.in/listings/resale-2-bhk-flat-for-sale-manish-nagar-nagpur-6a9c4b4d631aa569b275a728</loc>
+        <lastmod>2026-09-05</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.85</priority>
+        <image:image>
+            <image:loc>https://ohqsrhswsjqiuagprwii.supabase.co/storage/v1/object/public/kimi-properties/1788627584392-qxi1wgbf1i.jpeg</image:loc>
+            <image:title>🏠 Resale 2 BHK Flat for Sale – Manish Nagar, Nagpur</image:title>
+        </image:image>
+    </url>
+    <url>
+        <loc>https://kimiproperties.in/listings/6000-sqft-godoun-for-sell-in-butibori-midc-6a9a6ed7cb23e0ea62d16244</loc>
+        <lastmod>2026-09-04</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.85</priority>
+        <image:image>
+            <image:loc>https://ohqsrhswsjqiuagprwii.supabase.co/storage/v1/object/public/kimi-properties/1788505265949-72jjw0l2qmx.jpeg</image:loc>
+            <image:title>6000 sqft godoun for sell in butibori midc</image:title>
+        </image:image>
+    </url>
+    <url>
+        <loc>https://kimiproperties.in/listings/1-acre-industrial-plot-for-sale-in-butibori-midc-nagpur-6000-6a9a6822cb23e0ea62d16240</loc>
+        <lastmod>2026-09-04</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.85</priority>
+        <image:image>
+            <image:loc>https://ohqsrhswsjqiuagprwii.supabase.co/storage/v1/object/public/kimi-properties/1788503844977-3l6wjey1ymq.jpeg</image:loc>
+            <image:title>1 Acre Industrial Plot for Sale in Butibori MIDC Nagpur - 6000 Sq.Ft. Shed Built - Clear Title</image:title>
+        </image:image>
+    </url>
+    <url>
+        <loc>https://kimiproperties.in/listings/25-000-sq-ft-industrial-property-with-18-000-sq-ft-shed-for-6a9709c8fcee48abbff0fdd1</loc>
+        <lastmod>2026-09-01</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.85</priority>
+        <image:image>
+            <image:loc>https://ohqsrhswsjqiuagprwii.supabase.co/storage/v1/object/public/kimi-properties/1788282876607-2dvq93trigm.jpeg</image:loc>
+            <image:title>25,000 Sq.Ft. Industrial Property with 18,000 Sq.Ft. Shed for Sale &amp; Rent in Butibori MIDC, Nagpur</image:title>
+        </image:image>
+    </url>
+    <url>
+        <loc>https://kimiproperties.in/listings/industrial-land-for-sale-3-acre-hingna-sangam-road-nagpur-6a92f42585c38f5a046338bf</loc>
+        <lastmod>2026-08-29</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.85</priority>
+        <image:image>
+            <image:loc>https://ohqsrhswsjqiuagprwii.supabase.co/storage/v1/object/public/kimi-properties/1788015402059-2dqupb7zyux.jpeg</image:loc>
+            <image:title>Industrial Land for Sale – 3 Acre | Hingna Sangam Road, Nagpur</image:title>
+        </image:image>
+    </url>
+    <url>
+        <loc>https://kimiproperties.in/listings/amaravati-nagpur-highway-touch-3-41-acres-land-for-sale-6a919f8e5ff6b53ddbca6dd9</loc>
+        <lastmod>2026-08-28</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.85</priority>
+        <image:image>
+            <image:loc>https://ohqsrhswsjqiuagprwii.supabase.co/storage/v1/object/public/kimi-properties/1788282034697-gokz5zcd0hd.jpeg</image:loc>
+            <image:title>Amaravati–Nagpur Highway Touch | 3.41 Acres Land for Sale</image:title>
+        </image:image>
+    </url>
+    <url>
+        <loc>https://kimiproperties.in/listings/premium-commercial-plots-for-sale-wanadongri-nagpur-6a8ef229812f2af4636f1584</loc>
+        <lastmod>2026-08-26</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.85</priority>
+        <image:image>
+            <image:loc>https://ohqsrhswsjqiuagprwii.supabase.co/storage/v1/object/public/kimi-properties/1787752892231-d06xyzgb6s.jpeg</image:loc>
+            <image:title>PREMIUM COMMERCIAL PLOTS FOR SALE | WANADONGRI, NAGPUR</image:title>
+        </image:image>
+    </url>
+    <url>
+        <loc>https://kimiproperties.in/listings/1900-sq-ft-industrial-property-for-sale-in-hingna-midc-nagpu-6a8de0582e440d3007268986</loc>
+        <lastmod>2026-08-25</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.85</priority>
+        <image:image>
+            <image:loc>https://ohqsrhswsjqiuagprwii.supabase.co/storage/v1/object/public/kimi-properties/1787682708853-hmhhk04ta2v.jpeg</image:loc>
+            <image:title>1900 Sq.Ft. Industrial Property for Sale in Hingna MIDC, Nagpur | ₹82 Lakh</image:title>
+        </image:image>
+    </url>
+    <url>
+        <loc>https://kimiproperties.in/listings/wanadongri-2-bhk-flat-30-6a7f0d4fdf2c0a282416a8f6</loc>
+        <lastmod>2026-08-14</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.85</priority>
+        <image:image>
+            <image:loc>https://ohqsrhswsjqiuagprwii.supabase.co/storage/v1/object/public/kimi-properties/1788184246658-og3zhr3a8h.jpeg</image:loc>
+            <image:title>🏠 Wanadongri में 2 BHK Flat सिर्फ ₹30लाख!</image:title>
+        </image:image>
     </url>
 </urlset>

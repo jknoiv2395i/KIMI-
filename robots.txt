@@ -1,29 +1,26 @@
-# KIMI Properties - kimiproperties.in
-# Real Estate Agency in Nagpur, Maharashtra
+# KIMI Properties - https://kimiproperties.in
+# Industrial, Commercial, Residential & Agricultural Real Estate in Nagpur
 
 User-agent: *
 Allow: /
 Disallow: /admin.html
 Disallow: /admin
-Disallow: /script.js
 Disallow: /data/
 Disallow: /models/
 Disallow: /scratch/
+Disallow: /scripts/
+Disallow: /lib/
 Disallow: /api/
-Crawl-delay: 1
 
-# Google
+# Ensure Googlebot and Bingbot can crawl all scripts, styles, and WebP assets for full rendering
 User-agent: Googlebot
 Allow: /
-Crawl-delay: 0
 
 User-agent: Googlebot-Image
 Allow: /assets/
 
-# Bing
 User-agent: Bingbot
 Allow: /
-Crawl-delay: 0
 
 # AI Crawlers (GEO - Generative Engine Optimization)
 User-agent: GPTBot
@@ -47,7 +44,7 @@ Allow: /
 User-agent: Claude-Web
 Allow: /
 
-# Social Media
+# Social Media Previews
 User-agent: facebookexternalhit
 Allow: /
 

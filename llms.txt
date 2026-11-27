@@ -67,3 +67,12 @@ Properties listed from Rs 30 Lakh to Rs 5 Crore and above, covering budget-frien
 - [All Properties](https://kimiproperties.in/properties): Complete directory of verified properties for sale and rent in Nagpur.
 - [About Us](https://kimiproperties.in/about): Learn about KIMI Properties, our team, and our real estate expertise.
 - [Contact](https://kimiproperties.in/contact): Get in touch via phone, WhatsApp, or email for property inquiries.
+
+## Real Estate Guides & SSR Listing URLs
+- [Property & MIDC Buying Guides](https://kimiproperties.in/guides): Practical guides for Nagpur real estate investors and buyers.
+- [Nagpur Property Investment Guide 2026](https://kimiproperties.in/guides/nagpur-investment-guide): Butibori MIDC, Hingna MIDC, Wardha Road, and MIHAN SEZ insights.
+- [Best Residential Areas in Nagpur](https://kimiproperties.in/guides/best-residential-areas-nagpur): Comparison of Manish Nagar, Wanadongri, Dharampeth, and Ramdaspeth.
+- [Property Buying Checklist](https://kimiproperties.in/guides/property-buying-checklist): 7/12 extract, NA orders, NIT/NMRDA sanctions, and encumberance verification.
+- [Home Loan Guide Nagpur](https://kimiproperties.in/guides/home-loan-guide-nagpur): Bank document checklists and municipal sanction requirements.
+- [MahaRERA Rules Guide](https://kimiproperties.in/guides/maharera-rules-guide): Buyer verification steps on the MahaRERA portal.
+- Individual property pages are server-rendered at `/listings/<slug>-<id>` and indexed in `https://kimiproperties.in/sitemap.xml`.

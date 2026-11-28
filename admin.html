@@ -851,7 +851,25 @@
         function renderLocationOptions() {
             const locationSelect = document.getElementById('prop-location-select');
             if (locationSelect) {
-                locationSelect.innerHTML = content.locations.map(loc => `<option value="${loc}">${loc}</option>`).join('');
+                const nagpurCorridors = [
+                    'Butibori MIDC, Nagpur',
+                    'Hingna MIDC, Nagpur',
+                    'Hingna Sangam Road, Nagpur',
+                    'Manish Nagar, Nagpur',
+                    'Wanadongri, Nagpur',
+                    'Wardha Road, Nagpur',
+                    'MIHAN, Nagpur',
+                    'Parshivni, Nagpur',
+                    'Amravati Road, Nagpur',
+                    'Umred Road, Nagpur',
+                    'Dharampeth, Nagpur',
+                    'Sadar, Nagpur',
+                    'Ramdaspeth, Nagpur',
+                    'Sitabuldi, Nagpur',
+                    'Nagpur'
+                ];
+                const merged = [...new Set([...nagpurCorridors, ...(content.locations || [])])];
+                locationSelect.innerHTML = merged.map(loc => `<option value="${loc}">${loc}</option>`).join('');
             }
         }
 
